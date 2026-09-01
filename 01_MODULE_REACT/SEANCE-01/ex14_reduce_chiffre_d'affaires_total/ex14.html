@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const ventes = [
+            { produit: "Clavier", montant: 250 },
+            { produit: "Souris", montant: 90 },
+            { produit: "Écran", montant: 1200 },
+        ];
+
+        let total = ventes.reduce(function(a , b ){ return a +  b.montant  },0)
+        console.log(total) ; 
+    </script>
+</body>
+</html>

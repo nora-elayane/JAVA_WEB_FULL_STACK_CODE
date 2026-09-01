@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const personnes = [
+            { nom: "Rami", age: 33, estMember: true },
+            { nom: "Fatihi", age: 24, estMember: false },
+            { nom: "Chakib", age: 45, estMember: true },
+            { nom: "Mounir", age: 37, estMember: false },
+        ];
+        const nomsMembres = personnes.filter(function(a){return a.estMember ;}).map(function(a){return a.nom ;})
+        console.log(nomsMembres) ; 
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const etudiants = [
+            { nom: "Sara", moyenne: 14 },
+            { nom: "Yassine", moyenne: 8 },
+            { nom: "Imane", moyenne: 12 },
+            { nom: "Omar", moyenne: 9 },
+            ];
+        const admis = etudiants.filter(function(a){return a.moyenne >= 10 ; })
+        console.log(admis) ; 
+    </script>
+</body>
+</html>

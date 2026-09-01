@@ -1,0 +1,11 @@
+1-les actions front-end : 
+un client parcourt un site e vente de chaussures ,
+ajoute un article au panier ,
+valide sa commande , 
+revient deux jours plus tard consulter l'etat de sa livraison .
+2-les actions backend : 
+le serveur extrait les articles de chaussures depuis une  base de données , 
+le serveur enregistre un article dans le panier , 
+le serveur valide et enregistre la commande dans la base de données ,
+le serveur extrait l'etat de livraison depuis une base de données ou api .
+3-le moment que les données passent du front-end au back-end est lorsque il y a une interactions ; l'utilisateur envoie des données a traiter et/ou stocker a la base de données  .

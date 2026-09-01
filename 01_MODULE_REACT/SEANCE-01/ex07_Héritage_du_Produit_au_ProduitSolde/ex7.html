@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <script>
+    class Produit{
+        constructor(nom , prix){
+            this.nom = nom ;
+            this.prix = prix ;
+        }
+        info(){
+            return `Produit nom : ${this.nom} a pour prix : ${this.prix}` ;
+    
+        }
+    }
+    class ProduitSolde extends Produit{
+        constructor(nom , prix , remise){
+            super(nom , prix) ; 
+            this.remise = remise ; 
+        }
+        info(){
+            return super.info() + " " + ` avec remise de ${this.remise} %` ; 
+        }
+    }
+    let p1 = new ProduitSolde("clavier" , 300 , 10) ; 
+    console.log(p1.info()) ;
+   </script> 
+</body>
+</html>

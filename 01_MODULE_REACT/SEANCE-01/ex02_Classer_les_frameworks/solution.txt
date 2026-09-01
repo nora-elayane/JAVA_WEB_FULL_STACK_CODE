@@ -1,0 +1,9 @@
+1-
+-framework back-end : Node.js ,  Laravel , Django . 
+-framework front-end applicatif : React , Angular , Vue.js . 
+-framework front-end de présentation : Bootstrap .
+
+2-les frameworks back-end permet de gerer la logique  coté serveur
+ et les interactions avec la base de données  ,
+ alors que les frameworks front-end applicative permet de creer une interface utilisateur dynamique et interactive  coté client .
+alors que un framework front-end de présontation permet de gerer l'apparence visuelle , la mise en page et le style css du site .
