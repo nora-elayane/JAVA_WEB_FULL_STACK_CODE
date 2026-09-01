@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Banque d'exercices — C12 Front-end S1 (Concepts + JS ES6)</title>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#ffffff; --ink:#1e293b; --muted:#64748b;
+    --l1:#16a34a; --l2:#ca8a04; --l3:#ea580c; --l4:#dc2626; --l5:#7c3aed;
+    --blue:#1e3a8a; --code-bg:#0f172a; --code-fg:#e2e8f0; --border:#e2e8f0;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f5f9;color:var(--ink);margin:0;padding:0 0 60px;}
+  header.top{background:linear-gradient(135deg,var(--blue),#2563eb);color:#fff;padding:28px 20px;text-align:center;}
+  header.top h1{margin:0 0 6px;font-size:1.5rem;}
+  header.top p{margin:4px 0;opacity:.9;font-size:.92rem;}
+  .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:14px;}
+  .legend span{background:rgba(255,255,255,.15);padding:4px 10px;border-radius:20px;font-size:.8rem;}
+  .wrap{max-width:900px;margin:0 auto;padding:0 16px;}
+  .progress-bar{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--border);padding:8px 16px;z-index:10;font-size:.85rem;color:var(--muted);display:flex;justify-content:space-between;align-items:center;}
+  .progress-track{flex:1;height:8px;background:#e2e8f0;border-radius:4px;margin:0 12px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,#16a34a,#22c55e);width:0%;transition:width .3s;}
+  h2.level-title{margin-top:46px;padding:10px 16px;border-radius:10px;color:#fff;font-size:1.15rem;}
+  .lvl1{background:var(--l1)} .lvl2{background:var(--l2)} .lvl3{background:var(--l3)} .lvl4{background:var(--l4)} .lvl5{background:var(--l5)}
+  .rappel{background:#eef2ff;border-left:4px solid #6366f1;padding:12px 16px;border-radius:8px;margin:14px 0;font-size:.92rem;}
+  .rappel h4{margin:0 0 6px;}
+  .rappel ul{margin:4px 0 0;padding-left:20px;}
+  .exercise{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .ex-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+  .ex-head h3{margin:0;font-size:1.05rem;}
+  .badge{color:#fff;font-size:.72rem;padding:3px 10px;border-radius:20px;font-weight:600;}
+  .tag{display:inline-block;background:#f1f5f9;color:#475569;font-size:.75rem;padding:2px 8px;border-radius:6px;margin:2px 4px 0 0;}
+  .objectif{font-size:.88rem;color:var(--muted);font-style:italic;margin:8px 0;}
+  .enonce{margin-top:10px;font-size:.94rem;}
+  .enonce h4, .atoi h4{font-size:.85rem;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);margin:14px 0 6px;}
+  .atoi ol{margin:0;padding-left:20px;font-size:.92rem;}
+  .status{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:.88rem;background:#f8fafc;padding:8px 10px;border-radius:8px;}
+  details{margin-top:10px;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+  details summary{cursor:pointer;padding:9px 12px;font-size:.88rem;font-weight:600;background:#f8fafc;}
+  details[open] summary{border-bottom:1px solid var(--border);}
+  .details-body{padding:12px 14px;font-size:.9rem;}
+  .indice summary{color:#0369a1;}
+  .astuce summary{color:#92400e;}
+  .corrige summary{color:#15803d;}
+  pre{background:var(--code-bg);color:var(--code-fg);padding:12px 14px;border-radius:8px;overflow-x:auto;font-size:.82rem;line-height:1.5;}
+  code{font-family:'Fira Code',Consolas,monospace;}
+  .explication{margin-top:10px;}
+  .explication .step{margin:6px 0;padding-left:10px;border-left:3px solid #cbd5e1;}
+  .github{margin-top:12px;font-size:.85rem;background:#f8fafc;padding:8px 10px;border-radius:8px;}
+  .github code{background:#e2e8f0;padding:2px 6px;border-radius:4px;}
+  .checkpoint{background:#f0fdf4;border:1px dashed #16a34a;border-radius:10px;padding:14px 16px;margin:20px 0;font-size:.9rem;}
+  .checkpoint h4{margin:0 0 8px;color:#15803d;}
+  .exam-sujet{background:#faf5ff;border:1px solid #d8b4fe;border-radius:12px;padding:18px 20px;margin:18px 0;}
+  .exam-meta{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;color:#7c3aed;font-weight:600;margin-bottom:8px;}
+  .piege{background:#fef2f2;border-left:4px solid #dc2626;padding:8px 12px;border-radius:6px;font-size:.87rem;margin:8px 0;}
+  .reflexe{background:#eff6ff;border-left:4px solid #2563eb;padding:8px 12px;border-radius:6px;font-size:.87rem;margin:8px 0;}
+  .toc{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin:20px 0;font-size:.88rem;}
+  .toc a{color:#1e3a8a;text-decoration:none;}
+  .toc a:hover{text-decoration:underline;}
+  .toc ul{columns:2;padding-left:18px;}
+  .bareme{font-size:.82rem;color:var(--muted);margin-top:6px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>🏦 Banque d'exercices — C12 : Développer en Front-end (S1)</h1>
+  <p>Concepts front-end/back-end, frameworks, et bases JavaScript ES6 pour aborder React</p>
+  <p>Basé sur le cours OFPPT (BENDAOUD &amp; ABABAR) — parcours débutant → EFM / examen</p>
+  <div class="legend">
+    <span>🟢 Fondamentaux</span><span>🟡 Application</span><span>🟠 Intermédiaire</span>
+    <span>🔴 Avancé</span><span>🟣 EFM / Examen</span>
+  </div>
+</header>
+
+<div class="progress-bar">
+  <span>Progression</span>
+  <div class="progress-track"><div class="progress-fill" id="fill"></div></div>
+  <span id="count">0 / 0</span>
+</div>
+
+<div class="wrap">
+
+<div class="toc">
+  <strong>📚 Sommaire</strong>
+  <ul>
+    <li><a href="#n1">Niveau 1 — Fondamentaux</a></li>
+    <li><a href="#n2">Niveau 2 — Application</a></li>
+    <li><a href="#n3">Niveau 3 — Intermédiaire</a></li>
+    <li><a href="#n4">Niveau 4 — Avancé</a></li>
+    <li><a href="#n5">Niveau 5 — EFM</a></li>
+    <li><a href="#exam">Mode Examen</a></li>
+  </ul>
+</div>
+
+<!-- ============ NIVEAU 1 ============ -->
+<h2 class="level-title lvl1" id="n1">🟢 NIVEAU 1 — Fondamentaux</h2>
+<div class="rappel">
+  <h4>🧠 À savoir avant de commencer</h4>
+  <ul>
+    <li>Front-end = HTML/CSS/JS côté navigateur ; back-end = serveur + base de données.</li>
+    <li>Un framework front-end applicatif (React, Angular, Vue) sert à construire l'interface ; un framework back-end (Node, Laravel, Django...) communique avec la BDD.</li>
+    <li>Une classe ES6 se déclare avec <code>class</code> ; ses attributs se fixent dans <code>constructor()</code> via <code>this</code>.</li>
+    <li>Le template literal utilise les backticks <code>`...${var}...`</code>.</li>
+    <li>L'opérateur ternaire : <code>condition ? valeurSiVrai : valeurSiFaux</code>.</li>
+  </ul>
+</div>
+
+<div class="exercise" id="ex1">
+  <div class="ex-head"><h3>EXERCICE 1 — Front-end ou back-end ? <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl1">🟢 Niveau 1</span></div>
+  <div><span class="tag">Notions : front-end / back-end / rôle du serveur</span></div>
+  <div class="objectif">🎯 Objectif : distinguer clairement ce qui relève du front-end et du back-end dans un scénario e-commerce.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Un client parcourt un site de vente de chaussures, ajoute un article au panier, valide sa commande, puis revient deux jours plus tard consulter l'état de sa livraison.</p>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Lister les actions de ce scénario qui relèvent du front-end.</li>
+      <li>Lister les actions qui relèvent du back-end.</li>
+      <li>Expliquer avec tes mots à quel moment les données passent du front-end au back-end.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Demande-toi : est-ce que l'action se voit à l'écran (interface) ou est-ce qu'elle touche à une donnée stockée quelque part ?</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Le front-end est ce que l'utilisateur voit et manipule ; dès qu'une information doit être conservée, vérifiée ou récupérée plus tard, c'est le back-end qui entre en jeu.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Explication</summary>
+    <div class="details-body">
+      <p><strong>1. Analyse :</strong> le scénario contient une phase d'interaction visuelle et une phase de persistance/traitement de données.</p>
+      <p><strong>2. Front-end :</strong> parcourir les chaussures, cliquer sur "ajouter au panier", voir le panier, cliquer sur "valider la commande", consulter la page de suivi.</p>
+      <p><strong>3. Back-end :</strong> enregistrer l'article dans le panier en base de données, autoriser le paiement, mettre à jour le statut de livraison, renvoyer les données de suivi.</p>
+      <p><strong>4. Le passage front → back</strong> se fait à chaque fois que l'utilisateur envoie une donnée (clic "ajouter au panier", clic "valider") : le front-end transmet la demande au serveur, qui la traite et répond.</p>
+    </div>
+  </details>
+  <div class="github">🔗 <code> <a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex01_Front_end_ouback_end">Ma solution GitHub </a> </code></div>
+</div>
+
+<div class="exercise" id="ex2">
+  <div class="ex-head"><h3>EXERCICE 2 — Classer les frameworks <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl1">🟢 Niveau 1</span></div>
+  <div><span class="tag">Notions : frameworks front-end / back-end / présentation</span></div>
+  <div class="objectif">🎯 Objectif : reconnaître à quelle catégorie appartient un framework donné.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Voici une liste de technologies : <code>React</code>, <code>Node.js</code>, <code>Bootstrap</code>, <code>Angular</code>, <code>Laravel</code>, <code>Vue.js</code>, <code>Django</code>.</p>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Classer chaque technologie dans une des 3 catégories : framework back-end, framework front-end applicatif, framework front-end de présentation.</li>
+      <li>Justifier en une phrase le rôle de chaque catégorie.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Un framework de présentation ne gère pas de logique, seulement l'apparence (mise en page, boutons stylés...).</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Réflexe examen : si le framework touche à la base de données → back-end. S'il construit des composants d'interface interactifs → front applicatif. S'il ne fait que styliser → présentation.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Explication</summary>
+    <div class="details-body">
+      <p><strong>Back-end :</strong> Node.js, Laravel, Django (communiquent avec la base de données côté serveur).</p>
+      <p><strong>Front-end applicatif :</strong> React, Angular, Vue.js (créent l'interface interactive de l'application).</p>
+      <p><strong>Front-end de présentation :</strong> Bootstrap (définit uniquement l'apparence visuelle).</p>
+    </div>
+  </details>
+  <div class="github">🔗 <code><a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex02_Classer_les_frameworks">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="exercise" id="ex3">
+  <div class="ex-head"><h3>EXERCICE 3 — Ma première classe ES6 <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl1">🟢 Niveau 1</span></div>
+  <div><span class="tag">Notions : class, constructor, this, instanciation</span></div>
+  <div class="objectif">🎯 Objectif : écrire une classe ES6 simple et créer des instances.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On veut modéliser un <strong>Livre</strong> avec un titre et un auteur.</p>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Déclarer une classe <code>Livre</code> avec un constructeur <code>(titre, auteur)</code>.</li>
+      <li>Créer deux instances : <code>livre1</code> ("1984", "Orwell") et <code>livre2</code> ("Dune", "Herbert").</li>
+      <li>Afficher <code>livre1.titre</code> dans la console.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Reviens à l'exemple <code>Etudiant</code> du cours : les paramètres du constructeur se mémorisent avec <code>this.propriete = parametre</code>.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Erreur fréquente : oublier la majuscule au nom de la classe, ou écrire <code>this.titre=titre</code> sans respecter la casse du paramètre.</div></details>
+  <details class="corrige"><summary>✅ Corrigé</summary>
+    <div class="details-body">
+      <p><strong>1. Analyse :</strong> deux attributs, aucune méthode requise pour l'instant.</p>
+      <p><strong>2. Implémentation :</strong></p>
+      <pre><code>class Livre{
+  constructor(titre, auteur){
+    this.titre = titre;
+    this.auteur = auteur;
+  }
+}
+let livre1 = new Livre("1984", "Orwell");
+let livre2 = new Livre("Dune", "Herbert");
+console.log(livre1.titre);</code></pre>
+      <p><strong>3. Résultat attendu :</strong> <code>1984</code> affiché dans la console.</p>
+      <div class="explication">
+        <div class="step"><strong>Ce qu'on fait :</strong> on définit un modèle (classe) réutilisable.<br><strong>Pourquoi :</strong> pour créer plusieurs objets Livre sans réécrire la structure.<br><strong>Résultat :</strong> deux objets indépendants, chacun avec ses propres valeurs.</div>
+      </div>
+    </div>
+  </details>
+  <div class="github">🔗<code><a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex03_Ma_premiere_classe_S6">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="exercise" id="ex4">
+  <div class="ex-head"><h3>EXERCICE 4 — Message avec template literal <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl1">🟢 Niveau 1</span></div>
+  <div><span class="tag">Notions : template literals</span></div>
+  <div class="objectif">🎯 Objectif : construire une chaîne dynamique avec des backticks.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Deux variables : <code>const prenom = "Nora"</code> et <code>const filiere = "DEV"</code>.</p>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Construire, avec un template literal, la phrase : <code>Bienvenue Nora, filière DEV !</code></li>
+      <li>Afficher le résultat avec <code>console.log</code>.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Les backticks se trouvent en haut à gauche du clavier (touche à côté du 1) — pas des guillemets simples.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Réflexe examen : dès qu'on doit insérer une variable dans du texte → penser au template literal plutôt qu'à la concaténation avec <code>+</code>.</div></details>
+  <details class="corrige"><summary>✅ Corrigé</summary>
+    <div class="details-body">
+      <pre><code>const prenom = "Nora";
+const filiere = "DEV";
+console.log(`Bienvenue ${prenom}, filière ${filiere} !`);</code></pre>
+      <p><strong>Résultat attendu :</strong> <code>Bienvenue Nora, filière DEV !</code></p>
+    </div>
+  </details>
+  <div class="github">🔗<code><a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex04_Message_avec_template_literal">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="exercise" id="ex5">
+  <div class="ex-head"><h3>EXERCICE 5 — Tarif étudiant (ternaire) <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl1">🟢 Niveau 1</span></div>
+  <div><span class="tag">Notions : opérateur ternaire</span></div>
+  <div class="objectif">🎯 Objectif : remplacer un if...else simple par un ternaire.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Une variable <code>estEtudiant</code> vaut <code>true</code> ou <code>false</code>. Le tarif est de 20 DH si c'est un étudiant, sinon 50 DH.</p>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Déclarer <code>let estEtudiant = true</code>.</li>
+      <li>Calculer <code>tarif</code> avec un opérateur ternaire.</li>
+      <li>Afficher le tarif.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Syntaxe : <code>condition ? valeurSiVrai : valeurSiFaux</code>.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Pas besoin d'écrire <code>=== true</code> : une variable booléenne peut être testée directement dans la condition.</div></details>
+  <details class="corrige"><summary>✅ Corrigé</summary>
+    <div class="details-body">
+      <pre><code>let estEtudiant = true;
+let tarif = estEtudiant ? 20 : 50;
+console.log(tarif); // 20</code></pre>
+    </div>
+  </details>
+  <div class="github">🔗  : <code>[<a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex05_Tarif_%C3%A9tudiant_ternaire">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="exercise" id="ex6">
+  <div class="ex-head"><h3>EXERCICE 6 — Déstructurer un objet <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl1">🟢 Niveau 1</span></div>
+  <div><span class="tag">Notions : object destructuring</span></div>
+  <div class="objectif">🎯 Objectif : extraire des propriétés d'un objet en une seule ligne.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>const etudiant = { nom: "Amine", age: 20, ville: "Béni Mellal" };</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Extraire <code>nom</code>, <code>age</code> et <code>ville</code> par destructuring, sans écrire <code>etudiant.nom</code> trois fois.</li>
+      <li>Afficher les trois variables avec <code>console.log</code>.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">La syntaxe utilise des accolades à gauche du <code>=</code> : <code>const {a, b} = objet</code>.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Les noms des variables créées doivent correspondre exactement aux noms des propriétés de l'objet.</div></details>
+  <details class="corrige"><summary>✅ Corrigé</summary>
+    <div class="details-body">
+      <pre><code>const etudiant = { nom: "Amine", age: 20, ville: "Béni Mellal" };
+const { nom, age, ville } = etudiant;
+console.log(nom, age, ville);</code></pre>
+    </div>
+  </details>
+  <div class="github">🔗  : <code><a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex06_D%C3%A9structurer_un_objet">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="checkpoint">
+  <h4>📈 CHECKPOINT — Niveau 1</h4>
+  <p>☐ Je peux...</p>
+  <ul>
+    <li>expliquer la différence front-end / back-end avec un exemple concret ;</li>
+    <li>classer un framework donné dans la bonne catégorie ;</li>
+    <li>écrire une classe ES6 avec constructeur et l'instancier ;</li>
+    <li>utiliser un template literal et un opérateur ternaire ;</li>
+    <li>déstructurer un objet simple.</li>
+  </ul>
+  <p><em>Si un point coince, revoir les sections 1.2, 1.3 et 1.4 (classes, template literals, ternaire, destructuring) du cours avant de passer au niveau 2.</em></p>
+</div>
+
+<!-- ============ NIVEAU 2 ============ -->
+<h2 class="level-title lvl2" id="n2">🟡 NIVEAU 2 — Application</h2>
+<div class="rappel">
+  <h4>🧠 À savoir avant de commencer</h4>
+  <ul>
+    <li>Héritage : <code>class Fille extends Mere</code>, avec <code>super(...)</code> dans le constructeur pour appeler le constructeur parent.</li>
+    <li>Modules ES6 : <code>export default</code> (un seul par fichier) et <code>export {a, b}</code> (plusieurs), importés via <code>import X, {a,b} from './fichier.js'</code>.</li>
+    <li><code>map()</code> transforme chaque élément et retourne un nouveau tableau de même taille.</li>
+    <li><code>filter()</code> retourne seulement les éléments qui valident une condition.</li>
+    <li><code>find()</code> retourne le premier élément qui valide une condition (ou <code>undefined</code>).</li>
+  </ul>
+</div>
+
+<div class="exercise" id="ex7">
+  <div class="ex-head"><h3>EXERCICE 7 — Héritage : du Produit au ProduitSolde <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl2">🟡 Niveau 2</span></div>
+  <div><span class="tag">Notions : extends, super, redéfinition de méthode</span></div>
+  <div class="objectif">🎯 Objectif : créer une classe dérivée qui enrichit une classe existante.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On dispose d'une classe <code>Produit</code> avec <code>nom</code> et <code>prix</code>, et une méthode <code>info()</code> qui retourne <code>"Produit nom:X a pour prix:Y"</code>.</p>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Écrire la classe <code>Produit</code> avec son constructeur et sa méthode <code>info()</code>.</li>
+      <li>Créer une classe <code>ProduitSolde extends Produit</code> qui ajoute un attribut <code>remise</code> (en %).</li>
+      <li>Redéfinir <code>info()</code> dans <code>ProduitSolde</code> pour qu'elle réutilise <code>super.info()</code> et ajoute la remise.</li>
+      <li>Créer une instance et afficher son <code>info()</code>.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Regarde l'exemple <code>Stagiaire extends Etudiant</code> du cours : même logique avec <code>super(nom, prix)</code>.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Piège fréquent : oublier d'appeler <code>super(...)</code> avant d'utiliser <code>this</code> dans le constructeur de la classe fille — cela provoque une erreur.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Solution + Explication</summary>
+    <div class="details-body">
+      <pre><code>class Produit{
+  constructor(nom, prix){
+    this.nom = nom;
+    this.prix = prix;
+  }
+  info(){
+    return `Produit nom:${this.nom} a pour prix:${this.prix}`;
+  }
+}
+class ProduitSolde extends Produit{
+  constructor(nom, prix, remise){
+    super(nom, prix);
+    this.remise = remise;
+  }
+  info(){
+    return `${super.info()} remise:${this.remise}%`;
+  }
+}
+let p1 = new ProduitSolde("Sac", 200, 30);
+console.log(p1.info());
+// Produit nom:Sac a pour prix:200 remise:30%</code></pre>
+      <div class="explication">
+        <div class="step"><strong>super(nom, prix) :</strong> appelle le constructeur de <code>Produit</code> pour initialiser <code>nom</code> et <code>prix</code> avant d'ajouter <code>remise</code>.<br><strong>super.info() :</strong> réutilise le texte déjà généré par la classe mère au lieu de le réécrire.</div>
+      </div>
+    </div>
+  </details>
+  <div class="github">🔗  : <code><a href="01_MODULE_REACT/SEANCE-01/ex07_Héritage_du_Produit_au_ProduitSolde">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="exercise" id="ex8">
+  <div class="ex-head"><h3>EXERCICE 8 — Un module Panier.js <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl2">🟡 Niveau 2</span></div>
+  <div><span class="tag">Notions : export default, export, import</span></div>
+  <div class="objectif">🎯 Objectif : organiser du code en module et l'importer correctement.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On veut un fichier <code>Panier.js</code> contenant : une classe <code>Panier</code> (export par défaut) et une constante <code>TVA = 0.2</code> (export nommé).</p>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Écrire le contenu du fichier <code>Panier.js</code> avec les deux exports.</li>
+      <li>Écrire le contenu du fichier <code>Index.js</code> qui importe les deux éléments.</li>
+      <li>Expliquer, en une phrase, pourquoi <code>Panier</code> s'importe sans accolades et <code>TVA</code> avec accolades.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Un seul <code>export default</code> par fichier est autorisé ; il peut y avoir plusieurs <code>export</code> nommés.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Vérification : n'oublie pas <code>type="module"</code> sur la balise <code>&lt;script&gt;</code> qui charge <code>Index.js</code>, sinon les imports échouent.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Solution + Explication</summary>
+    <div class="details-body">
+      <p><strong>Panier.js</strong></p>
+      <pre><code>export const TVA = 0.2;
+export default class Panier{
+  constructor(){
+    this.articles = [];
+  }
+}</code></pre>
+      <p><strong>Index.js</strong></p>
+      <pre><code>import Panier, { TVA } from './Panier.js';
+let monPanier = new Panier();
+console.log(TVA);</code></pre>
+      <div class="explication">
+        <div class="step">L'élément exporté par <code>export default</code> est unique par fichier et s'importe sans accolades ; les éléments exportés avec <code>export</code> peuvent être multiples et s'importent entre accolades.</div>
+      </div>
+    </div>
+  </details>
+  <div class="github">🔗 <code><a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex08_Un_module_Panier..js">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="exercise" id="ex9">
+  <div class="ex-head"><h3>EXERCICE 9 — map() : liste de prix TTC <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl2">🟡 Niveau 2</span></div>
+  <div><span class="tag">Notions : map()</span></div>
+  <div class="objectif">🎯 Objectif : transformer un tableau de nombres avec map().</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>const prixHT = [100, 250, 40, 300];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Créer un tableau <code>prixTTC</code> où chaque prix est multiplié par 1.2 (TVA 20%).</li>
+      <li>Afficher <code>prixTTC</code>.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">La fonction passée à <code>map</code> reçoit un élément et doit <code>return</code> sa transformation.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Réflexe examen : "transformer chaque élément d'un tableau" → penser à <code>map()</code>.</div></details>
+  <details class="corrige"><summary>✅ Corrigé</summary>
+    <div class="details-body">
+      <pre><code>const prixHT = [100, 250, 40, 300];
+const prixTTC = prixHT.map(function(prix){ return prix * 1.2; });
+console.log(prixTTC); // [120, 300, 48, 360]</code></pre>
+    </div>
+  </details>
+  <div class="github">🔗 <code><a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex09_map_liste_de_prix_TTC">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="exercise" id="ex10">
+  <div class="ex-head"><h3>EXERCICE 10 — filter() : étudiants admis <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl2">🟡 Niveau 2</span></div>
+  <div><span class="tag">Notions : filter()</span></div>
+  <div class="objectif">🎯 Objectif : sélectionner des éléments selon une condition.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>const etudiants = [
+  { nom: "Sara", moyenne: 14 },
+  { nom: "Yassine", moyenne: 8 },
+  { nom: "Imane", moyenne: 12 },
+  { nom: "Omar", moyenne: 9 },
+];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Créer un tableau <code>admis</code> contenant les étudiants dont la moyenne est <code>&gt;= 10</code>.</li>
+      <li>Afficher <code>admis</code>.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">La fonction passée à <code>filter</code> doit retourner <code>true</code> ou <code>false</code> pour chaque élément.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Réflexe examen : "garder seulement certains éléments d'un tableau" → penser à <code>filter()</code>.</div></details>
+  <details class="corrige"><summary>✅ Corrigé</summary>
+    <div class="details-body">
+      <pre><code>const admis = etudiants.filter(function(e){ return e.moyenne >= 10; });
+console.log(admis); // Sara et Imane</code></pre>
+    </div>
+  </details>
+  <div class="github">🔗<code>[<a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex10_filter_%C3%A9tudiants_admis">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="exercise" id="ex11">
+  <div class="ex-head"><h3>EXERCICE 11 — find() : chercher un client <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl2">🟡 Niveau 2</span></div>
+  <div><span class="tag">Notions : find()</span></div>
+  <div class="objectif">🎯 Objectif : retrouver un seul élément précis dans un tableau.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>const clients = [
+  { id: 1, nom: "Rami" },
+  { id: 2, nom: "Karimi" },
+  { id: 3, nom: "Chaouki" },
+];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Utiliser <code>find()</code> pour récupérer le client dont <code>id === 2</code>.</li>
+      <li>Tester aussi avec <code>id === 9</code> et observer le résultat.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Contrairement à <code>filter</code>, <code>find</code> retourne un seul objet, pas un tableau.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Vérification à faire : si aucun élément ne correspond, le résultat est <code>undefined</code>, pas une erreur — pense à le gérer si besoin.</div></details>
+  <details class="corrige"><summary>✅ Corrigé</summary>
+    <div class="details-body">
+      <pre><code>const client2 = clients.find(function(c){ return c.id === 2; });
+console.log(client2); // {id: 2, nom: "Karimi"}
+const client9 = clients.find(function(c){ return c.id === 9; });
+console.log(client9); // undefined</code></pre>
+    </div>
+  </details>
+  <div class="github">🔗<code><a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex11_find_chercher_un_client">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="exercise" id="ex12">
+  <div class="ex-head"><h3>EXERCICE 12 — Destructuring avec rest et copie <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl2">🟡 Niveau 2</span></div>
+  <div><span class="tag">Notions : destructuring array, rest, spread (copie)</span></div>
+  <div class="objectif">🎯 Objectif : extraire des éléments et créer une copie indépendante d'un tableau.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>let notes = [12, 15, 9, 18, 7];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Récupérer la première note dans <code>premiere</code>, la deuxième dans <code>deuxieme</code>, et le reste dans <code>autres</code> (destructuring + rest).</li>
+      <li>Créer une copie complète du tableau <code>notes</code> appelée <code>notesCopie</code> avec le spread operator.</li>
+      <li>Afficher les trois résultats.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Syntaxe : <code>const [a, b, ...rest] = tableau</code>.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Le spread <code>[...notes]</code> crée un nouveau tableau : modifier <code>notesCopie</code> ne touche pas <code>notes</code>.</div></details>
+  <details class="corrige"><summary>✅ Corrigé</summary>
+    <div class="details-body">
+      <pre><code>let notes = [12, 15, 9, 18, 7];
+const [premiere, deuxieme, ...autres] = notes;
+const notesCopie = [...notes];
+console.log(premiere, deuxieme, autres);
+console.log(notesCopie);</code></pre>
+    </div>
+  </details>
+  <div class="github">🔗 <code><a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex12_Destructuring_avec%20_est_et%20_copie">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="checkpoint">
+  <h4>📈 CHECKPOINT — Niveau 2</h4>
+  <p>☐ Je peux...</p>
+  <ul>
+    <li>créer une classe dérivée avec <code>extends</code> et <code>super</code> ;</li>
+    <li>organiser du code avec <code>export default</code> / <code>export</code> / <code>import</code> ;</li>
+    <li>choisir entre <code>map</code>, <code>filter</code> et <code>find</code> selon le besoin ;</li>
+    <li>utiliser rest et spread sur un tableau.</li>
+  </ul>
+  <p><em>Si un point coince, revoir "Héritage de classe" et "Modules" (p.7-9) ainsi que "Opérations sur Array" (p.12-14) du cours.</em></p>
+</div>
+
+<!-- ============ NIVEAU 3 ============ -->
+<h2 class="level-title lvl3" id="n3">🟠 NIVEAU 3 — Intermédiaire</h2>
+<div class="rappel">
+  <h4>🧠 À savoir avant de commencer</h4>
+  <ul>
+    <li>On peut chaîner <code>map</code>, <code>filter</code>, <code>find</code>, <code>reduce</code> pour résoudre un problème en plusieurs étapes.</li>
+    <li><code>reduce((acc, elt) => ..., valeurInitiale)</code> réduit un tableau à une seule valeur.</li>
+    <li>Une fonction récursive s'appelle elle-même, avec un cas d'arrêt (base case) obligatoire.</li>
+    <li>Une closure (fermeture) garde en mémoire une variable même après la fin de l'exécution de la fonction englobante.</li>
+    <li>Une arrow function <code>(a,b) =&gt; a+b</code> est une syntaxe raccourcie, mais ne peut pas servir de constructeur.</li>
+  </ul>
+</div>
+
+<div class="exercise" id="ex13">
+  <div class="ex-head"><h3>EXERCICE 13 — Chaîner filter puis map <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl3">🟠 Niveau 3</span></div>
+  <div><span class="tag">Notions : filter + map combinés</span></div>
+  <div class="objectif">🎯 Objectif : combiner deux méthodes de tableau pour résoudre un problème en une chaîne d'instructions.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>const personnes = [
+  { nom: "Rami", age: 33, estMember: true },
+  { nom: "Fatihi", age: 24, estMember: false },
+  { nom: "Chakib", age: 45, estMember: true },
+  { nom: "Mounir", age: 37, estMember: false },
+];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Créer un tableau <code>nomsMembres</code> contenant uniquement les <strong>noms</strong> des personnes dont <code>estMember</code> est <code>true</code>.</li>
+      <li>Faire cela en une seule expression chaînée (<code>.filter(...).map(...)</code>).</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">D'abord filtrer les membres, puis transformer le tableau filtré pour ne garder que le nom.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Piège fréquent : inverser l'ordre (map avant filter) complique la condition car on perd l'accès aux autres propriétés de l'objet.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Solution + Explication</summary>
+    <div class="details-body">
+      <pre><code>const nomsMembres = personnes
+  .filter(function(p){ return p.estMember; })
+  .map(function(p){ return p.nom; });
+console.log(nomsMembres); // ["Rami", "Chakib"]</code></pre>
+      <div class="explication">
+        <div class="step"><strong>filter :</strong> réduit le tableau aux objets membres.<br><strong>map :</strong> transforme chaque objet restant en simple chaîne (son nom).</div>
+      </div>
+    </div>
+  </details>
+  <div class="github">🔗<code><a href="https://github.com/nora-elayane/JAVA_WEB_FULL_STACK_CODE/tree/main/01_MODULE_REACT/SEANCE-01/ex13_Cha%C3%AEner_filter_puis_map">Ma solution GitHub</a></code></div>
+</div>
+
+<div class="exercise" id="ex14">
+  <div class="ex-head"><h3>EXERCICE 14 — reduce() : chiffre d'affaires total <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl3">🟠 Niveau 3</span></div>
+  <div><span class="tag">Notions : reduce()</span></div>
+  <div class="objectif">🎯 Objectif : réduire un tableau d'objets à une valeur unique.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>const ventes = [
+  { produit: "Clavier", montant: 250 },
+  { produit: "Souris", montant: 90 },
+  { produit: "Écran", montant: 1200 },
+];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Calculer le total des ventes avec <code>reduce()</code>.</li>
+      <li>Afficher le résultat.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">La valeur initiale de l'accumulateur doit être <code>0</code>, sinon le premier élément du tableau sera pris comme accumulateur de départ (et ce serait un objet, pas un nombre).</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Réflexe examen : "réduire un tableau à une seule valeur (total, moyenne...)" → penser à <code>reduce()</code>.</div></details>
+  <details class="corrige"><summary>✅ Corrigé</summary>
+    <div class="details-body">
+      <pre><code>const total = ventes.reduce(function(acc, v){
+  return acc + v.montant;
+}, 0);
+console.log(total); // 1540</code></pre>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="exercise" id="ex15">
+  <div class="ex-head"><h3>EXERCICE 15 — Récursivité : puissance <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl3">🟠 Niveau 3</span></div>
+  <div><span class="tag">Notions : récursivité, cas d'arrêt</span></div>
+  <div class="objectif">🎯 Objectif : écrire une fonction récursive avec un cas de base correct.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On veut calculer <code>base</code> élevé à la puissance <code>exposant</code> (entiers positifs), sans utiliser <code>Math.pow</code> ni <code>**</code>.</p>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Écrire une fonction récursive <code>puissance(base, exposant)</code>.</li>
+      <li>Définir le cas d'arrêt (quand <code>exposant === 0</code>).</li>
+      <li>Tester avec <code>puissance(2, 5)</code>.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Inspire-toi de <code>fact(n)</code> du cours : le cas d'arrêt retourne une valeur fixe, sinon on multiplie par un appel récursif avec un exposant réduit de 1.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Piège fréquent : oublier le cas d'arrêt provoque une boucle infinie (stack overflow).</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Explication</summary>
+    <div class="details-body">
+      <pre><code>function puissance(base, exposant){
+  if(exposant === 0){
+    return 1;
+  }
+  return base * puissance(base, exposant - 1);
+}
+console.log(puissance(2, 5)); // 32</code></pre>
+      <div class="explication">
+        <div class="step">Chaque appel réduit le problème (l'exposant diminue de 1) jusqu'à atteindre le cas d'arrêt, puis les résultats "remontent" en se multipliant.</div>
+      </div>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="exercise" id="ex16">
+  <div class="ex-head"><h3>EXERCICE 16 — Closure : jauge de points <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl3">🟠 Niveau 3</span></div>
+  <div><span class="tag">Notions : closures, variables privées</span></div>
+  <div class="objectif">🎯 Objectif : utiliser une fermeture pour garder une variable "privée" entre plusieurs appels.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On veut une fonction <code>creerJauge(depart)</code> qui retourne une fonction permettant d'ajouter des points à chaque appel, en gardant le score en mémoire.</p>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Écrire <code>creerJauge(depart)</code> qui retourne une fonction acceptant un paramètre <code>points</code>.</li>
+      <li>Chaque appel de la fonction retournée doit ajouter <code>points</code> au score et le retourner.</li>
+      <li>Tester : <code>let jauge = creerJauge(10); jauge(5); jauge(3);</code></li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Reprends la structure de <code>compteur()</code> du cours : une variable déclarée dans la fonction externe, modifiée par la fonction interne retournée.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Vérification : chaque appel à <code>creerJauge()</code> crée une <em>nouvelle</em> closure indépendante — deux jauges différentes n'interfèrent pas.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Explication</summary>
+    <div class="details-body">
+      <pre><code>function creerJauge(depart){
+  let score = depart;
+  return function(points){
+    score += points;
+    return score;
+  };
+}
+let jauge = creerJauge(10);
+console.log(jauge(5)); // 15
+console.log(jauge(3)); // 18</code></pre>
+      <div class="explication">
+        <div class="step">La fonction interne "se souvient" de <code>score</code> grâce à la fermeture, même après la fin de l'exécution de <code>creerJauge</code>.</div>
+      </div>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="exercise" id="ex17">
+  <div class="ex-head"><h3>EXERCICE 17 — Convertir en arrow function <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl3">🟠 Niveau 3</span></div>
+  <div><span class="tag">Notions : arrow functions</span></div>
+  <div class="objectif">🎯 Objectif : transformer des fonctions classiques en arrow functions.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>function carre(n){
+  return n * n;
+}
+function estPair(n){
+  return n % 2 === 0;
+}</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Réécrire <code>carre</code> en arrow function stockée dans une constante <code>myCarre</code>.</li>
+      <li>Réécrire <code>estPair</code> en arrow function stockée dans une constante <code>myEstPair</code>.</li>
+      <li>Vérifier que les deux fonctionnent avec quelques tests.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Une arrow function avec une seule instruction n'a pas besoin de <code>return</code> explicite ni d'accolades.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Piège fréquent : une arrow function est anonyme — il faut absolument l'affecter à une variable pour pouvoir la réutiliser.</div></details>
+  <details class="corrige"><summary>✅ Corrigé</summary>
+    <div class="details-body">
+      <pre><code>const myCarre = n => n * n;
+const myEstPair = n => n % 2 === 0;
+console.log(myCarre(4));    // 16
+console.log(myEstPair(7));  // false</code></pre>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="exercise" id="ex18">
+  <div class="ex-head"><h3>EXERCICE 18 — Fusionner avec le spread <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl3">🟠 Niveau 3</span></div>
+  <div><span class="tag">Notions : spread sur objets et tableaux</span></div>
+  <div class="objectif">🎯 Objectif : combiner deux structures sans les modifier directement.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>const infosPerso = { nom: "Nora", ville: "Béni Mellal" };
+const infosEcole = { filiere: "DEV FullStack + IA", annee: 2 };
+const listeA = [1,2,3];
+const listeB = [4,5,6];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Créer un objet <code>profil</code> qui fusionne <code>infosPerso</code> et <code>infosEcole</code> avec le spread.</li>
+      <li>Créer un tableau <code>toutesLesListes</code> qui fusionne <code>listeA</code> et <code>listeB</code>.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Le spread fonctionne à l'intérieur de <code>{...}</code> pour les objets et de <code>[...]</code> pour les tableaux.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Vérification : <code>infosPerso</code> et <code>infosEcole</code> ne sont pas modifiés après l'opération — seul <code>profil</code> est un nouvel objet.</div></details>
+  <details class="corrige"><summary>✅ Corrigé</summary>
+    <div class="details-body">
+      <pre><code>const profil = { ...infosPerso, ...infosEcole };
+const toutesLesListes = [...listeA, ...listeB];
+console.log(profil);
+console.log(toutesLesListes);</code></pre>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="checkpoint">
+  <h4>📈 CHECKPOINT — Niveau 3</h4>
+  <p>☐ Je peux...</p>
+  <ul>
+    <li>chaîner <code>filter</code> et <code>map</code> pour résoudre un problème en plusieurs étapes ;</li>
+    <li>utiliser <code>reduce</code> pour calculer un total ;</li>
+    <li>écrire une fonction récursive correcte (avec cas d'arrêt) ;</li>
+    <li>expliquer et utiliser une closure ;</li>
+    <li>convertir une fonction classique en arrow function et fusionner avec le spread.</li>
+  </ul>
+  <p><em>Si un point coince, revoir "La récursivité", "Fermetures" et "L'opérateur de propagation spread" (p.16-19) du cours.</em></p>
+</div>
+
+<!-- ============ NIVEAU 4 ============ -->
+<h2 class="level-title lvl4" id="n4">🔴 NIVEAU 4 — Avancé</h2>
+<div class="rappel">
+  <h4>🧠 À savoir avant de commencer</h4>
+  <ul>
+    <li>Une fonction pure ne modifie jamais une donnée en dehors de sa portée : elle retourne toujours une <strong>nouvelle</strong> valeur.</li>
+    <li>Pour ajouter/supprimer/modifier un élément d'un tableau sans le muter : combiner <code>filter</code>, <code>map</code> et le spread <code>[...]</code>.</li>
+    <li>Plusieurs notions (classes, tableaux, closures, modules) peuvent se combiner dans un même exercice, comme dans un vrai projet.</li>
+  </ul>
+</div>
+
+<div class="exercise" id="ex19">
+  <div class="ex-head"><h3>EXERCICE 19 — CRUD immuable sur un tableau <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl4">🔴 Niveau 4</span></div>
+  <div><span class="tag">Notions : fonctions pures, immutabilité, filter, spread</span></div>
+  <div class="objectif">🎯 Objectif : manipuler un tableau d'objets sans jamais le muter directement.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>const taches = [
+  { id: 1, titre: "Réviser React", faite: false },
+  { id: 2, titre: "Push sur GitHub", faite: true },
+  { id: 3, titre: "TP closures", faite: false },
+];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Écrire <code>pureAjouter(tache)</code> qui retourne un nouveau tableau avec la tâche ajoutée, sans modifier <code>taches</code>.</li>
+      <li>Écrire <code>pureSupprimer(id)</code> qui retourne un nouveau tableau sans la tâche correspondante.</li>
+      <li>Écrire <code>pureBasculer(id)</code> qui retourne un nouveau tableau où <code>faite</code> est inversé pour la tâche correspondante, les autres restant inchangées.</li>
+      <li>Vérifier après chaque appel que <code>taches</code> n'a pas changé.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Regarde <code>pureAppend</code>, <code>pureDeleteFonction</code> et <code>pureUpdateNote</code> du cours (p.20-24) : chaque fonction reconstruit un nouveau tableau au lieu de modifier l'original.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Piège fréquent : utiliser <code>push()</code>, <code>splice()</code> ou une affectation directe (<code>taches[0].faite = true</code>) — cela mute le tableau d'origine et casse l'immutabilité.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Solution + Explication</summary>
+    <div class="details-body">
+      <pre><code>function pureAjouter(tache){
+  return [...taches, tache];
+}
+function pureSupprimer(id){
+  return taches.filter(t => t.id !== id);
+}
+function pureBasculer(id){
+  return taches.map(t =>
+    t.id === id ? { ...t, faite: !t.faite } : t
+  );
+}
+console.log(pureAjouter({id:4, titre:"Quiz JS", faite:false}));
+console.log(pureSupprimer(2));
+console.log(pureBasculer(1));
+console.log(taches); // inchangé</code></pre>
+      <div class="explication">
+        <div class="step"><strong>pureAjouter :</strong> spread de l'ancien tableau + nouvel élément → nouveau tableau.<br><strong>pureSupprimer :</strong> filter garde tout sauf l'id ciblé → nouveau tableau, sans toucher l'ancien.<br><strong>pureBasculer :</strong> map recrée chaque élément ; seul celui qui correspond à l'id est remplacé par une copie modifiée (<code>{...t, faite: !t.faite}</code>).</div>
+      </div>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="exercise" id="ex20">
+  <div class="ex-head"><h3>EXERCICE 20 — Héritage + tableau d'objets <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl4">🔴 Niveau 4</span></div>
+  <div><span class="tag">Notions : héritage, map/filter combinés à des instances de classe</span></div>
+  <div class="objectif">🎯 Objectif : combiner classes et opérations sur tableaux dans un scénario réaliste.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Reprendre les classes <code>Etudiant</code> et <code>Stagiaire extends Etudiant</code> du cours (p.6-8). On dispose d'une liste mixte de stagiaires :</p>
+    <pre><code>let liste = [
+  new Stagiaire("Rami", 23, "dev mobile"),
+  new Stagiaire("Karimi", 21, "dev web"),
+  new Stagiaire("Fahmi", 25, "dev mobile"),
+];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Utiliser <code>filter</code> pour ne garder que les stagiaires du stage "dev mobile".</li>
+      <li>Utiliser <code>map</code> pour obtenir un tableau des textes <code>info()</code> de chaque stagiaire filtré.</li>
+      <li>Afficher le résultat final.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Même si les éléments sont des instances de classe, ce sont toujours des objets JS classiques pour <code>filter</code> et <code>map</code> — les méthodes de la classe restent accessibles dans le callback.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Réflexe examen : "filtrer puis transformer des instances d'une classe" = même logique que sur des objets littéraux, appelle simplement leurs méthodes dans <code>map</code>.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Explication</summary>
+    <div class="details-body">
+      <pre><code>let mobiles = liste.filter(s => s.stage === "dev mobile");
+let textes = mobiles.map(s => s.info());
+console.log(textes);
+// ["Stagiaire nom:Rami a pour age:23 stage:dev mobile",
+//  "Stagiaire nom:Fahmi a pour age:25 stage:dev mobile"]</code></pre>
+      <div class="explication">
+        <div class="step">Le filtre s'appuie sur l'attribut <code>stage</code> hérité du constructeur de <code>Stagiaire</code> ; le <code>map</code> appelle la méthode <code>info()</code> redéfinie (qui utilise <code>super.info()</code> en interne).</div>
+      </div>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="exercise" id="ex21">
+  <div class="ex-head"><h3>EXERCICE 21 — Fermeture avancée : minuteur d'étude <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl4">🔴 Niveau 4</span></div>
+  <div><span class="tag">Notions : closures, fonctions retournant des fonctions, setInterval</span></div>
+  <div class="objectif">🎯 Objectif : construire une fermeture à plusieurs niveaux, inspirée d'un cas réel du cours.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Le cours (p.17-18) présente un minuteur heure/minute/seconde construit avec une closure. On veut une version simplifiée : un minuteur qui compte des <strong>secondes écoulées</strong> depuis un départ donné.</p>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Écrire <code>creerMinuteur(depart)</code> qui retourne une fonction sans paramètre.</li>
+      <li>Chaque appel de la fonction retournée doit incrémenter les secondes de 1 et retourner la valeur courante.</li>
+      <li>Ne pas utiliser de variable globale mutable en dehors de la fermeture.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Même principe que la fonction <code>incrementer(temps)</code> du cours : on copie l'état de départ avec <code>{...}</code>, puis on le modifie uniquement à l'intérieur de la fonction interne retournée.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Vérification : deux minuteurs créés séparément (<code>creerMinuteur(0)</code> et <code>creerMinuteur(100)</code>) doivent évoluer de façon totalement indépendante.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Explication</summary>
+    <div class="details-body">
+      <pre><code>function creerMinuteur(depart){
+  let secondes = depart;
+  return function(){
+    secondes++;
+    return secondes;
+  };
+}
+let minuteurA = creerMinuteur(0);
+let minuteurB = creerMinuteur(100);
+console.log(minuteurA()); // 1
+console.log(minuteurA()); // 2
+console.log(minuteurB()); // 101</code></pre>
+      <div class="explication">
+        <div class="step">Chaque appel de <code>creerMinuteur</code> crée sa propre variable <code>secondes</code>, capturée par une fonction interne distincte : les deux minuteurs ne partagent aucun état.</div>
+      </div>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="exercise" id="ex22">
+  <div class="ex-head"><h3>EXERCICE 22 — Modules + alias + classe <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl4">🔴 Niveau 4</span></div>
+  <div><span class="tag">Notions : import/export, alias (as), classes</span></div>
+  <div class="objectif">🎯 Objectif : organiser un mini-projet en modules avec renommage à l'import.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On veut un module <code>Cours.js</code> exportant : une classe <code>Cours</code> (par défaut) avec <code>titre</code> et <code>duree</code>, et une constante <code>NIVEAU = "S1"</code> (export nommé).</p>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Écrire <code>Cours.js</code> avec les deux exports.</li>
+      <li>Dans <code>Index.js</code>, importer la classe et renommer <code>NIVEAU</code> en <code>niv</code> avec un alias (<code>as</code>).</li>
+      <li>Créer une instance de <code>Cours</code> et afficher son titre suivi du niveau (via <code>niv</code>).</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">La syntaxe d'alias vue dans le cours (p.9) : <code>import Etd, {Etablissement as Etab, info} from './Etudiant.js'</code>.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Piège fréquent : l'alias ne s'applique qu'aux exports nommés (entre accolades), jamais à l'export par défaut.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Solution</summary>
+    <div class="details-body">
+      <p><strong>Cours.js</strong></p>
+      <pre><code>export const NIVEAU = "S1";
+export default class Cours{
+  constructor(titre, duree){
+    this.titre = titre;
+    this.duree = duree;
+  }
+}</code></pre>
+      <p><strong>Index.js</strong></p>
+      <pre><code>import Cours, { NIVEAU as niv } from './Cours.js';
+let c1 = new Cours("Front-end", 24);
+console.log(`${c1.titre} - niveau ${niv}`);</code></pre>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="exercise" id="ex23">
+  <div class="ex-head"><h3>EXERCICE 23 — Trouver l'erreur (débogage) <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl4">🔴 Niveau 4</span></div>
+  <div><span class="tag">Notions : fonctions pures vs impures, immutabilité</span></div>
+  <div class="objectif">🎯 Objectif : repérer pourquoi une fonction censée être pure ne l'est pas.</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Un camarade a écrit ce code pour ajouter une note à un tableau "sans le modifier" :</p>
+    <pre><code>let notes = [12, 15, 9];
+function ajouterNote(note){
+  notes.push(note);
+  return notes;
+}
+console.log(ajouterNote(18));
+console.log(notes);</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>Prédire ce que va afficher le deuxième <code>console.log(notes)</code>.</li>
+      <li>Expliquer pourquoi cette fonction n'est pas pure.</li>
+      <li>Corriger la fonction pour qu'elle soit réellement pure.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body"><code>push()</code> modifie le tableau d'origine "en place" — ce n'est pas une méthode qui retourne un nouveau tableau.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Piège fréquent à l'examen : confondre les méthodes qui mutent (<code>push</code>, <code>pop</code>, <code>splice</code>, affectation d'index) et celles qui ne mutent pas (<code>map</code>, <code>filter</code>, spread).</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Explication</summary>
+    <div class="details-body">
+      <p><strong>1. Prédiction :</strong> <code>[12, 15, 9, 18]</code> — le tableau original a bien été modifié.</p>
+      <p><strong>2. Explication :</strong> <code>push()</code> mute directement <code>notes</code> ; la fonction a donc un effet de bord visible en dehors de sa portée, ce qui contredit la définition d'une fonction pure.</p>
+      <p><strong>3. Correction :</strong></p>
+      <pre><code>function ajouterNote(note){
+  return [...notes, note];
+}
+console.log(ajouterNote(18)); // [12,15,9,18]
+console.log(notes);           // [12,15,9] inchangé</code></pre>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="checkpoint">
+  <h4>📈 CHECKPOINT — Niveau 4</h4>
+  <p>☐ Je peux...</p>
+  <ul>
+    <li>écrire des fonctions pures pour ajouter/supprimer/modifier dans un tableau ;</li>
+    <li>combiner héritage de classe et méthodes de tableau ;</li>
+    <li>construire une fermeture à plusieurs instances indépendantes ;</li>
+    <li>utiliser un alias à l'import d'un module ;</li>
+    <li>repérer une mutation accidentelle dans du code existant.</li>
+  </ul>
+  <p><em>Si un point coince, revoir "Pures fonctions et Arrays" (p.20-24) et "Fermetures" (p.16-18) du cours avant l'EFM.</em></p>
+</div>
+
+<!-- ============ NIVEAU 5 ============ -->
+<h2 class="level-title lvl5" id="n5">🟣 NIVEAU 5 — EFM / Examen</h2>
+<div class="rappel">
+  <h4>🧠 À savoir avant de commencer</h4>
+  <ul>
+    <li>Un exercice d'EFM combine souvent plusieurs notions du module dans un seul scénario.</li>
+    <li>Gérer son temps : lire l'énoncé en entier avant de coder, repérer les notions attendues.</li>
+    <li>Une correction de qualité montre le raisonnement, pas seulement le résultat final.</li>
+  </ul>
+</div>
+
+<div class="exercise" id="ex24">
+  <div class="ex-head"><h3>EXERCICE 24 — Gestion d'une bibliothèque <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl5">🟣 Niveau 5</span></div>
+  <div><span class="tag">Notions : classe, héritage, filter/map, fonction pure</span></div>
+  <div class="objectif">🎯 Objectif : mobiliser plusieurs notions du module dans un exercice de synthèse.</div>
+  <div class="bareme">Barème indicatif — 10 pts</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On modélise une bibliothèque. Un <code>Livre</code> a un <code>titre</code> et un <code>auteur</code>. Un <code>LivreNumerique extends Livre</code> ajoute une <code>taille</code> (en Mo).</p>
+    <pre><code>let stock = [
+  new Livre("Le Petit Prince", "Saint-Exupéry"),
+  new LivreNumerique("Dune", "Herbert", 4.2),
+  new LivreNumerique("1984", "Orwell", 1.8),
+];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>(2 pts) Écrire les classes <code>Livre</code> et <code>LivreNumerique</code> avec une méthode <code>info()</code> adaptée à chacune.</li>
+      <li>(3 pts) Écrire une fonction pure <code>pureAjouterLivre(livre)</code> qui retourne un nouveau tableau avec le livre ajouté à <code>stock</code>, sans le modifier.</li>
+      <li>(3 pts) Avec <code>filter</code> et <code>map</code>, produire la liste des titres des seuls livres numériques de moins de 3 Mo.</li>
+      <li>(2 pts) Expliquer en 2-3 phrases pourquoi <code>pureAjouterLivre</code> est bien une fonction pure.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Pour la question 3, il faut d'abord filtrer sur deux conditions (être numérique <em>et</em> taille &lt; 3), en testant si l'objet a une propriété <code>taille</code> (<code>livre.taille !== undefined</code>) ou en gardant une trace de son type.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Réflexe examen : "distinguer un sous-type dans un tableau mixte" → tester une propriété propre à la sous-classe (ici <code>taille</code>), ou utiliser <code>instanceof</code>.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Solution + Explication</summary>
+    <div class="details-body">
+      <pre><code>class Livre{
+  constructor(titre, auteur){
+    this.titre = titre;
+    this.auteur = auteur;
+  }
+  info(){
+    return `Livre "${this.titre}" de ${this.auteur}`;
+  }
+}
+class LivreNumerique extends Livre{
+  constructor(titre, auteur, taille){
+    super(titre, auteur);
+    this.taille = taille;
+  }
+  info(){
+    return `${super.info()} (numérique, ${this.taille} Mo)`;
+  }
+}
+
+function pureAjouterLivre(livre){
+  return [...stock, livre];
+}
+
+const petitsNumeriques = stock
+  .filter(l => l instanceof LivreNumerique && l.taille < 3)
+  .map(l => l.titre);
+console.log(petitsNumeriques); // ["1984"]</code></pre>
+      <div class="explication">
+        <div class="step"><strong>Question 4 :</strong> <code>pureAjouterLivre</code> ne modifie jamais <code>stock</code> : elle utilise le spread pour créer un tout nouveau tableau, n'a pas d'effet de bord, et retourne toujours le même résultat pour les mêmes entrées.</div>
+      </div>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="exercise" id="ex25">
+  <div class="ex-head"><h3>EXERCICE 25 — Tableau de bord des dépenses <span class="tag">[Exercice d'entraînement]</span></h3><span class="badge lvl5">🟣 Niveau 5</span></div>
+  <div><span class="tag">Notions : reduce, map, closure, destructuring</span></div>
+  <div class="objectif">🎯 Objectif : combiner reduce, closure et destructuring dans un scénario de gestion de budget.</div>
+  <div class="bareme">Barème indicatif — 10 pts</div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>const depenses = [
+  { categorie: "Transport", montant: 150 },
+  { categorie: "Nourriture", montant: 400 },
+  { categorie: "Transport", montant: 80 },
+  { categorie: "Loisirs", montant: 120 },
+];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ À toi de jouer</h4>
+    <ol>
+      <li>(3 pts) Avec <code>reduce</code>, calculer le total général des dépenses.</li>
+      <li>(3 pts) Écrire une fonction <code>creerBudgetTracker(limite)</code> (closure) qui retourne une fonction acceptant un montant, ajoutant les dépenses cumulées, et retournant <code>true</code> si la limite est dépassée, <code>false</code> sinon.</li>
+      <li>(2 pts) Extraire par destructuring la <code>categorie</code> et le <code>montant</code> du premier élément de <code>depenses</code>.</li>
+      <li>(2 pts) Expliquer pourquoi la fonction retournée par <code>creerBudgetTracker</code> garde le total en mémoire d'un appel à l'autre.</li>
+    </ol>
+  </div>
+  <label class="status"><input type="checkbox" class="track"> Marquer comme terminé</label>
+  <details class="indice"><summary>💡 Indice</summary><div class="details-body">Pour la question 2, la variable qui cumule les dépenses doit être déclarée <em>en dehors</em> de la fonction retournée, mais <em>dans</em> <code>creerBudgetTracker</code>.</div></details>
+  <details class="astuce"><summary>🧠 Astuce</summary><div class="details-body">Vérification : appeler la fonction retournée plusieurs fois de suite doit faire évoluer le cumul, pas repartir de zéro à chaque appel.</div></details>
+  <details class="corrige"><summary>✅ Corrigé + Solution + Explication</summary>
+    <div class="details-body">
+      <pre><code>const total = depenses.reduce((acc, d) => acc + d.montant, 0);
+console.log(total); // 750
+
+function creerBudgetTracker(limite){
+  let cumul = 0;
+  return function(montant){
+    cumul += montant;
+    return cumul > limite;
+  };
+}
+let tracker = creerBudgetTracker(300);
+console.log(tracker(150)); // false (150)
+console.log(tracker(200)); // true  (350 > 300)
+
+const { categorie, montant } = depenses[0];
+console.log(categorie, montant); // Transport 150</code></pre>
+      <div class="explication">
+        <div class="step"><strong>Question 4 :</strong> la variable <code>cumul</code> est capturée par la fonction interne au moment de sa création (fermeture) ; elle reste accessible et modifiable à chaque appel, tant que la référence à la fonction retournée existe.</div>
+      </div>
+    </div>
+  </details>
+  <div class="github">🔗 Ma solution GitHub : <code>[ AJOUTER LE LIEN ICI ]</code></div>
+</div>
+
+<div class="checkpoint">
+  <h4>📈 CHECKPOINT — Niveau 5</h4>
+  <p>☐ Je peux...</p>
+  <ul>
+    <li>résoudre un exercice combinant classes, héritage et tableaux sans aide ;</li>
+    <li>construire une closure avec état cumulatif ;</li>
+    <li>justifier par écrit pourquoi une fonction est pure ou non ;</li>
+    <li>gérer mon temps sur un exercice à plusieurs questions notées.</li>
+  </ul>
+  <p><em>Prête pour le Mode Examen ci-dessous.</em></p>
+</div>
+
+<!-- ============ MODE EXAMEN ============ -->
+<h2 class="level-title lvl5" id="exam">🏆 MODE EXAMEN</h2>
+
+<div class="exam-sujet">
+  <h3>SUJET 1 — Plateforme d'inscriptions</h3>
+  <div class="exam-meta"><span>⏱️ Durée indicative : 35 min</span><span>🔴/🟣 Niveau</span><span>Barème : 20 pts</span></div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <pre><code>const inscriptions = [
+  { id: 1, nom: "Rami", filiere: "DEV", valide: false },
+  { id: 2, nom: "Kamali", filiere: "IA", valide: true },
+  { id: 3, nom: "Fahmi", filiere: "DEV", valide: true },
+  { id: 4, nom: "Chaouki", filiere: "IA", valide: false },
+];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ Travail demandé</h4>
+    <ol>
+      <li>(4 pts) Écrire une classe <code>Inscription</code> avec <code>id, nom, filiere, valide</code> et une méthode <code>resume()</code> retournant une phrase descriptive.</li>
+      <li>(4 pts) Avec <code>filter</code>, obtenir uniquement les inscriptions validées de la filière "DEV".</li>
+      <li>(4 pts) Écrire une fonction pure <code>pureValider(id)</code> qui retourne un nouveau tableau où l'inscription correspondante a <code>valide: true</code>, sans modifier <code>inscriptions</code>.</li>
+      <li>(4 pts) Avec <code>reduce</code>, compter le nombre total d'inscriptions non validées.</li>
+      <li>(4 pts) Écrire une fonction récursive qui affiche les noms des inscriptions un par un (sans boucle <code>for</code>/<code>while</code>).</li>
+    </ol>
+  </div>
+  <div class="details-body" style="font-size:.85rem;color:var(--muted);"><strong>⏱️ Conseil de gestion du temps :</strong> 5 min de lecture + plan, 25 min de code (environ 5 min par question), 5 min de relecture.</div>
+  <details class="corrige"><summary>✅ Corrigé complet</summary>
+    <div class="details-body">
+      <pre><code>// 1.
+class Inscription{
+  constructor(id, nom, filiere, valide){
+    this.id = id; this.nom = nom;
+    this.filiere = filiere; this.valide = valide;
+  }
+  resume(){
+    return `${this.nom} (${this.filiere}) - ${this.valide ? "validée" : "en attente"}`;
+  }
+}
+
+// 2.
+const devValides = inscriptions.filter(i => i.filiere === "DEV" && i.valide);
+
+// 3.
+function pureValider(id){
+  return inscriptions.map(i =>
+    i.id === id ? { ...i, valide: true } : i
+  );
+}
+
+// 4.
+const nbNonValidees = inscriptions.reduce((acc, i) => i.valide ? acc : acc + 1, 0);
+
+// 5.
+function afficherNoms(liste, index = 0){
+  if(index >= liste.length) return;
+  console.log(liste[index].nom);
+  afficherNoms(liste, index + 1);
+}
+afficherNoms(inscriptions);</code></pre>
+      <div class="explication">
+        <div class="step"><strong>Question 3 :</strong> <code>map</code> reconstruit chaque élément ; seul celui dont l'id correspond est remplacé par une copie avec <code>valide: true</code>, ce qui préserve l'immutabilité.</div>
+        <div class="step"><strong>Question 5 :</strong> le cas d'arrêt est <code>index >= liste.length</code> ; chaque appel affiche un nom puis avance l'index de 1.</div>
+      </div>
+    </div>
+  </details>
+</div>
+
+<div class="exam-sujet">
+  <h3>SUJET 2 — Composants réutilisables (préparation React)</h3>
+  <div class="exam-meta"><span>⏱️ Durée indicative : 25 min</span><span>🟣 Niveau</span><span>Barème : 15 pts</span></div>
+  <div class="enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Avant d'attaquer React, on veut préparer les données d'une liste de "cartes produit" à afficher.</p>
+    <pre><code>const produits = [
+  { nom: "Casque audio", prix: 250, stock: 0 },
+  { nom: "Souris sans fil", prix: 90, stock: 12 },
+  { nom: "Clavier mécanique", prix: 400, stock: 3 },
+];</code></pre>
+  </div>
+  <div class="atoi">
+    <h4>✅ Travail demandé</h4>
+    <ol>
+      <li>(4 pts) Avec <code>map</code> et le ternaire, créer un tableau de textes du type <code>"Casque audio - Rupture de stock"</code> ou <code>"Souris sans fil - 12 en stock"</code> selon la valeur de <code>stock</code>.</li>
+      <li>(4 pts) Avec le module literal (<code>Etablissement</code> as modèle), écrire un module <code>Boutique.js</code> exportant par défaut une classe <code>Produit</code> et, en export nommé, une constante <code>DEVISE = "MAD"</code>.</li>
+      <li>(4 pts) Écrire une fonction pure qui applique une remise de 10% à un produit donné (retourne un nouvel objet, sans modifier l'original).</li>
+      <li>(3 pts) Expliquer en 2-3 phrases pourquoi les frameworks front-end comme React s'appuient autant sur des fonctions pures et l'immutabilité pour gérer leurs données.</li>
+    </ol>
+  </div>
+  <div class="details-body" style="font-size:.85rem;color:var(--muted);"><strong>⏱️ Conseil de gestion du temps :</strong> traiter la question 4 (rédaction) en dernier, une fois le code des questions 1-3 validé.</div>
+  <details class="corrige"><summary>✅ Corrigé complet</summary>
+    <div class="details-body">
+      <pre><code>// 1.
+const textes = produits.map(p =>
+  p.stock === 0
+    ? `${p.nom} - Rupture de stock`
+    : `${p.nom} - ${p.stock} en stock`
+);
+
+// 2. Boutique.js
+export const DEVISE = "MAD";
+export default class Produit{
+  constructor(nom, prix, stock){
+    this.nom = nom; this.prix = prix; this.stock = stock;
+  }
+}
+
+// 3.
+function appliquerRemise(produit){
+  return { ...produit, prix: produit.prix * 0.9 };
+}</code></pre>
+      <p><strong>4. Réponse attendue (idée générale) :</strong> comme le DOM virtuel compare une ancienne et une nouvelle version de l'interface pour savoir quoi mettre à jour, il a besoin de données prévisibles : des fonctions pures et des données immuables garantissent que chaque changement produit une <em>nouvelle</em> version claire à comparer, ce qui rend l'application plus facile à déboguer et plus performante.</p>
+    </div>
+  </details>
+</div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var boxes = document.querySelectorAll('.track');
+  var fill = document.getElementById('fill');
+  var count = document.getElementById('count');
+  function update(){
+    var checked = 0;
+    boxes.forEach(function(b){ if(b.checked) checked++; });
+    count.textContent = checked + ' / ' + boxes.length;
+    fill.style.width = boxes.length ? (checked / boxes.length * 100) + '%' : '0%';
+  }
+  boxes.forEach(function(b){ b.addEventListener('change', update); });
+  update();
+});
+</script>
+
+</body>
+</html>
