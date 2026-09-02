@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // le deuxieme consoe va afficher [12 , 15 , 9 , 18] 
+    // la fonction n'esst pas pure car il modifie le tableau notes
+        // let notes = [12, 15, 9];
+        // function ajouterNote(note){
+        //     notes.push(note);
+        //     return notes;
+        //     }
+        // console.log(ajouterNote(18));
+        // console.log(notes);
+        //correction :
+        let notes = [12, 15, 9];
+        function ajouterNote(note){
+            return [...notes , note];
+            }
+        console.log(ajouterNote(18));
+        console.log(notes);
+    </script>
+</body>
+</html>

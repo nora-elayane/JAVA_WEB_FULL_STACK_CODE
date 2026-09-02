@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const infosPerso = { nom: "Nora", ville: "Béni Mellal" };
+        const infosEcole = { filiere: "DEV FullStack + IA", annee: 2 };
+        const listeA = [1,2,3];
+        const listeB = [4,5,6];  
+        const profile = {...infosPerso,...infosEcole}     ;
+        const toutesLesListes = [...listeA , ... listeB] ; 
+        console.log(profile) ; 
+        console.log(toutesLesListes) ;   
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class Etudiant{
+            constructor(nom,age){
+            this.nom=nom;
+            this.age=age
+            }
+            info(){
+              return `Etudiant nom:${this.nom} a pour
+               age:${this.age}`
+            }
+        }
+        class Stagiaire extends Etudiant{
+            constructor(nom,age,stage){
+                super(nom,age);
+                this.stage=stage; }
+            info(){
+                return `Stagiaire nom:${this.nom} a pour
+                age:${this.age} stage:${this.stage}`
+            }
+         }
+         let liste = [
+             new Stagiaire("Rami", 23, "dev mobile"),
+             new Stagiaire("Karimi", 21, "dev web"),
+             new Stagiaire("Fahmi", 25, "dev mobile"),
+        ];
+        let mobile = liste.filter(function(a){return a.stage === "dev mobile"}).map(function(a){return a.info()})  ;
+        console.log(mobile) ; 
+
+    </script>
+</body>
+</html>

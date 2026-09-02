@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function creerMinuteur(depart){
+            let count = depart ; 
+             function incrementSeconds(){
+               return  ++count ; 
+            } 
+            return {incrementSeconds } ; 
+        }
+        let minuteur = creerMinuteur(0) ;
+        setInterval(function(){
+            let mi = minuteur.incrementSeconds()  
+          if(mi <= 6){
+            console.log(mi) ;
+          }else{
+            clearInterval() ;
+          }
+        },1000)
+        
+
+    </script>
+</body>
+</html>

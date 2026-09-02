@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class Livre{
+            constructor(titre , auteur){
+                this.titre = titre ; 
+                this.auteur = auteur ; 
+            }
+            info(){
+                return `livre de titre : ${this.titre} , et auteur : ${this.auteur}` ;
+            }
+        }
+        class LivreNumerique extends Livre{
+            constructor(titre , auteur , taille){
+                super(titre , auteur) ; 
+                this.taille = taille ; 
+            }
+            info(){
+                return  `${super.info()} et taille : ${this.taille}` ; 
+            }
+        }
+        let stock = [
+            new Livre("Le Petit Prince", "Saint-Exupéry"),
+            new LivreNumerique("Dune", "Herbert", 4.2),
+            new LivreNumerique("1984", "Orwell", 1.8),
+                    ];
+        function pureAjouterLivre(livre){
+            return [...stock , livre ] ; 
+        }
+        let moin3 = stock.filter(function(a){return a.taille < 3}).map(function(a){return a.titre}) ;
+        console.log(moin3)  //1984
+
+        //pureAjouterLivre est une fonction pure car ila a un parametre stock et ne modifie pas lorigine de ce parametre 
+
+    </script>
+</body>
+</html>

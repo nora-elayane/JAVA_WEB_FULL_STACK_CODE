@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const depenses = [
+            { categorie: "Transport", montant: 150 },
+            { categorie: "Nourriture", montant: 400 },
+            { categorie: "Transport", montant: 80 },
+            { categorie: "Loisirs", montant: 120 },
+            ];
+            let total = depenses.reduce(function(a , b ){return a +  b.montant},0) ; 
+            
+            function creerBudjetTracker(limit){
+                let depenses = 0 ; 
+                function track(montant){
+                    depenses += montant ; 
+                    return depenses > limit ? true : false ; 
+                }
+                return {track} ;
+            }
+           let {categorie , montant} = depenses[0] ; 
+           let l1 = creerBudjetTracker(400) ; 
+           console.log(total) ;
+           console.log(l1.track(200)) ;
+           console.log(l1.track(300)) ; 
+           console.log(categorie , montant) ;
+           //la fonction retoutné par creerBujetTracker garde le total en mémoire d'un appel a l'autre car il est enregiste dans un variable depences qui est declare dans la fonction creebujettracker et nous avons appelé cette fonction a unvariabble comme instanciation dun objet de classe et en appel justement la fonction retourné .
+    </script>
+</body>
+</html>

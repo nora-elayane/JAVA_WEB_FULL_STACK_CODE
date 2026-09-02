@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const taches = [
+            { id: 1, titre: "Réviser React", faite: false },
+            { id: 2, titre: "Push sur GitHub", faite: true },
+            { id: 3, titre: "TP closures", faite: false },
+            ];
+        function pureAjouter(tache){
+            return [...taches , tache ];
+        }
+        function pureSupprimer(id){
+            return  taches.filter(function(a){return a.id !== id}) ; 
+
+
+        }
+        function pureBascular(id){
+            return taches.map((a)=> a.id === id?{ ...a, faite : a.faite = !a.faite}:a)
+            
+        }
+        console.log(pureAjouter({id: 4 , titre : "task edit user" , faite: false})) ; 
+        console.log(pureSupprimer(1)) ; 
+        console.log(pureBascular(3)) ; 
+        console.log(taches) ; 
+    </script>           
+</body>
+</html>
