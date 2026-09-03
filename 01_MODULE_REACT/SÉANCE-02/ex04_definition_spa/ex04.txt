@@ -1,0 +1,15 @@
+📋 Énoncé
+Complète le texte ci-dessous à l'aide de la banque de mots fournie (chaque mot n'est utilisé qu'une fois).
+
+Banque de mots : JavaScript, côté client, Ajax, asynchrone, native, dynamiquement
+
+✅ À toi de jouer
+« Une SPA diffère d'une page conventionnelle en cela qu'elle est rendue ___(1)___ et qu'elle est principalement pilotée par ___(2)___, en utilisant les appels ___(3)___ pour charger les données et mettre la page à jour ___(4)___. Les ressources supplémentaires sont chargées de manière ___(5)___ selon les besoins. L'utilisateur bénéficie ainsi d'une expérience rappelant davantage celle d'une application ___(6)___. »
+
+Solution : 
+« Une SPA diffère d'une page conventionnelle en cela qu'elle est rendue ___côté client__
+et qu'elle est principalement pilotée par ___JavaScript___,
+ en utilisant les appels ___Ajax___ pour charger les données
+  et mettre la page à jour ___dynamiquement___. 
+  Les ressources supplémentaires sont chargées de manière ___asynchrone___ selon les besoins.
+   L'utilisateur bénéficie ainsi d'une expérience rappelant davantage celle d'une application ___native___. »

@@ -1,0 +1,19 @@
+📋 Énoncé
+Pour chacune des situations suivantes, indique s'il s'agit probablement d'une SPA ou d'une MPA, et justifie en une phrase avec un argument du cours.
+
+✅ À toi de jouer
+Chaque fois que l'utilisateur clique sur un lien du menu, l'écran clignote brièvement et toute la page se recharge.
+L'utilisateur filtre une liste de produits et voit les résultats apparaître instantanément, sans aucun rechargement visible de la page.
+Après une première attente un peu plus longue à l'ouverture du site, toutes les interactions suivantes sont immédiates.
+L'utilisateur clique sur « Retour » dans son navigateur et se retrouve ramené à une page entière différente, plutôt qu'au filtre qu'il venait de retirer.
+
+
+Solution : 
+1-Chaque fois que l'utilisateur clique sur un lien du menu, l'écran clignote brièvement et toute la page se recharge. 
+---> MPA : a chaque click il envoi une requette http et il fait un reload complait de la page .
+2-L'utilisateur filtre une liste de produits et voit les résultats apparaître instantanément, sans aucun rechargement visible de la page.
+--->SPA : la page ne fait aucune reload et il affiche justement les donneés demandé dans le compausant responsable de cette operation et garde le rest .
+3-Après une première attente un peu plus longue à l'ouverture du site, toutes les interactions suivantes sont immédiates.
+--->SPA : le premier chargement est un peu plus lent car il charge tous le contnue nessaicaire et apres les actions sont fluide a cause de asancrounous javascript and xml .
+4-L'utilisateur clique sur « Retour » dans son navigateur et se retrouve ramené à une page entière différente, plutôt qu'au filtre qu'il venait de retirer.
+--->SPA : c'est l'un des inconveignion de spa il ne enregistre pas l'historique des actions faites , alors le retoure a une page ca se sera different comme il ete .

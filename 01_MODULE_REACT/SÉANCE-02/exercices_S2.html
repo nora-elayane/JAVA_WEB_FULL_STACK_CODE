@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banque d'exercices — SPA vs MPA (C12 · S2) — OFPPT</title>
+<style>
+:root{
+  --bg:#fbfcfe;
+  --card:#ffffff;
+  --ink:#151b26;
+  --ink-soft:#4a5568;
+  --line:#e3e8f0;
+  --blue:#0b3d91;
+  --blue-light:#eaf1ff;
+  --blue-accent:#2f6fed;
+  --green:#1e7a46;
+  --green-bg:#eaf7ee;
+  --yellow:#8a6d1a;
+  --yellow-bg:#fbf3d9;
+  --orange:#b5620f;
+  --orange-bg:#fdf3e6;
+  --red:#a3272f;
+  --red-bg:#fbe9ea;
+  --purple:#6a3aa8;
+  --purple-bg:#f2eafb;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:14.5px;
+  line-height:1.55;
+}
+.wrap{ max-width:900px; margin:0 auto; padding:26px 22px 60px; }
+
+/* ===== HEADER ===== */
+header{
+  border-bottom:3px solid var(--blue);
+  padding-bottom:14px;
+  margin-bottom:22px;
+}
+header h1{ font-size:23px; margin:0 0 4px 0; color:var(--blue); }
+header p.sub{ margin:0 0 10px 0; color:var(--ink-soft); font-size:13px; }
+header .pathline{
+  display:flex; flex-wrap:wrap; gap:6px; font-size:11px; font-weight:700;
+}
+header .pathline span{
+  background:var(--blue-light); color:var(--blue); padding:3px 9px; border-radius:20px;
+}
+header .pathline span.arrow{ background:none; color:var(--ink-soft); padding:3px 0; font-weight:400; }
+
+/* ===== TOC ===== */
+nav.toc{
+  background:var(--card); border:1px solid var(--line); border-radius:8px;
+  padding:12px 16px; margin-bottom:26px; font-size:13px;
+}
+nav.toc h2{ font-size:12.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--blue); margin:0 0 8px 0; }
+nav.toc ul{ margin:0; padding-left:18px; columns:2; column-gap:24px; }
+nav.toc li{ margin-bottom:4px; break-inside:avoid; }
+nav.toc a{ color:var(--ink); text-decoration:none; }
+nav.toc a:hover{ color:var(--blue-accent); }
+
+/* ===== LEVEL SECTION HEADERS ===== */
+.level-section{ margin-bottom:34px; scroll-margin-top:16px; }
+.level-head{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:8px; margin-bottom:12px;
+  font-size:16px; font-weight:700;
+}
+.level-head .count{ margin-left:auto; font-size:11.5px; font-weight:600; opacity:.8; }
+.lvl-1 .level-head{ background:var(--green-bg); color:var(--green); }
+.lvl-2 .level-head{ background:var(--yellow-bg); color:var(--yellow); }
+.lvl-3 .level-head{ background:var(--orange-bg); color:var(--orange); }
+.lvl-4 .level-head{ background:var(--red-bg); color:var(--red); }
+.lvl-5 .level-head{ background:var(--purple-bg); color:var(--purple); }
+.lvl-x .level-head{ background:var(--blue); color:#fff; }
+
+.recap{
+  background:var(--card); border:1px dashed var(--line); border-radius:6px;
+  padding:9px 13px; margin-bottom:14px; font-size:13px;
+}
+.recap h4{ margin:0 0 5px 0; font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.03em; }
+.recap ul{ margin:0; padding-left:18px; }
+.recap li{ margin-bottom:2px; }
+
+/* ===== EXERCISE CARD ===== */
+.exercise{
+  background:var(--card); border:1px solid var(--line); border-radius:8px;
+  padding:16px 18px; margin-bottom:14px;
+}
+.ex-top{
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:6px;
+}
+.ex-top h3{ font-size:15px; margin:0; color:var(--ink); flex:1; min-width:200px; }
+.badge{
+  font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:20px; white-space:nowrap;
+}
+.badge.src-cours{ background:var(--blue-light); color:var(--blue); }
+.badge.src-entrainement{ background:#eef2f7; color:var(--ink-soft); }
+.lvl-badge-1{ background:var(--green-bg); color:var(--green); }
+.lvl-badge-2{ background:var(--yellow-bg); color:var(--yellow); }
+.lvl-badge-3{ background:var(--orange-bg); color:var(--orange); }
+.lvl-badge-4{ background:var(--red-bg); color:var(--red); }
+.lvl-badge-5{ background:var(--purple-bg); color:var(--purple); }
+
+.status label{
+  display:flex; align-items:center; gap:5px; font-size:12px; color:var(--ink-soft); cursor:pointer;
+}
+
+.notions{ font-size:12px; color:var(--ink-soft); margin-bottom:6px; }
+.notions strong{ color:var(--ink); }
+
+.objectif{
+  font-size:12.5px; font-style:italic; color:var(--blue); margin-bottom:10px;
+}
+
+.block{ margin-bottom:10px; }
+.block h4{
+  font-size:11.5px; text-transform:uppercase; letter-spacing:.03em;
+  color:var(--ink-soft); margin:0 0 5px 0;
+}
+.block p, .block li{ font-size:13.5px; }
+.block ol, .block ul{ margin:4px 0; padding-left:20px; }
+.block table{ width:100%; border-collapse:collapse; font-size:13px; margin-top:4px; }
+.block th, .block td{ border:1px solid var(--line); padding:5px 8px; text-align:left; }
+.block th{ background:var(--blue-light); color:var(--blue); }
+
+hr.sep{ border:none; border-top:1px dashed var(--line); margin:10px 0; }
+
+details{ margin-bottom:8px; border-radius:6px; overflow:hidden; }
+details summary{
+  cursor:pointer; font-size:12.5px; font-weight:700; padding:7px 11px;
+  list-style:none; display:flex; align-items:center; gap:6px;
+}
+details summary::-webkit-details-marker{ display:none; }
+details summary::before{ content:"▸"; transition:transform .15s; }
+details[open] summary::before{ transform:rotate(90deg); }
+details .inner{ padding:8px 12px 10px; font-size:13.5px; }
+
+details.indice{ background:var(--blue-light); }
+details.indice summary{ color:var(--blue); }
+details.astuce{ background:var(--purple-bg); }
+details.astuce summary{ color:var(--purple); }
+details.piege{ background:var(--orange-bg); }
+details.piege summary{ color:var(--orange); }
+details.corrige{ background:var(--green-bg); border:1px solid #cdebd8; }
+details.corrige summary{ color:var(--green); font-size:13px; }
+details.corrige .inner h5{ font-size:12px; color:var(--green); margin:8px 0 3px 0; text-transform:uppercase; letter-spacing:.03em; }
+details.corrige .inner h5:first-child{ margin-top:0; }
+
+.github{
+  margin-top:10px; padding-top:8px; border-top:1px solid var(--line);
+  font-size:12px; color:var(--ink-soft); display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+}
+.github input{
+  flex:1; min-width:160px; font-size:12px; padding:4px 8px; border:1px solid var(--line); border-radius:4px;
+  font-family:inherit; color:var(--ink);
+}
+
+.checkpoint{
+  background:var(--blue-light); border-radius:8px; padding:12px 16px; margin-top:6px;
+}
+.checkpoint h4{ margin:0 0 6px 0; color:var(--blue); font-size:13px; }
+.checkpoint ul{ margin:0 0 6px 0; padding-left:0; list-style:none; }
+.checkpoint li{ margin-bottom:4px; font-size:13px; display:flex; gap:6px; align-items:flex-start; }
+.checkpoint li input{ margin-top:3px; }
+.checkpoint .fallback{ font-size:12px; color:var(--ink-soft); font-style:italic; }
+
+/* ===== EXAM MODE ===== */
+.exam-subject{
+  background:var(--card); border:2px solid var(--blue); border-radius:10px;
+  padding:18px 20px; margin-bottom:20px;
+}
+.exam-meta{
+  display:flex; gap:10px; flex-wrap:wrap; font-size:12px; font-weight:700; margin-bottom:10px;
+}
+.exam-meta span{ background:var(--blue-light); color:var(--blue); padding:4px 10px; border-radius:20px; }
+.exam-subject h3{ margin:0 0 8px 0; color:var(--blue); font-size:17px; }
+.timing{
+  background:var(--orange-bg); color:var(--orange); border-radius:6px; padding:8px 12px; font-size:12.5px; margin:10px 0;
+}
+
+/* ===== MISC ===== */
+code, .code{
+  font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  background:#f1f4f9; padding:1px 5px; border-radius:3px; font-size:12.5px;
+}
+.badge-count{ background:var(--blue); color:#fff; border-radius:4px; padding:1px 7px; font-size:11px; margin-left:6px; }
+
+footer{
+  margin-top:30px; text-align:center; font-size:11px; color:#9aa4b4;
+  border-top:1px solid var(--line); padding-top:12px;
+}
+
+@media (max-width:640px){
+  nav.toc ul{ columns:1; }
+  .ex-top{ flex-direction:column; align-items:flex-start; }
+  .wrap{ padding:16px; }
+}
+
+@media print{
+  @page{ size:A4; margin:14mm 12mm; }
+  body{ background:#fff; font-size:11px; }
+  .exercise, .exam-subject, .checkpoint{ break-inside:avoid; }
+  nav.toc{ break-after:page; }
+  details .inner{ display:block !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Banque d'exercices — Applications Web Monopage (SPA vs MPA)</h1>
+  <p class="sub">C12 · Développer en Front-end — S2 : Créer des applications web monopage · OFPPT · Parcours progressif vers l'EFM</p>
+  <div class="pathline">
+    <span>🟢 Fondamentaux</span><span class="arrow">→</span>
+    <span>🟡 Application</span><span class="arrow">→</span>
+    <span>🟠 Intermédiaire</span><span class="arrow">→</span>
+    <span>🔴 Avancé</span><span class="arrow">→</span>
+    <span>🟣 EFM / Examen</span><span class="arrow">→</span>
+    <span>🏆 Mode Examen</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>Sommaire</h2>
+  <ul>
+    <li><a href="#n1">🟢 Niveau 1 — Fondamentaux (4 exercices)</a></li>
+    <li><a href="#n2">🟡 Niveau 2 — Application (3 exercices)</a></li>
+    <li><a href="#n3">🟠 Niveau 3 — Intermédiaire (3 exercices)</a></li>
+    <li><a href="#n4">🔴 Niveau 4 — Avancé (2 exercices)</a></li>
+    <li><a href="#n5">🟣 Niveau 5 — EFM / Examen (2 exercices)</a></li>
+    <li><a href="#exam">🏆 Mode Examen (2 mini-sujets)</a></li>
+  </ul>
+</nav>
+
+<!-- =========================================================
+     NIVEAU 1 — FONDAMENTAUX
+========================================================== -->
+<section class="level-section lvl-1" id="n1">
+  <div class="level-head">🟢 NIVEAU 1 — FONDAMENTAUX <span class="count">4 exercices</span></div>
+
+  <div class="recap">
+    <h4>🧠 À savoir avant de commencer</h4>
+    <ul>
+      <li>Une <strong>SPA</strong> est rendue <strong>côté client</strong> et pilotée par <strong>JavaScript</strong>.</li>
+      <li>Une <strong>MPA</strong> (Multi-Page Application) est l'architecture traditionnelle : chaque clic déclenche une requête HTTP et un rechargement complet.</li>
+      <li><strong>Ajax</strong> permet d'envoyer/recevoir des données du serveur en arrière-plan, sans recharger la page.</li>
+      <li>SPA et MPA reposent tous deux sur le protocole <strong>HTTP</strong>.</li>
+      <li>Le but d'une SPA est de se rapprocher de l'expérience d'une <strong>application native</strong>.</li>
+    </ul>
+  </div>
+
+  <!-- EX 1 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 1 — QCM : les définitions clés</h3>
+      <span class="badge lvl-badge-1">🟢 Niveau 1</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> définition SPA, définition MPA, Ajax</div>
+    <p class="objectif">Objectif : vérifier que les définitions de base du cours sont bien comprises.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Pour chaque question, choisis la seule bonne réponse parmi les propositions.</p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <ol>
+        <li>Une SPA (Single Page Application) est une application qui est :<br>
+          a) rendue côté serveur, à chaque page &nbsp;|&nbsp; b) rendue côté client, pilotée par JavaScript &nbsp;|&nbsp; c) rendue uniquement en HTML statique</li>
+        <li>Dans une architecture MPA, chaque clic de l'utilisateur déclenche :<br>
+          a) un appel Ajax asynchrone &nbsp;|&nbsp; b) une requête HTTP suivie d'un rechargement complet de la page &nbsp;|&nbsp; c) rien, la page ne change jamais</li>
+        <li>Ajax permet principalement de :<br>
+          a) styliser une page web &nbsp;|&nbsp; b) envoyer/récupérer des données du serveur en arrière-plan, sans recharger la page &nbsp;|&nbsp; c) remplacer le protocole HTTP</li>
+        <li>SPA et MPA ont en commun d'être basées sur :<br>
+          a) JavaScript uniquement &nbsp;|&nbsp; b) le protocole HTTP &nbsp;|&nbsp; c) le framework React</li>
+        <li>L'objectif principal recherché par une SPA est de :<br>
+          a) simplifier le référencement Google &nbsp;|&nbsp; b) se rapprocher de l'expérience d'une application native &nbsp;|&nbsp; c) supprimer totalement le serveur</li>
+      </ol>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Repère dans chaque proposition le mot clé qui distingue « côté client » de « côté serveur » : c'est souvent lui qui indique la bonne réponse.</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Dans un QCM de définitions, élimine d'abord les réponses qui contredisent frontalement le cours (ex. « la page ne change jamais ») avant de choisir entre les deux options restantes.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Analyse</h5>
+        <p>Ce QCM teste la compréhension littérale des définitions du cours (section « Notion d'application web monopage SPA » et « SPA vs MPA »).</p>
+        <h5>Solution</h5>
+        <ol>
+          <li><strong>b)</strong> — une SPA est rendue côté client et pilotée par JavaScript.</li>
+          <li><strong>b)</strong> — chaque clic en MPA = 1 requête HTTP + rechargement complet de la page.</li>
+          <li><strong>b)</strong> — Ajax envoie/récupère des données en arrière-plan, sans interférer avec l'affichage.</li>
+          <li><strong>b)</strong> — SPA et MPA sont « tous deux basés sur le protocole HTTP » (cours, 2.2).</li>
+          <li><strong>b)</strong> — le cours indique que la SPA « rappelle davantage l'expérience d'une application native ».</li>
+        </ol>
+        <h5>Explication</h5>
+        <p>Ces cinq réponses reprennent chacune une phrase presque littérale du cours : c'est volontaire à ce niveau, l'objectif est de vérifier que le vocabulaire est mémorisé avant de l'utiliser dans des situations plus complexes (niveaux 2 et 3).</p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <!-- EX 2 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 2 — Vrai ou Faux</h3>
+      <span class="badge lvl-badge-1">🟢 Niveau 1</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> caractéristiques SPA, caractéristiques MPA</div>
+    <p class="objectif">Objectif : reconnaître rapidement une affirmation correcte ou incorrecte à propos du cours.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Indique si chaque affirmation est <strong>Vraie</strong> ou <strong>Fausse</strong>.</p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <ol>
+        <li>Une SPA charge la totalité ou la plupart de son contenu en une seule fois.</li>
+        <li>Une MPA utilise Ajax pour éviter de recharger la page à chaque clic.</li>
+        <li>Le bouton « retour » du navigateur pose un problème particulier avec les SPA.</li>
+        <li>Une SPA est toujours plus rapide qu'une MPA, y compris lors du tout premier affichage.</li>
+        <li>SPA et MPA n'ont aucun point commun technique.</li>
+        <li>Le débogage d'une SPA construite avec Angular ou React est facilité par les outils Chrome dédiés à ces frameworks.</li>
+        <li>Une SPA est, selon le cours, une bonne base pour le développement futur d'applications mobiles.</li>
+        <li>Les applications monopages sont, par rapport aux applications multi-pages, moins vulnérables aux attaques XSS.</li>
+      </ol>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Trois affirmations sur les huit sont fausses. Cherche en particulier celles qui inversent une notion du cours (ex. attribuer à la MPA une caractéristique de la SPA, ou l'inverse).</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Attention aux mots absolus comme « toujours » ou « aucun » : dans un vrai/faux de cours, ils cachent souvent une affirmation fausse, car le cours nuance presque toujours ce type de propos.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Solution</h5>
+        <ol>
+          <li><strong>Vrai</strong> — « la plupart ou la totalité du contenu est récupérée une fois au chargement d'une seule page ».</li>
+          <li><strong>Faux</strong> — c'est la SPA qui utilise Ajax, pas la MPA (la MPA recharge entièrement la page à chaque clic).</li>
+          <li><strong>Vrai</strong> — les SPA n'enregistrent pas les sauts d'états ; le bouton « retour » ne ramène qu'à la page précédente.</li>
+          <li><strong>Faux</strong> — le premier chargement d'une SPA peut au contraire « nécessiter un peu plus de temps ».</li>
+          <li><strong>Faux</strong> — SPA et MPA sont « tous deux basés sur le protocole HTTP ».</li>
+          <li><strong>Vrai</strong> — Angular et React ont « leurs propres outils de débogage Chrome ».</li>
+          <li><strong>Vrai</strong> — le cours conclut que la SPA « est parfaite comme base pour le développement futur d'applications mobiles ».</li>
+          <li><strong>Faux</strong> — c'est l'inverse : les SPA sont <strong>plus</strong> vulnérables aux attaques XSS que les applications multi-pages.</li>
+        </ol>
+        <h5>Explication</h5>
+        <p>Les affirmations 2, 4, 5 et 8 sont conçues pour tester une confusion fréquente : inverser un fait entre SPA et MPA, ou transformer une nuance du cours en généralité absolue.</p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <!-- EX 3 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 3 — Associer chaque terme à sa définition</h3>
+      <span class="badge lvl-badge-1">🟢 Niveau 1</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> vocabulaire technique du cours</div>
+    <p class="objectif">Objectif : mémoriser le vocabulaire du cours en associant chaque terme à sa bonne définition.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Associe chaque terme de la colonne A à sa définition dans la colonne B (une définition par terme).</p>
+      <table>
+        <tr><th>Colonne A — Terme</th><th>Colonne B — Définition</th></tr>
+        <tr><td>1. SPA</td><td>A. Ensemble de techniques permettant d'échanger des données avec le serveur en arrière-plan</td></tr>
+        <tr><td>2. MPA</td><td>B. Absence d'enregistrement des sauts d'états de l'utilisateur dans l'application</td></tr>
+        <tr><td>3. Ajax</td><td>C. Application rendue côté client, pilotée par JavaScript</td></tr>
+        <tr><td>4. Rafraîchissement complet</td><td>D. Faille exploitée par l'injection de scripts côté client dans une application web</td></tr>
+        <tr><td>5. Historique du navigateur (limite SPA)</td><td>E. Rechargement entier de la page suite à une requête HTTP</td></tr>
+        <tr><td>6. XSS</td><td>F. Architecture traditionnelle où chaque clic déclenche une requête HTTP</td></tr>
+      </table>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <p>Écris les six paires sous la forme <span class="code">1-C, 2-F, ...</span></p>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Commence par les termes que tu es sûre à 100 % (souvent SPA et MPA), cela réduit les choix restants pour les autres.</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">XSS et « historique du navigateur » sont tous les deux des <em>inconvénients</em> de la SPA, mais l'un concerne la sécurité et l'autre la navigation — ne les confonds pas.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Solution</h5>
+        <p><strong>1-C, 2-F, 3-A, 4-E, 5-B, 6-D</strong></p>
+        <h5>Explication</h5>
+        <p>Chaque association reprend une formulation directement issue du cours : c'est un exercice de mémorisation pure, indispensable avant de passer aux niveaux où ce vocabulaire devra être réutilisé sans aide.</p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <!-- EX 4 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 4 — Texte à trous</h3>
+      <span class="badge lvl-badge-1">🟢 Niveau 1</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> définition SPA, vocabulaire du cours</div>
+    <p class="objectif">Objectif : reconstituer de mémoire la définition d'une SPA en respectant le vocabulaire exact du cours.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Complète le texte ci-dessous à l'aide de la banque de mots fournie (chaque mot n'est utilisé qu'une fois).</p>
+      <p><em>Banque de mots :</em> <span class="code">JavaScript</span>, <span class="code">côté client</span>, <span class="code">Ajax</span>, <span class="code">asynchrone</span>, <span class="code">native</span>, <span class="code">dynamiquement</span></p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <p>« Une SPA diffère d'une page conventionnelle en cela qu'elle est rendue ___(1)___ et qu'elle est principalement pilotée par ___(2)___, en utilisant les appels ___(3)___ pour charger les données et mettre la page à jour ___(4)___. Les ressources supplémentaires sont chargées de manière ___(5)___ selon les besoins. L'utilisateur bénéficie ainsi d'une expérience rappelant davantage celle d'une application ___(6)___. »</p>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Deux mots de la banque se ressemblent dans le sens (rapidité/fluidité) : l'un qualifie la manière dont les données sont chargées, l'autre qualifie le type d'application auquel la SPA ressemble.</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Relis la phrase complète après l'avoir remplie : si elle sonne bizarrement, un mot est probablement à la mauvaise place.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Solution</h5>
+        <p>(1) côté client — (2) JavaScript — (3) Ajax — (4) dynamiquement — (5) asynchrone — (6) native</p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <div class="checkpoint">
+    <h4>📈 CHECKPOINT — Niveau 1</h4>
+    <ul>
+      <li><label><input type="checkbox"> Je peux définir une SPA et une MPA sans hésiter</label></li>
+      <li><label><input type="checkbox"> Je peux expliquer le rôle d'Ajax en une phrase</label></li>
+      <li><label><input type="checkbox"> Je reconnais le vocabulaire clé du cours (rendu côté client, rafraîchissement complet, asynchrone)</label></li>
+    </ul>
+    <p class="fallback">Si un point n'est pas coché : revoir les sections 2.1 et 2.2 du cours avant de continuer.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     NIVEAU 2 — APPLICATION
+========================================================== -->
+<section class="level-section lvl-2" id="n2">
+  <div class="level-head">🟡 NIVEAU 2 — APPLICATION <span class="count">3 exercices</span></div>
+
+  <div class="recap">
+    <h4>🧠 À savoir avant de commencer</h4>
+    <ul>
+      <li>Une SPA charge toutes les données nécessaires dès le premier chargement, puis élimine les appels supplémentaires.</li>
+      <li>Une MPA envoie une nouvelle requête HTTP et recharge entièrement la page à chaque navigation.</li>
+      <li>Les avantages de la SPA vus en cours : vitesse accrue, UX fluide, mise en cache efficace, débogage facilité.</li>
+      <li>Les inconvénients de la SPA vus en cours : historique du navigateur, SEO difficile, sécurité (XSS).</li>
+    </ul>
+  </div>
+
+  <!-- EX 5 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 5 — SPA ou MPA ? (à partir d'un comportement observé)</h3>
+      <span class="badge lvl-badge-2">🟡 Niveau 2</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> reconnaissance des comportements SPA/MPA</div>
+    <p class="objectif">Objectif : reconnaître le type d'architecture à partir d'un comportement observable, et justifier avec le vocabulaire du cours.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Pour chacune des situations suivantes, indique s'il s'agit probablement d'une SPA ou d'une MPA, et justifie en une phrase avec un argument du cours.</p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <ol>
+        <li>Chaque fois que l'utilisateur clique sur un lien du menu, l'écran clignote brièvement et toute la page se recharge.</li>
+        <li>L'utilisateur filtre une liste de produits et voit les résultats apparaître instantanément, sans aucun rechargement visible de la page.</li>
+        <li>Après une première attente un peu plus longue à l'ouverture du site, toutes les interactions suivantes sont immédiates.</li>
+        <li>L'utilisateur clique sur « Retour » dans son navigateur et se retrouve ramené à une page entière différente, plutôt qu'au filtre qu'il venait de retirer.</li>
+      </ol>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Cherche le mot clé qui trahit un rechargement complet (donc MPA) ou au contraire une mise à jour partielle/instantanée (donc SPA).</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Réflexe examen : « clignotement / rechargement visible » → MPA. « Mise à jour instantanée sans rechargement » → SPA.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Solution</h5>
+        <ol>
+          <li><strong>MPA</strong> — chaque clic déclenche « une requête HTTP vers le serveur » et « un rafraîchissement complet de la page ».</li>
+          <li><strong>SPA</strong> — la page est mise à jour « dynamiquement » via Ajax, sans recharger l'ensemble du document.</li>
+          <li><strong>SPA</strong> — correspond exactement au compromis du cours : premier chargement plus long, puis élimination des appels supplémentaires.</li>
+          <li><strong>SPA (limite du bouton retour)</strong> — les SPA « n'enregistrent pas les sauts des utilisateurs entre les différents états » : le retour ramène à la page précédente, pas à l'état précédent.</li>
+        </ol>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <!-- EX 6 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 6 — Justifier un choix d'architecture</h3>
+      <span class="badge lvl-badge-2">🟡 Niveau 2</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> avantages de la SPA, argumentation</div>
+    <p class="objectif">Objectif : utiliser les arguments du cours pour justifier un choix technique dans un contexte concret.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Une agence de marketing souhaite relancer son site vitrine afin d'améliorer l'expérience de navigation et donner une impression « moderne, fluide, proche d'une application mobile ».</p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <ol>
+        <li>Explique en 4 à 5 phrases pourquoi une architecture SPA pourrait convenir à ce besoin.</li>
+        <li>Appuie ton explication sur au moins <strong>deux</strong> arguments explicitement présents dans le cours.</li>
+      </ol>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Le besoin décrit correspond presque mot pour mot à deux avantages du cours : lesquels concernent directement la « fluidité » et le ressenti « proche d'une application native » ?</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Une bonne justification technique cite le cours, ne se contente pas d'un avis général du type « c'est mieux » : appuie chaque affirmation sur un fait précis du document.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Analyse</h5>
+        <p>La demande porte sur deux critères : la fluidité de navigation et l'expérience « proche d'une app native ». Le cours contient exactement ces arguments dans la section « Pourquoi une SPA ? » et dans les avantages « Vitesse accrue » et « Expérience utilisateur (UX) ».</p>
+        <h5>Solution (proposition de réponse modèle)</h5>
+        <p>« Une SPA est adaptée à ce besoin car elle rend l'application côté client et met la page à jour dynamiquement via Ajax, ce qui limite la nécessité d'actualiser la page. Cela procure une expérience harmonieuse et rapide, rappelant davantage celle d'une application native — exactement l'effet recherché par l'agence. De plus, le cours indique que la SPA offre une vitesse accrue car elle charge de nouvelles informations dans une seule page à la demande, plutôt que de relier plusieurs pages HTML. Enfin, les utilisateurs sont souvent déroutés et irrités par les clics multiples d'un site traditionnel : l'UX directe d'une SPA répond donc bien à l'objectif de modernité recherché. »</p>
+        <h5>Explication</h5>
+        <p>Deux arguments minimum étaient exigés : ici, « expérience proche du natif / pas de rechargement » et « vitesse accrue / UX directe » sont mobilisés et rattachés explicitement au cours.</p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <!-- EX 7 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 7 — Classer les avantages et inconvénients par catégorie</h3>
+      <span class="badge lvl-badge-2">🟡 Niveau 2</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> avantages/inconvénients de la SPA</div>
+    <p class="objectif">Objectif : organiser les avantages et inconvénients de la SPA selon leur catégorie (Performance, UX, Sécurité, SEO, Navigation, Outillage).</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Voici une liste mélangée de points issus du cours. Range-les dans le tableau ci-dessous selon leur catégorie.</p>
+      <p><em>Liste :</em> Vitesse accrue · Difficulté d'optimisation SEO · Vulnérabilité aux attaques XSS · Bouton « retour » non fiable entre états · Mise en cache efficace / usage hors ligne · Expérience utilisateur directe · Débogage facilité avec Chrome (Angular/React)</p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <table>
+        <tr><th>Catégorie</th><th>Point(s) correspondant(s)</th></tr>
+        <tr><td>Performance</td><td>?</td></tr>
+        <tr><td>Expérience utilisateur (UX)</td><td>?</td></tr>
+        <tr><td>Sécurité</td><td>?</td></tr>
+        <tr><td>Référencement (SEO)</td><td>?</td></tr>
+        <tr><td>Navigation / historique</td><td>?</td></tr>
+        <tr><td>Outillage développeur</td><td>?</td></tr>
+      </table>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">« Mise en cache » peut sembler toucher plusieurs catégories : classe-la selon ce qu'elle apporte concrètement à l'utilisateur d'après le cours (rapidité + usage hors ligne).</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Réflexe examen : Sécurité → toujours associer au mot XSS dans ce cours. SEO → toujours associer au mot « référencement ».</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Solution</h5>
+        <table>
+          <tr><th>Catégorie</th><th>Point(s) correspondant(s)</th></tr>
+          <tr><td>Performance</td><td>Vitesse accrue · Mise en cache efficace / usage hors ligne</td></tr>
+          <tr><td>Expérience utilisateur (UX)</td><td>Expérience utilisateur directe</td></tr>
+          <tr><td>Sécurité</td><td>Vulnérabilité aux attaques XSS</td></tr>
+          <tr><td>Référencement (SEO)</td><td>Difficulté d'optimisation SEO</td></tr>
+          <tr><td>Navigation / historique</td><td>Bouton « retour » non fiable entre états</td></tr>
+          <tr><td>Outillage développeur</td><td>Débogage facilité avec Chrome (Angular/React)</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <div class="checkpoint">
+    <h4>📈 CHECKPOINT — Niveau 2</h4>
+    <ul>
+      <li><label><input type="checkbox"> Je sais reconnaître une SPA ou une MPA à partir d'un comportement décrit</label></li>
+      <li><label><input type="checkbox"> Je peux justifier un choix d'architecture avec au moins deux arguments du cours</label></li>
+      <li><label><input type="checkbox"> Je sais classer les avantages/inconvénients par catégorie</label></li>
+    </ul>
+    <p class="fallback">Si un point n'est pas coché : revoir la section 2.4 (avantages/inconvénients) avant de continuer.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     NIVEAU 3 — INTERMÉDIAIRE
+========================================================== -->
+<section class="level-section lvl-3" id="n3">
+  <div class="level-head">🟠 NIVEAU 3 — INTERMÉDIAIRE <span class="count">3 exercices</span></div>
+
+  <div class="recap">
+    <h4>🧠 À savoir avant de commencer</h4>
+    <ul>
+      <li>Le chargement initial d'une SPA peut être plus long, mais il élimine les appels supplémentaires par la suite.</li>
+      <li>Une SPA n'est pas automatiquement meilleure en toute circonstance : elle a des limites précises (SEO, historique, sécurité).</li>
+      <li>Comparer SPA et MPA demande de croiser plusieurs critères, pas un seul.</li>
+    </ul>
+  </div>
+
+  <!-- EX 8 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 8 — Étude de cas courte : quelle architecture choisir ?</h3>
+      <span class="badge lvl-badge-3">🟠 Niveau 3</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> arbitrage SPA/MPA, avantages/inconvénients, raisonnement contextuel</div>
+    <p class="objectif">Objectif : choisir et argumenter une architecture selon un contexte donné, en croisant plusieurs critères du cours.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Pour chacun des trois contextes suivants, propose une architecture (SPA ou MPA) et justifie avec <strong>au moins deux arguments</strong> du cours.</p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <ol>
+        <li>Un blog d'actualités dont la priorité absolue est d'être bien référencé sur Google pour attirer de nouveaux lecteurs.</li>
+        <li>Un back-office de gestion interne, utilisé uniquement par les employés, avec beaucoup de filtres et de mises à jour de tableaux en temps réel.</li>
+        <li>Une messagerie interne d'entreprise où les employés doivent voir les nouveaux messages apparaître sans recharger la page.</li>
+      </ol>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Pour le blog, pense au point faible cité par le cours concernant le référencement. Pour les deux autres cas, pense à qui utilise l'outil (public large vs employés) et à quel point la fluidité compte.</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Réflexe examen : « priorité SEO / grand public » → penser MPA. « Interactions fréquentes / mises à jour fluides / utilisateurs identifiés » → penser SPA.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Solution</h5>
+        <p><strong>1. Blog d'actualités → MPA</strong> conseillée. Le cours indique que « la difficulté d'optimisation du référencement » est l'un des plus grands freins à l'adoption d'une SPA — or ici le SEO est la priorité absolue.</p>
+        <p><strong>2. Back-office interne → SPA</strong> conseillée. Les utilisateurs sont internes (le SEO n'a aucune importance ici), et le cours indique que la SPA offre une « vitesse accrue » et une UX plus directe pour des interactions fréquentes (filtres, mises à jour).</p>
+        <p><strong>3. Messagerie interne → SPA</strong> conseillée. Le cœur d'une SPA repose sur Ajax, qui permet justement de « modifier le contenu de manière dynamique sans avoir à recharger la page entière » — exactement le besoin décrit.</p>
+        <h5>Explication</h5>
+        <p>Le raisonnement attendu croise toujours au moins deux éléments du cours : un avantage (ou inconvénient) technique <em>et</em> le contexte d'utilisation (public large vs utilisateurs internes).</p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <!-- EX 9 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 9 — Trouve et corrige l'erreur</h3>
+      <span class="badge lvl-badge-3">🟠 Niveau 3</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> distinction SPA/MPA, rôle d'Ajax</div>
+    <p class="objectif">Objectif : repérer une erreur conceptuelle dans un texte et la corriger avec la bonne notion du cours.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Le paragraphe suivant, rédigé par un stagiaire, contient <strong>deux erreurs conceptuelles</strong> par rapport au cours.</p>
+      <p><em>« Dans une SPA, chaque clic de l'utilisateur déclenche un rechargement complet de la page grâce à Ajax, ce qui améliore fortement le référencement Google. De plus, comme la SPA n'utilise jamais le protocole HTTP, elle est totalement indépendante du serveur. »</em></p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <ol>
+        <li>Identifie les deux erreurs.</li>
+        <li>Réécris le paragraphe en le corrigeant, en conservant un style proche de l'original.</li>
+      </ol>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Une des erreurs inverse un comportement (attribue à Ajax l'inverse de son rôle) ; l'autre erreur contredit un point commun explicitement cité entre SPA et MPA.</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Face à un texte à corriger, surligne d'abord chaque affirmation technique une par une et confronte-la mentalement à une phrase du cours avant de juger si elle est correcte.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Solution</h5>
+        <p><strong>Erreur 1 :</strong> Ajax ne déclenche pas de rechargement complet — c'est justement l'inverse de son rôle (il permet la mise à jour <em>sans</em> recharger la page), et cela n'améliore pas le SEO : le cours indique au contraire que le référencement est <em>difficile à optimiser</em> pour une SPA.</p>
+        <p><strong>Erreur 2 :</strong> une SPA n'est pas indépendante du serveur ni du protocole HTTP — le cours précise que « SPA et MPA sont tous deux basés sur le protocole HTTP ».</p>
+        <h5>Version corrigée</h5>
+        <p><em>« Dans une SPA, les interactions de l'utilisateur déclenchent des appels Ajax qui mettent à jour la page en arrière-plan, sans la recharger entièrement — ce qui rend d'ailleurs le référencement Google plus difficile à optimiser. De plus, comme la SPA et la MPA reposent toutes deux sur le protocole HTTP, la SPA reste dépendante du serveur, même si les appels sont réduits après le premier chargement. »</em></p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <!-- EX 10 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 10 — Le compromis du premier chargement</h3>
+      <span class="badge lvl-badge-3">🟠 Niveau 3</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> fonctionnement du chargement SPA, réduction des appels serveur</div>
+    <p class="objectif">Objectif : nuancer une affirmation trop générale en s'appuyant précisément sur le fonctionnement décrit dans le cours.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Un camarade affirme : <em>« Une SPA est toujours plus rapide qu'un site classique, dès le tout premier affichage de la page. »</em></p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <ol>
+        <li>Indique si cette affirmation est exacte selon le cours.</li>
+        <li>Justifie ta réponse en expliquant précisément ce qui se passe lors du premier chargement d'une SPA, puis lors des chargements suivants.</li>
+      </ol>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Cherche dans le cours le passage qui décrit ce qu'il se passe « au début » du chargement d'une SPA, avant de parler de ce qui se passe « ensuite ».</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Réflexe examen : dès qu'une affirmation utilise « toujours » à propos de la performance d'une SPA, vérifie si le cours distingue « premier chargement » et « chargements suivants ».</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Solution</h5>
+        <p>L'affirmation est <strong>inexacte</strong>. Le cours précise que le chargement de toutes les données nécessaires dès le premier affichage « peut nécessiter au début un peu plus de temps » : le premier chargement d'une SPA n'est donc pas forcément plus rapide qu'un site classique.</p>
+        <p>En revanche, ce premier chargement plus lourd « élimine ensuite la nécessité d'appels supplémentaires au serveur » : c'est donc <strong>après</strong> ce premier chargement que la SPA devient nettement plus réactive, grâce au rendu côté client et aux appels asynchrones.</p>
+        <h5>Explication</h5>
+        <p>Cet exercice entraîne à répondre avec nuance plutôt que par un simple « vrai/faux » : la bonne réponse doit distinguer explicitement les deux moments (premier chargement vs navigation suivante), exactement comme le fait le cours.</p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <div class="checkpoint">
+    <h4>📈 CHECKPOINT — Niveau 3</h4>
+    <ul>
+      <li><label><input type="checkbox"> Je sais choisir une architecture selon un contexte en croisant plusieurs critères</label></li>
+      <li><label><input type="checkbox"> Je sais repérer une erreur conceptuelle dans un texte sur les SPA</label></li>
+      <li><label><input type="checkbox"> Je sais expliquer le compromis « premier chargement plus long / appels réduits ensuite »</label></li>
+    </ul>
+    <p class="fallback">Si un point n'est pas coché : revoir la section 2.3 (fonctionnement) et 2.4 (avantages/inconvénients) avant de continuer.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     NIVEAU 4 — AVANCÉ
+========================================================== -->
+<section class="level-section lvl-4" id="n4">
+  <div class="level-head">🔴 NIVEAU 4 — AVANCÉ <span class="count">2 exercices</span></div>
+
+  <div class="recap">
+    <h4>🧠 À savoir avant de commencer</h4>
+    <ul>
+      <li>Ce niveau demande de mobiliser <strong>l'ensemble</strong> des notions du cours en même temps (fonctionnement, avantages, inconvénients).</li>
+      <li>Un bon raisonnement d'architecture sépare souvent les besoins par zone (partie publique vs espace utilisateur connecté).</li>
+    </ul>
+  </div>
+
+  <!-- EX 11 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 11 — Rédiger une note technique comparative</h3>
+      <span class="badge lvl-badge-4">🔴 Niveau 4</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> synthèse complète SPA vs MPA</div>
+    <p class="objectif">Objectif : produire une synthèse écrite claire et argumentée, destinée à un public non technique.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Un chef de projet non technique te demande une courte note pour comprendre la différence entre SPA et MPA avant une réunion de décision.</p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <p>Rédige une note de 150 à 200 mots incluant :</p>
+      <ol>
+        <li>une définition simple de la SPA et de la MPA ;</li>
+        <li>au moins deux avantages de la SPA tirés du cours ;</li>
+        <li>au moins deux limites de la SPA tirées du cours ;</li>
+        <li>une recommandation selon le type de projet (grand public orienté SEO vs application interne interactive).</li>
+      </ol>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Structure ta note en quatre courts paragraphes correspondant exactement aux quatre points demandés — cela évite d'en oublier un.</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Pour un public non technique, remplace les termes bruts du cours (« Ajax », « rendu côté client ») par une reformulation simple, tout en gardant l'idée exacte du cours.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Analyse</h5>
+        <p>Cette note doit rester fidèle au cours (aucune notion externe) tout en étant compréhensible sans vocabulaire technique — c'est l'exercice le plus proche d'une compétence de communication professionnelle réelle.</p>
+        <h5>Solution (proposition de réponse modèle)</h5>
+        <p><em>« Une SPA (application monopage) charge l'essentiel du site en une seule fois, puis met à jour uniquement les parties nécessaires sans recharger toute la page — un peu comme une application mobile. Une MPA (site multi-pages) recharge entièrement une nouvelle page à chaque clic, de façon plus classique.</em></p>
+        <p><em>La SPA a deux avantages majeurs : elle est perçue comme plus rapide et plus fluide une fois lancée, et elle facilite la mise en cache des données pour un usage même hors connexion. En contrepartie, elle présente deux limites à connaître : son référencement naturel (SEO) est plus difficile à optimiser, et elle est plus exposée aux attaques de type XSS que les sites multi-pages classiques.</em></p>
+        <p><em>Recommandation : pour un site grand public dont l'objectif principal est d'être trouvé sur Google, une MPA reste préférable. Pour une application interne ou un espace utilisateur avec beaucoup d'interactions, la SPA est plus adaptée. »</em></p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <!-- EX 12 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 12 — Étude de cas complète : refonte d'un site immobilier</h3>
+      <span class="badge lvl-badge-4">🔴 Niveau 4</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> ensemble du cours (SEO, sécurité, UX, cache, débogage, historique)</div>
+    <p class="objectif">Objectif : analyser un cas concret combinant plusieurs besoins contradictoires et proposer une architecture argumentée.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Une agence immobilière veut refondre son site. Deux besoins coexistent :</p>
+      <ul>
+        <li>une <strong>vitrine publique</strong> (annonces, articles de blog) qui doit être très bien référencée sur Google, car la majorité des visiteurs arrive par la recherche ;</li>
+        <li>un <strong>espace client connecté</strong> (recherche de biens avec filtres dynamiques, favoris, messagerie interne) qui doit être fluide et réactif.</li>
+      </ul>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <ol>
+        <li>Propose une architecture pour l'ensemble du site (SPA seule, MPA seule, ou une combinaison des deux).</li>
+        <li>Justifie ta proposition en t'appuyant sur au moins <strong>quatre</strong> arguments différents issus du cours (fonctionnement, avantages, inconvénients).</li>
+        <li>Signale un point de vigilance à surveiller si une SPA est utilisée quelque part dans la solution.</li>
+      </ol>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Le cours ne dit jamais qu'il faut choisir une seule architecture pour tout un site : rien n'empêche de traiter les deux besoins séparément selon leurs priorités respectives.</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Piège fréquent : vouloir absolument choisir « SPA » ou « MPA » en bloc pour tout le site, alors que les deux besoins décrits ont des priorités opposées (SEO vs fluidité).</div>
+    </details>
+    <details class="piege">
+      <summary>⚠ PIÈGE FRÉQUENT</summary>
+      <div class="inner">Oublier de mentionner la sécurité XSS comme point de vigilance dès qu'une SPA gère des données utilisateur sensibles (favoris, messagerie) — c'est justement l'un des inconvénients cités par le cours.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Analyse</h5>
+        <p>Les deux besoins sont contradictoires si on les traite avec une seule architecture : la vitrine a besoin de SEO (point faible de la SPA), l'espace client a besoin de fluidité (point fort de la SPA).</p>
+        <h5>Solution (proposition de réponse modèle)</h5>
+        <p><strong>1. Architecture proposée :</strong> une combinaison — la <strong>vitrine publique en MPA</strong> (ou rendu classique) pour préserver le référencement, et l'<strong>espace client connecté en SPA</strong> pour offrir des filtres dynamiques et une messagerie fluide.</p>
+        <p><strong>2. Justification (4 arguments du cours) :</strong></p>
+        <ul>
+          <li>Le cours indique que « la difficulté d'optimisation du référencement » est un frein majeur des SPA → la vitrine publique doit donc éviter une SPA pure.</li>
+          <li>La SPA offre une « vitesse accrue » et charge « de nouvelles informations dans une seule page à la demande du client » → idéal pour les filtres dynamiques de recherche de biens.</li>
+          <li>La SPA permet une « mise en cache » efficace des données → utile pour les favoris consultés régulièrement.</li>
+          <li>Ajax permet de « modifier le contenu de manière dynamique sans avoir à recharger la page entière » → correspond exactement au besoin de messagerie interne fluide.</li>
+        </ul>
+        <p><strong>3. Point de vigilance :</strong> le cours signale que les applications monopages sont « plus vulnérables aux attaques par cross-site scripting » (XSS) — un point à surveiller particulièrement pour l'espace client, qui gère des données personnelles (messagerie, favoris).</p>
+        <h5>Explication</h5>
+        <p>La bonne copie ne choisit pas une réponse binaire : elle découpe le problème en sous-besoins et applique à chacun l'argument du cours qui lui correspond le mieux, tout en signalant une limite réelle (XSS) plutôt que de ne citer que des avantages.</p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <div class="checkpoint">
+    <h4>📈 CHECKPOINT — Niveau 4</h4>
+    <ul>
+      <li><label><input type="checkbox"> Je peux rédiger une synthèse claire pour un public non technique</label></li>
+      <li><label><input type="checkbox"> Je sais analyser un cas avec des besoins contradictoires et proposer une architecture mixte</label></li>
+      <li><label><input type="checkbox"> Je pense systématiquement à signaler les limites (SEO, sécurité, historique) et pas seulement les avantages</label></li>
+    </ul>
+    <p class="fallback">Si un point n'est pas coché : revoir l'intégralité de la section 2.4 avant de passer au niveau EFM.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     NIVEAU 5 — EFM / EXAMEN
+========================================================== -->
+<section class="level-section lvl-5" id="n5">
+  <div class="level-head">🟣 NIVEAU 5 — EFM / EXAMEN <span class="count">2 exercices</span></div>
+
+  <!-- EX 13 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 13 — Sujet type EFM (format mixte)</h3>
+      <span class="badge lvl-badge-5">🟣 Niveau 5</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> ensemble du module</div>
+    <p class="objectif">Objectif : se mettre en conditions d'examen sur l'ensemble du module, avec un format mixte proche d'un EFM réel.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p><strong>Partie A — QCM (5 pts)</strong> : Une SPA met à jour son contenu principalement grâce à : a) un rechargement complet · b) Ajax · c) une base de données locale uniquement.</p>
+      <p><strong>Partie B — Vrai/Faux avec justification (6 pts)</strong> : « Le bouton retour du navigateur fonctionne de la même façon en SPA et en MPA. » Vrai ou Faux ? Justifie en une phrase.</p>
+      <p><strong>Partie C — Tableau à compléter (6 pts)</strong> : Complète le tableau ci-dessous avec les 4 avantages et 3 inconvénients de la SPA vus en cours.</p>
+      <table>
+        <tr><th>Avantages (4)</th><th>Inconvénients (3)</th></tr>
+        <tr><td>1. ?<br>2. ?<br>3. ?<br>4. ?</td><td>1. ?<br>2. ?<br>3. ?</td></tr>
+      </table>
+      <p><strong>Partie D — Question rédigée (3 pts)</strong> : En deux phrases maximum, explique pourquoi une SPA est présentée par le cours comme une bonne base pour les applications mobiles.</p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <p>Réponds aux quatre parties dans l'ordre, en respectant le temps que tu t'accordes à chacune (environ 5 minutes pour ce sujet).</p>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Pour la partie B, repense à ce qui différencie un « saut d'état » d'un « changement de page ».</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Réflexe examen : dans un sujet à parties multiples, commence toujours par le QCM et le vrai/faux (rapides, peu de rédaction) avant les questions ouvertes.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Solution</h5>
+        <p><strong>Partie A :</strong> b) Ajax — <em>(5 pts)</em></p>
+        <p><strong>Partie B :</strong> Faux — en SPA le bouton retour ne ramène qu'à la page précédente, jamais à l'état précédent à l'intérieur de l'application, contrairement à une navigation MPA classique entre pages distinctes. — <em>(6 pts)</em></p>
+        <p><strong>Partie C :</strong></p>
+        <table>
+          <tr><th>Avantages (4)</th><th>Inconvénients (3)</th></tr>
+          <tr><td>Vitesse accrue · Expérience utilisateur (UX) · Capacités de mise en cache · Débogage avec Chrome</td><td>Historique du navigateur · Optimisation du référencement (SEO) · Problèmes de sécurité (XSS)</td></tr>
+        </table>
+        <p><em>(6 pts — 1,5 pt par élément correct dans chaque colonne, jusqu'à 4 et 3 respectivement plafonné à 6)</em></p>
+        <p><strong>Partie D :</strong> « Une SPA vise à offrir une expérience utilisateur exceptionnelle en reproduisant un environnement naturel dans le navigateur, sans rechargement de page ni temps d'attente supplémentaire — c'est exactement le comportement attendu d'une application mobile native. » — <em>(3 pts)</em></p>
+        <p><strong>Total : /20</strong></p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <!-- EX 14 -->
+  <div class="exercise">
+    <div class="ex-top">
+      <h3>EXERCICE 14 — Analyse du schéma « Sequential vs Fluid Experience »</h3>
+      <span class="badge lvl-badge-5">🟣 Niveau 5</span>
+      <span class="badge src-entrainement">Exercice d'entraînement</span>
+      <span class="status"><label><input type="checkbox"> À faire</label></span>
+    </div>
+    <div class="notions"><strong>Notions mobilisées :</strong> fonctionnement du chargement, schémas du cours</div>
+    <p class="objectif">Objectif : décrire et expliquer avec ses propres mots un schéma du cours, compétence fréquemment demandée en EFM.</p>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Le cours contient un schéma comparant « Sequential Experience (Web) » et « Fluid Experience (Mobile) », ainsi qu'un second schéma comparant une navigation « SPA » à une navigation « Site web classique ».</p>
+    </div>
+    <div class="block">
+      <h4>✅ À toi de jouer</h4>
+      <ol>
+        <li>Décris en 3-4 phrases ce que représentent ces deux schémas.</li>
+        <li>Explique pourquoi le temps de chargement diffère entre les deux approches, en citant le passage du cours qui le justifie.</li>
+      </ol>
+    </div>
+
+    <details class="indice">
+      <summary>💡 INDICE</summary>
+      <div class="inner">Le schéma « Sequential » illustre plusieurs allers-retours avec le serveur ; le schéma « Fluid » illustre un seul aller-retour initial.</div>
+    </details>
+    <details class="astuce">
+      <summary>🧠 ASTUCE</summary>
+      <div class="inner">Quand un sujet demande de décrire un schéma, commence toujours par nommer ce qu'il compare avant d'expliquer pourquoi la différence existe.</div>
+    </details>
+    <details class="corrige">
+      <summary>✅ CORRIGÉ (à ouvrir seulement après avoir répondu)</summary>
+      <div class="inner">
+        <h5>Solution</h5>
+        <p>Le premier schéma oppose une <strong>expérience séquentielle</strong> (plusieurs appels successifs au serveur, avec des temps d'attente à chaque interaction) à une <strong>expérience fluide</strong> (un chargement initial regroupant les besoins, puis des interactions immédiates). Le second schéma illustre la même idée sous forme de navigation : une SPA affiche un indicateur de chargement localisé sur la seule zone mise à jour, tandis qu'un site classique recharge l'ensemble de la page.</p>
+        <p>La différence de temps de chargement s'explique par le passage du cours : « un SPA charge toutes les données nécessaires pour le visiteur au premier chargement. Bien que cette opération puisse nécessiter au début un peu plus de temps, elle élimine ensuite la nécessité d'appels supplémentaires au serveur. » À l'inverse, un site séquentiel ne charge que les données de la page immédiate, ce qui oblige à rappeler le serveur à chaque nouvelle interaction.</p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <div class="checkpoint">
+    <h4>📈 CHECKPOINT — Niveau 5</h4>
+    <ul>
+      <li><label><input type="checkbox"> Je peux traiter un sujet à format mixte (QCM + V/F + tableau + rédaction) dans un temps limité</label></li>
+      <li><label><input type="checkbox"> Je peux décrire et expliquer un schéma du cours avec mes propres mots</label></li>
+    </ul>
+    <p class="fallback">Si un point n'est pas coché : refaire un tour complet des niveaux 2 à 4 avant de tenter le Mode Examen.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     MODE EXAMEN
+========================================================== -->
+<section class="level-section lvl-x" id="exam">
+  <div class="level-head">🏆 MODE EXAMEN <span class="count">2 mini-sujets</span></div>
+
+  <!-- SUJET 1 -->
+  <div class="exam-subject">
+    <div class="exam-meta">
+      <span>⏱ Durée indicative : 45 min</span>
+      <span>🔴 Niveau</span>
+      <span>📊 Barème : 20 pts</span>
+    </div>
+    <h3>Sujet 1 — Refonte du portail d'une bibliothèque municipale</h3>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Une bibliothèque municipale souhaite refondre son portail. Il doit permettre : (1) la consultation publique du catalogue et des horaires par tout visiteur (y compris via une recherche Google), et (2) pour les abonnés connectés, la réservation d'ouvrages avec mise à jour en direct de la disponibilité, sans rechargement de page perceptible.</p>
+    </div>
+
+    <div class="block">
+      <h4>✅ Travail demandé</h4>
+      <ol>
+        <li><strong>(4 pts)</strong> QCM — Pour chacune des 4 affirmations suivantes, réponds Vrai ou Faux :<br>
+          a) Une MPA recharge toute la page à chaque navigation.<br>
+          b) Ajax nécessite obligatoirement un rechargement complet de la page.<br>
+          c) SPA et MPA utilisent toutes les deux le protocole HTTP.<br>
+          d) Une SPA est toujours mieux référencée qu'une MPA.</li>
+        <li><strong>(4 pts)</strong> Définis en une phrase chacun des deux termes : SPA / MPA.</li>
+        <li><strong>(8 pts)</strong> Étude de cas — Propose une architecture pour l'ensemble du portail (catalogue public + espace abonné) et justifie avec au moins <strong>trois</strong> arguments précis du cours.</li>
+        <li><strong>(4 pts)</strong> Cite un inconvénient de la SPA qui doit particulièrement être surveillé dans l'espace abonné (données personnelles, réservations), et explique pourquoi en une phrase.</li>
+      </ol>
+    </div>
+
+    <div class="timing">
+      ⏱️ <strong>Conseil de gestion du temps :</strong> 5 min pour les questions 1 et 2 (rapides), 30 min pour l'étude de cas (question 3, la plus valorisée), 10 min pour la question 4 et la relecture.
+    </div>
+
+    <details class="corrige">
+      <summary>✅ CORRIGÉ COMPLET (à ouvrir seulement après avoir traité le sujet)</summary>
+      <div class="inner">
+        <h5>1. QCM (4 pts — 1 pt/item)</h5>
+        <p>a) Vrai — b) Faux (c'est l'inverse : Ajax évite le rechargement) — c) Vrai — d) Faux (le SEO est au contraire plus difficile à optimiser pour une SPA).</p>
+        <h5>2. Définitions (4 pts — 2 pts chacune)</h5>
+        <p><strong>SPA :</strong> application rendue côté client, pilotée par JavaScript, qui met à jour son contenu dynamiquement via Ajax sans recharger toute la page. <strong>MPA :</strong> architecture traditionnelle où chaque clic déclenche une requête HTTP et un rechargement complet de la page.</p>
+        <h5>3. Étude de cas (8 pts)</h5>
+        <p><strong>Proposition :</strong> catalogue public en MPA (ou rendu classique) pour préserver le référencement Google, espace abonné en SPA pour la fluidité des réservations en direct.</p>
+        <p><strong>Arguments (3 attendus minimum, exemples) :</strong> (1) le cours signale la difficulté SEO des SPA → à éviter pour le catalogue public ; (2) la SPA modifie le contenu « de manière dynamique sans avoir à recharger la page entière » via Ajax → correspond au besoin de disponibilité en direct ; (3) la SPA offre une « vitesse accrue » et une UX plus directe, adaptée à des utilisateurs identifiés qui réservent régulièrement.</p>
+        <h5>4. Point de vigilance (4 pts)</h5>
+        <p>La sécurité : le cours indique que les applications monopages sont « plus vulnérables aux attaques par cross-site scripting (XSS) » — un point important dès que des données personnelles (compte abonné, réservations) sont en jeu.</p>
+        <p><strong>Barème détaillé :</strong> QCM 4 pts + Définitions 4 pts + Étude de cas 8 pts (proposition cohérente 2 pts, 3 arguments corrects 2 pts chacun) + Vigilance sécurité 4 pts = <strong>20 pts</strong>.</p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+
+  <!-- SUJET 2 -->
+  <div class="exam-subject">
+    <div class="exam-meta">
+      <span>⏱ Durée indicative : 25 min</span>
+      <span>🟣 Niveau</span>
+      <span>📊 Barème : 12 pts</span>
+    </div>
+    <h3>Sujet 2 — Note de recommandation express</h3>
+
+    <div class="block">
+      <h4>📋 Énoncé</h4>
+      <p>Ton formateur te donne 25 minutes pour rédiger une fiche de recommandation destinée à un jury, comparant SPA et MPA pour le cas d'une application de suivi de commandes en cuisine (affichage temps réel pour le personnel, aucun enjeu de référencement).</p>
+    </div>
+
+    <div class="block">
+      <h4>✅ Travail demandé</h4>
+      <ol>
+        <li><strong>(3 pts)</strong> Rappelle en une phrase le fonctionnement de base d'une SPA.</li>
+        <li><strong>(3 pts)</strong> Cite deux avantages du cours particulièrement pertinents pour ce cas.</li>
+        <li><strong>(4 pts)</strong> Recommande une architecture et justifie ta réponse en 3-4 phrases.</li>
+        <li><strong>(2 pts)</strong> Cite un inconvénient de la SPA qui, ici, n'est pas un problème pour ce cas précis — et explique pourquoi en une phrase.</li>
+      </ol>
+    </div>
+
+    <div class="timing">
+      ⏱️ <strong>Conseil de gestion du temps :</strong> 3 min question 1, 5 min question 2, 12 min question 3 (la plus valorisée), 5 min question 4 et relecture.
+    </div>
+
+    <details class="corrige">
+      <summary>✅ CORRIGÉ COMPLET (à ouvrir seulement après avoir traité le sujet)</summary>
+      <div class="inner">
+        <h5>1. Fonctionnement (3 pts)</h5>
+        <p>Une SPA est rendue côté client et met à jour son contenu dynamiquement via Ajax, sans recharger toute la page.</p>
+        <h5>2. Avantages pertinents (3 pts)</h5>
+        <p>Vitesse accrue (affichage immédiat des nouvelles commandes) et expérience utilisateur directe (le personnel n'a pas à cliquer/attendre un rechargement en pleine activité).</p>
+        <h5>3. Recommandation (4 pts)</h5>
+        <p>Une architecture SPA est recommandée : le besoin est un affichage temps réel pour un public interne (le personnel de cuisine), sans aucune contrainte de référencement. Le cours indique que la SPA « réagit plus rapidement » grâce au rendu côté client, ce qui correspond exactement à un environnement de cuisine où chaque seconde compte.</p>
+        <h5>4. Inconvénient non problématique ici (2 pts)</h5>
+        <p>Le SEO : le cours cite la difficulté d'optimisation du référencement comme inconvénient des SPA, mais une application interne de suivi de commandes n'a besoin d'aucun référencement, ce point est donc sans impact ici.</p>
+        <p><strong>Barème détaillé :</strong> 3 + 3 + 4 + 2 = <strong>12 pts</strong>.</p>
+      </div>
+    </details>
+
+    <div class="github">🔗 Ma solution GitHub : <input type="text" placeholder="[ AJOUTER LE LIEN ICI ]"></div>
+  </div>
+</section>
+
+<footer>
+  Banque d'exercices originale, construite à partir du cours OFPPT C12 · S2 (Créer des applications web monopage) et inspirée du format des évaluations OFPPT (QCM, vrai/faux, études de cas, mini-sujets notés). Aucun exercice externe copié — sources externes utilisées uniquement pour calibrer le format et le niveau attendu.
+</footer>
+
+</div>
+</body>
+</html>

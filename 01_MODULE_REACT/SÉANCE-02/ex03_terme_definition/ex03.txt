@@ -1,0 +1,21 @@
+Associe chaque terme de la colonne A à sa définition dans la colonne B (une définition par terme).
+Colonne A — Terme	Colonne B — Définition
+1. SPA	A. Ensemble de techniques permettant d'échanger des données avec le serveur en arrière-plan
+2. MPA	B. Absence d'enregistrement des sauts d'états de l'utilisateur dans l'application
+3. Ajax	C. Application rendue côté client, pilotée par JavaScript
+4. Rafraîchissement complet	D. Faille exploitée par l'injection de scripts côté client dans une application web
+5. Historique du navigateur (limite SPA)	E. Rechargement entier de la page suite à une requête HTTP
+6. XSS	F. Architecture traditionnelle où chaque clic déclenche une requête HTTP
+solution : 
+
+1---->c
+2---->f
+3---->A
+4---->e
+5---->B
+6---->d
+
+
+
+
+

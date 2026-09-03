@@ -1,0 +1,22 @@
+📋 Énoncé
+Pour chaque question, choisis la seule bonne réponse parmi les propositions.
+
+✅ À toi de jouer
+Une SPA (Single Page Application) est une application qui est :
+a) rendue côté serveur, à chaque page  |  b) rendue côté client, pilotée par JavaScript  |  c) rendue uniquement en HTML statique
+Dans une architecture MPA, chaque clic de l'utilisateur déclenche :
+a) un appel Ajax asynchrone  |  b) une requête HTTP suivie d'un rechargement complet de la page  |  c) rien, la page ne change jamais
+Ajax permet principalement de :
+a) styliser une page web  |  b) envoyer/récupérer des données du serveur en arrière-plan, sans recharger la page  |  c) remplacer le protocole HTTP
+SPA et MPA ont en commun d'être basées sur :
+a) JavaScript uniquement  |  b) le protocole HTTP  |  c) le framework React
+L'objectif principal recherché par une SPA est de :
+a) simplifier le référencement Google  |  b) se rapprocher de l'expérience d'une application native  |  c) supprimer totalement le serveur
+
+
+Solution : 
+1-b
+2-b
+3-b
+4-b
+5-b

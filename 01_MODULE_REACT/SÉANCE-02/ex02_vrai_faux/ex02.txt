@@ -1,0 +1,14 @@
+📋 Énoncé
+Indique si chaque affirmation est Vraie ou Fausse.
+Solution : 
+✅ À toi de jouer
+Une SPA charge la totalité ou la plupart de son contenu en une seule fois. vrai
+Une MPA utilise Ajax pour éviter de recharger la page à chaque clic. faux
+Le bouton « retour » du navigateur pose un problème particulier avec les SPA. vrai
+Une SPA est toujours plus rapide qu'une MPA, y compris lors du tout premier affichage. faux
+SPA et MPA n'ont aucun point commun technique.faux
+Le débogage d'une SPA construite avec Angular ou React est facilité par les outils Chrome dédiés à ces frameworks.vrai
+Une SPA est, selon le cours, une bonne base pour le développement futur d'applications mobiles. vrai
+Les applications monopages sont, par rapport aux applications multi-pages, moins vulnérables aux attaques XSS.faux
+
+
