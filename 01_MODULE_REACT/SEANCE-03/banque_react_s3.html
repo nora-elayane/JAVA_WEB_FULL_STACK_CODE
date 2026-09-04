@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banque d'exercices — Séance 3 : Concepts React JS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --bg:#f7f8fb; --panel:#ffffff; --panel2:#f4f6fa; --border:#e3e7ef;
+    --text:#1e2635; --muted:#66708a;
+    --l1:#0284c7; --l1-bg:#e6f4fd;
+    --l2:#059669; --l2-bg:#e2f7ee;
+    --l3:#7c3aed; --l3-bg:#f1eafe;
+    --l4:#ea580c; --l4-bg:#fef0e4;
+    --l5:#e11d48; --l5-bg:#fde8ec;
+    --exam:#b45309; --exam-bg:#fdf1dc;
+    --code-bg:#f4f6fb;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,-apple-system,sans-serif;}
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:14px; box-shadow:0 1px 3px rgba(30,38,53,0.06), 0 1px 2px rgba(30,38,53,0.04);}
+  code, pre{font-family:'Fira Code','Cascadia Code',Consolas,monospace;}
+  pre{background:var(--code-bg); border:1px solid var(--border); border-radius:10px; padding:14px; overflow-x:auto; font-size:0.85rem; line-height:1.55; color:#1e2635;}
+  code.inline{background:var(--code-bg); border:1px solid var(--border); border-radius:5px; padding:1px 6px; font-size:0.88em; color:#0f172a;}
+  details{background:var(--panel2); border:1px solid var(--border); border-radius:10px; margin-top:10px;}
+  details summary{cursor:pointer; padding:10px 14px; font-weight:600; list-style:none; display:flex; align-items:center; gap:8px; user-select:none; color:#1e2635;}
+  details summary::-webkit-details-marker{display:none;}
+  details summary::before{content:"▸"; display:inline-block; transition:transform .15s; color:var(--muted);}
+  details[open] summary::before{transform:rotate(90deg);}
+  details .content{padding:0 16px 16px 16px; border-top:1px dashed var(--border); margin-top:2px; padding-top:12px;}
+  .badge{display:inline-block; padding:2px 10px; border-radius:999px; font-size:0.75rem; font-weight:700; letter-spacing:.02em;}
+  .folder{font-family:'Fira Code',monospace; background:var(--code-bg); border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:0.85rem; color:#0369a1; font-weight:600;}
+  .github{margin-top:10px; font-size:0.85rem; color:var(--muted);}
+  .github a{color:#0369a1; text-decoration:underline;}
+  .checklist label{display:flex; gap:8px; align-items:flex-start; padding:4px 0; font-size:0.92rem;}
+  .checklist input{margin-top:4px;}
+  table{width:100%; border-collapse:collapse; font-size:0.88rem;}
+  th,td{border:1px solid var(--border); padding:8px 10px; text-align:left;}
+  th{background:var(--panel2); font-weight:700;}
+  .navlink{padding:6px 12px; border-radius:8px; font-size:0.85rem; border:1px solid var(--border); white-space:nowrap; background:#ffffff; font-weight:600;}
+  .navlink:hover{background:var(--panel2);}
+  .astuce{border-left:4px solid #d97706; background:#fffaf0; border-radius:6px; padding:10px 14px; margin-top:10px; font-size:0.9rem;}
+  .piege{border-left:4px solid #dc2626; background:#fef2f2; border-radius:6px; padding:10px 14px; margin-top:10px; font-size:0.9rem;}
+  .savoir{border-left:4px solid #2563eb; background:#eff6ff; border-radius:8px; padding:14px 16px; margin-bottom:20px;}
+  .checkpoint{border:1px dashed var(--border); border-radius:10px; padding:14px 16px; margin-top:24px; background:var(--panel2);}
+  ::-webkit-scrollbar{height:8px; width:8px;}
+  ::-webkit-scrollbar-thumb{background:#cbd5e1; border-radius:4px;}
+  .step{color:var(--muted);}
+  .exo-title{font-size:1.05rem; font-weight:800; color:#0f172a;}
+</style>
+</head>
+<body class="pb-24">
+
+<!-- HEADER -->
+<header class="sticky top-0 z-20 backdrop-blur bg-white/95 border-b border-[var(--border)] shadow-sm">
+  <div class="max-w-5xl mx-auto px-5 py-4">
+    <div class="flex items-center justify-between flex-wrap gap-3">
+      <div>
+        <p class="text-xs uppercase tracking-widest text-[var(--muted)]">OFPPT — Développement Digital · Full Stack + IA</p>
+        <h1 class="text-xl md:text-2xl font-extrabold">🏋️ Banque d'exercices — Séance 3 : Concepts React JS</h1>
+      </div>
+      <div class="text-xs text-[var(--muted)] text-right">
+        Basée sur le guide de révision Séance 3<br>Progression : Fondamentaux → Examen National
+      </div>
+    </div>
+    <nav class="flex gap-2 overflow-x-auto mt-3 pb-1">
+      <a href="#niveau1" class="navlink" style="color:var(--l1)">N1 · Fondamentaux</a>
+      <a href="#niveau2" class="navlink" style="color:var(--l2)">N2 · Application</a>
+      <a href="#niveau3" class="navlink" style="color:var(--l3)">N3 · Intermédiaire</a>
+      <a href="#niveau4" class="navlink" style="color:var(--l4)">N4 · Avancé</a>
+      <a href="#niveau5" class="navlink" style="color:var(--l5)">N5 · EFM/Examen</a>
+      <a href="#examen" class="navlink" style="color:var(--exam)">📝 Mode Examen</a>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-5 mt-6 space-y-10">
+
+<!-- INTRO -->
+<section class="card p-5">
+  <h2 class="font-bold text-lg mb-2">🎯 Comment utiliser cette banque</h2>
+  <p class="text-sm text-[var(--muted)] leading-relaxed">
+    Cette banque couvre uniquement les 4 chapitres de la Séance 3 : présentation de React, écosystème
+    (npm, ES6, Babel, bundlers), architecture d'une application React, et structure d'un premier projet
+    <code class="inline">create-react-app</code>. Le cours ne détaille pas encore l'écriture de composants JSX
+    ni les Hooks en profondeur (ils ne sont que cités p.8) — cette banque reste donc volontairement au
+    niveau conceptuel/lecture de code, sans dériver vers des notions non enseignées.
+  </p>
+  <p class="text-sm text-[var(--muted)] mt-2 leading-relaxed">
+    Pour chaque exercice : lis l'énoncé, essaie seule, ouvre l'<b>indice</b> si tu bloques, puis seulement
+    ensuite le <b>corrigé</b> et la <b>solution attendue</b>. Coche le statut quand c'est fait.
+  </p>
+</section>
+
+<!-- ============================================================ -->
+<!-- NIVEAU 1 -->
+<!-- ============================================================ -->
+<section id="niveau1">
+  <div class="flex items-center gap-3 mb-3">
+    <span class="badge" style="background:var(--l1-bg); color:var(--l1); border:1px solid var(--l1)">NIVEAU 1</span>
+    <h2 class="text-lg font-bold">Fondamentaux</h2>
+  </div>
+
+  <div class="savoir">
+    <b>📌 À savoir avant de commencer</b>
+    <ul class="list-disc ml-5 mt-2 text-sm space-y-1">
+      <li>React est une <b>bibliothèque JavaScript</b> (Facebook) pour créer des composants réutilisables.</li>
+      <li>Le <b>DOM virtuel</b> est une copie interne du DOM que React utilise pour limiter les mises à jour réelles.</li>
+      <li><b>npm</b> gère les dépendances et lance des scripts (<code class="inline">install</code>, <code class="inline">start</code>, <code class="inline">test</code>, <code class="inline">run dev</code>).</li>
+      <li><b>Babel</b> transpile l'ES6 vers l'ES5 ; <b>Webpack/Browserify</b> fusionnent les fichiers (bundling).</li>
+      <li>Un projet <code class="inline">create-react-app</code> a un dossier <code class="inline">public/</code> et un dossier <code class="inline">src/</code>.</li>
+    </ul>
+  </div>
+
+  <!-- EX 1 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l1)">
+    <p class="exo-title">EXERCICE 1 — React, jQuery et le DOM virtuel</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex01_react_jquery_dom_virtuel</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex01.md</code></p>
+    <p class="text-sm mt-1">⭐ Niveau 1</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> définition de React, DOM virtuel, comparaison avec jQuery</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Vérifier la compréhension de la définition de React et du principe du DOM virtuel.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <p class="text-sm mt-1">Réponds aux questions suivantes en une phrase chacune :</p>
+      <ol class="list-decimal ml-5 text-sm mt-1 space-y-1">
+        <li>Qu'est-ce que React et par qui a-t-il été créé ?</li>
+        <li>Quelle est la différence entre la manière dont jQuery et React manipulent le DOM ?</li>
+        <li>Pourquoi cette différence rend-elle React plus performant ?</li>
+      </ol>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Rédiger une réponse courte pour chaque question.</li>
+        <li>Éviter de recopier mot pour mot le cours : reformule avec tes propres mots.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">Pense au mot « copie » : React ne touche pas directement le HTML affiché, il compare une version en mémoire avant d'agir.</div></details>
+    <details><summary>🧠 Astuce</summary><div class="content text-sm astuce">Réflexe examen : si la question porte sur « pourquoi React est rapide », la réponse tourne presque toujours autour du <b>DOM virtuel</b> et de la <b>synchronisation ciblée</b>.</div></details>
+    <details>
+      <summary>✅ Corrigé</summary>
+      <div class="content text-sm space-y-2">
+        <p><b>1. Analyse :</b> la question teste une définition (React) et un mécanisme (DOM virtuel).</p>
+        <p><b>2. Méthode :</b> distinguer « manipulation directe » (jQuery) vs « copie interne + synchronisation » (React).</p>
+        <p><b>3. Implémentation :</b> rédiger trois réponses courtes et précises.</p>
+        <p><b>4. Résultat attendu :</b> voir solution ci-dessous.</p>
+        <p><b>5. Explication :</b> la manipulation directe du DOM réel est coûteuse car le navigateur doit recalculer l'affichage à chaque changement ; travailler sur une copie permet de grouper les changements avant de toucher le DOM réel.</p>
+      </div>
+    </details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm space-y-2">
+        <p><b>1.</b> React est une bibliothèque JavaScript développée par Facebook, utilisée pour créer des composants d'affichage réutilisables.</p>
+        <p><b>2.</b> jQuery manipule directement les éléments du DOM réel, alors que React travaille sur une copie interne appelée le DOM virtuel.</p>
+        <p><b>3.</b> Parce que React ne met à jour l'affichage réel que lorsque c'est nécessaire, ce qui évite des manipulations directes coûteuses et améliore les performances.</p>
+      </div>
+    </details>
+    <details>
+      <summary>🔎 Explication de la solution</summary>
+      <div class="content text-sm">On distingue bien « bibliothèque » (React n'est pas un framework complet) de « framework ». Le mot-clé à retenir pour l'examen est « synchronisation ciblée » : React ne réécrit pas tout le DOM, seulement ce qui a changé.</div>
+    </details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <!-- EX 2 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l1)">
+    <p class="exo-title">EXERCICE 2 — Associer chaque outil à sa définition</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex02_associer_outils_ecosysteme</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex02.md</code></p>
+    <p class="text-sm mt-1">⭐ Niveau 1</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> npm, ES6, Babel, bundler</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Mémoriser le rôle exact de chaque outil de l'écosystème React.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <p class="text-sm mt-1">Associe chaque outil (colonne A) à sa définition (colonne B).</p>
+      <table class="mt-2">
+        <tr><th>Colonne A</th><th>Colonne B</th></tr>
+        <tr><td>1. npm</td><td>a. Compile le JSX et l'ES6 vers de l'ES5</td></tr>
+        <tr><td>2. ES6</td><td>b. Fusionne le code en un seul fichier statique</td></tr>
+        <tr><td>3. Babel</td><td>c. Standard de langage définissant fonctions fléchées, classes, modules</td></tr>
+        <tr><td>4. Webpack</td><td>d. Gère les dépendances et lance des scripts</td></tr>
+      </table>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Écrire les 4 associations sous la forme « 1-d, 2-c, ... ».</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">npm n'est pas un langage, ES6 n'est pas un outil de compilation, Babel ≠ bundler.</div></details>
+    <details><summary>🧠 Astuce</summary><div class="content text-sm astuce">Retiens la chaîne logique : on écrit en <b>ES6</b> → <b>Babel</b> le transpile → <b>Webpack</b> le regroupe → <b>npm</b> lance tout.</div></details>
+    <details>
+      <summary>✅ Corrigé</summary>
+      <div class="content text-sm space-y-2">
+        <p><b>Analyse :</b> question de vocabulaire pur, pas de piège de raisonnement.</p>
+        <p><b>Méthode :</b> éliminer d'abord les associations évidentes (ES6 = standard de langage), puis les autres par élimination.</p>
+      </div>
+    </details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm">1-d, 2-c, 3-a, 4-b</div>
+    </details>
+    <details>
+      <summary>🔎 Explication de la solution</summary>
+      <div class="content text-sm">Piège fréquent : confondre Babel et Webpack. Babel <i>traduit</i> la syntaxe, Webpack <i>assemble</i> les fichiers. Un projet React a besoin des deux, combinés.</div>
+    </details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <!-- EX 3 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l1)">
+    <p class="exo-title">EXERCICE 3 — Compléter les commandes npm</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex03_completer_commandes_npm</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex03.md</code></p>
+    <p class="text-sm mt-1">⭐ Niveau 1</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> commandes npm</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Connaître par cœur les commandes npm de base.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <p class="text-sm mt-1">Complète chaque phrase avec la bonne commande npm :</p>
+      <pre>npm ______   → installe le projet sur la machine
+npm ______   → démarre le projet
+npm ______   → lance les tests du projet
+npm run ____ → lance un environnement de développement</pre>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Compléter les 4 blancs.</li>
+        <li>Préciser dans quel cas on utilise <code class="inline">npm install</code> après un <code class="inline">git clone</code>.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">Une des commandes n'a pas de deuxième mot après « npm » directement — elle utilise <code class="inline">run</code>.</div></details>
+    <details>
+      <summary>✅ Corrigé</summary>
+      <div class="content text-sm"><b>Analyse → Méthode → Résultat :</b> question de mémorisation directe issue du tableau « commandes npm courantes » du cours.</div>
+    </details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm"><pre>npm install
+npm start
+npm test
+npm run dev</pre>
+On utilise <code class="inline">npm install</code> après un <code class="inline">git clone</code> pour récupérer/installer toutes les dépendances du projet cloné.</div>
+    </details>
+    <details><summary>🔎 Explication de la solution</summary><div class="content text-sm">C'est une question « astuce examen » signalée explicitement dans le cours (p.5) : à retenir telle quelle.</div></details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <!-- EX 4 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l1)">
+    <p class="exo-title">EXERCICE 4 — Rôle des fichiers d'un projet create-react-app</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex04_role_fichiers_create_react_app</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex04.md</code></p>
+    <p class="text-sm mt-1">⭐ Niveau 1</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> structure d'un projet React généré</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Savoir à quoi sert chaque élément principal de l'arborescence d'un projet React.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <p class="text-sm mt-1">Pour chaque élément, écris en une phrase son rôle : <code class="inline">node_modules</code>, <code class="inline">public/</code>, <code class="inline">.gitignore</code>, <code class="inline">package.json</code>, <code class="inline">src/</code>.</p>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Rédiger 5 phrases courtes, une par élément.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">Un seul de ces éléments contient la div <code class="inline">id="root"</code>.</div></details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm space-y-1">
+        <p><b>node_modules</b> : contient toutes les librairies JavaScript nécessaires au projet.</p>
+        <p><b>public/</b> : contient <code class="inline">index.html</code>, le point de départ, avec la div de classe/id <code class="inline">root</code>.</p>
+        <p><b>.gitignore</b> : indique à Git les fichiers à ne pas pousser sur le dépôt distant (notamment <code class="inline">node_modules</code>).</p>
+        <p><b>package.json</b> : contient les informations de l'application (scripts, dépendances...).</p>
+        <p><b>src/</b> : contient <code class="inline">index.js</code>, qui charge le composant <code class="inline">App</code>, lui-même greffé à la div racine.</p>
+      </div>
+    </details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <div class="checkpoint">
+    <b>🏁 CHECKPOINT — Niveau 1</b>
+    <div class="checklist mt-2">
+      <label><input type="checkbox"> Je peux définir React et expliquer le DOM virtuel en 2 phrases.</label>
+      <label><input type="checkbox"> Je peux citer le rôle de npm, ES6, Babel et d'un bundler.</label>
+      <label><input type="checkbox"> Je connais par cœur les 4 commandes npm de base.</label>
+      <label><input type="checkbox"> Je sais à quoi sert chaque dossier/fichier d'un projet create-react-app.</label>
+    </div>
+    <p class="text-xs text-[var(--muted)] mt-2">Si un point échoue → relire chapitres 01 et 02 (p.3 à 7) avant de continuer.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- NIVEAU 2 -->
+<!-- ============================================================ -->
+<section id="niveau2">
+  <div class="flex items-center gap-3 mb-3 mt-10">
+    <span class="badge" style="background:var(--l2-bg); color:var(--l2); border:1px solid var(--l2)">NIVEAU 2</span>
+    <h2 class="text-lg font-bold">Application</h2>
+  </div>
+
+  <div class="savoir" style="border-left-color:var(--l2)">
+    <b>📌 À savoir avant de commencer</b>
+    <ul class="list-disc ml-5 mt-2 text-sm space-y-1">
+      <li><code class="inline">index.js</code> importe React + ReactDOM, puis monte <code class="inline">&lt;App /&gt;</code> dans la div <code class="inline">root</code>.</li>
+      <li>Tout composant React doit importer <code class="inline">React</code> car le JSX se transforme en <code class="inline">React.createElement()</code>.</li>
+      <li><code class="inline">export default App</code> rend le composant disponible pour les autres fichiers.</li>
+      <li>Babel a besoin de deux presets pour React : <code class="inline">babel-preset-es2015</code> et <code class="inline">babel-preset-react</code>.</li>
+    </ul>
+  </div>
+
+  <!-- EX 5 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l2)">
+    <p class="exo-title">EXERCICE 5 — Annoter index.js ligne par ligne</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex05_annoter_index_js</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex05.js</code></p>
+    <p class="text-sm mt-1">⭐⭐ Niveau 2</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> point d'entrée d'une app React, imports, ReactDOM.createRoot</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Comprendre le rôle de chaque ligne du fichier <code class="inline">src/index.js</code>.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <pre>1 import React from 'react';
+2 import ReactDOM from 'react-dom/client';
+3 import './index.css';
+4 import App from './App';
+5 import reportWebVitals from './reportWebVitals';
+6
+7 const root = ReactDOM.createRoot(document.getElementById('root'));
+8 root.render(
+9   &lt;React.StrictMode&gt;
+10    &lt;App /&gt;
+11  &lt;/React.StrictMode&gt;
+12 );
+13 reportWebVitals();</pre>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Pour chaque ligne 1, 2, 4, 7 et 8-12, expliquer en une phrase ce qu'elle fait.</li>
+        <li>Indiquer ce qui se passerait si la ligne 1 était supprimée.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">La ligne 1 est liée à la transformation du JSX en <code class="inline">React.createElement()</code>.</div></details>
+    <details><summary>⚠️ Piège fréquent</summary><div class="content text-sm piege">Confondre <code class="inline">react</code> (ligne 1) et <code class="inline">react-dom</code> (ligne 2) : le premier définit les composants, le second fournit les méthodes liées au DOM du navigateur.</div></details>
+    <details>
+      <summary>✅ Corrigé</summary>
+      <div class="content text-sm space-y-2">
+        <p><b>Analyse :</b> question de lecture de code, pas d'écriture.</p>
+        <p><b>Méthode :</b> relier chaque ligne à un rôle précis vu dans le cours (import, montage, mesure de performance).</p>
+      </div>
+    </details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm space-y-1">
+        <p><b>Ligne 1 :</b> importe la bibliothèque React elle-même, nécessaire car le JSX se transforme en <code class="inline">React.createElement()</code>.</p>
+        <p><b>Ligne 2 :</b> importe react-dom, qui fournit les méthodes spécifiques au DOM du navigateur.</p>
+        <p><b>Ligne 4 :</b> importe le composant <code class="inline">App</code> défini dans <code class="inline">src/App.js</code>.</p>
+        <p><b>Lignes 7-12 :</b> créent une racine React sur la div <code class="inline">#root</code> puis affichent le composant <code class="inline">&lt;App /&gt;</code> à l'intérieur.</p>
+        <p><b>Sans la ligne 1 :</b> une erreur se produirait, car tout composant React doit importer React.</p>
+      </div>
+    </details>
+    <details><summary>🔎 Explication de la solution</summary><div class="content text-sm">Le point clé à l'examen : <code class="inline">ReactDOM.createRoot(...).render(...)</code> est le mécanisme exact de montage d'une app React 18+ dans le DOM.</div></details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <!-- EX 6 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l2)">
+    <p class="exo-title">EXERCICE 6 — Corriger l'erreur d'un stagiaire</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex06_corriger_erreur_webpack_babel</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex06.md</code></p>
+    <p class="text-sm mt-1">⭐⭐ Niveau 2</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> rôle de Webpack, rôle de Babel</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Identifier une erreur de compréhension fréquente sur les bundlers.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <p class="text-sm mt-1">Un stagiaire affirme : <i>« J'ai installé Webpack dans mon projet React, donc je n'ai plus besoin de Babel : Webpack sait déjà transformer mon JSX et mon code ES2015. »</i></p>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Dire si l'affirmation est vraie ou fausse.</li>
+        <li>Corriger l'erreur en expliquant précisément ce que fait Webpack seul, et ce qu'il faut ajouter.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">Relire le bloc « ATTENTION / PIÈGE FRÉQUENT » du chapitre 2.</div></details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm">Faux. Webpack, seul, est incapable de transformer du code ES2015 ou du JSX : il ne fait que fusionner (bundler) les modules en fichiers statiques. Pour un projet React complet, Webpack doit être combiné avec Babel (presets <code class="inline">es2015</code> et <code class="inline">react</code>) qui, lui, se charge de la transpilation.</div>
+    </details>
+    <details><summary>🔎 Explication de la solution</summary><div class="content text-sm">C'est explicitement signalé comme piège fréquent dans le cours — question quasi certaine en QCM d'examen.</div></details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <!-- EX 7 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l2)">
+    <p class="exo-title">EXERCICE 7 — Tableau comparatif jQuery vs React</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex07_tableau_jquery_vs_react</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex07.md</code></p>
+    <p class="text-sm mt-1">⭐⭐ Niveau 2</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> comparaison jQuery / React, npm et ses équivalents</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Combiner deux notions du cours dans un même document de synthèse.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <p class="text-sm mt-1">Construis un tableau à deux colonnes (Approche / Caractéristique) comparant jQuery et React sur : manipulation du DOM, performance. Ajoute une deuxième mini-table associant chaque langage back-end (PHP, Java, Python, Ruby) à son gestionnaire de dépendances équivalent à npm.</p>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Créer les deux tableaux demandés.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">Les deux tableaux existent déjà, séparément, dans le cours (chapitres 1 et 2) — il s'agit de les restituer correctement.</div></details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm space-y-3">
+        <table>
+          <tr><th>Approche</th><th>Manipulation du DOM</th><th>Performance</th></tr>
+          <tr><td>jQuery (classique)</td><td>Directe sur le DOM réel</td><td>Plus lente</td></tr>
+          <tr><td>React</td><td>Sur une copie (DOM virtuel), puis synchronisation ciblée</td><td>Plus rapide</td></tr>
+        </table>
+        <table>
+          <tr><th>Langage</th><th>Gestionnaire équivalent</th></tr>
+          <tr><td>PHP</td><td>Composer</td></tr>
+          <tr><td>Java</td><td>Maven</td></tr>
+          <tr><td>Python</td><td>pip</td></tr>
+          <tr><td>Ruby</td><td>Bundler</td></tr>
+        </table>
+      </div>
+    </details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <div class="checkpoint">
+    <b>🏁 CHECKPOINT — Niveau 2</b>
+    <div class="checklist mt-2">
+      <label><input type="checkbox"> Je peux expliquer chaque ligne de <code class="inline">index.js</code>.</label>
+      <label><input type="checkbox"> Je peux repérer une erreur de raisonnement sur Webpack/Babel et la corriger.</label>
+      <label><input type="checkbox"> Je peux produire un tableau comparatif combinant deux notions du cours.</label>
+    </div>
+    <p class="text-xs text-[var(--muted)] mt-2">Si un point échoue → relire chapitre 04 (p.10-13) et le tableau Babel/Webpack (p.6-7).</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- NIVEAU 3 -->
+<!-- ============================================================ -->
+<section id="niveau3">
+  <div class="flex items-center gap-3 mb-3 mt-10">
+    <span class="badge" style="background:var(--l3-bg); color:var(--l3); border:1px solid var(--l3)">NIVEAU 3</span>
+    <h2 class="text-lg font-bold">Intermédiaire</h2>
+  </div>
+
+  <div class="savoir" style="border-left-color:var(--l3)">
+    <b>📌 À savoir avant de commencer</b>
+    <ul class="list-disc ml-5 mt-2 text-sm space-y-1">
+      <li>Une app React démarre avec un seul <b>composant racine</b>, composé de plus petits composants.</li>
+      <li>L'architecture React repose sur la <b>composition</b>, pas sur l'héritage.</li>
+      <li>Composants tiers courants : React Router (routage), Redux/MobX (état), Fetch (API), react-transition-group (animation).</li>
+      <li>Concepts avancés cités (non détaillés dans ce cours) : HOC, contexte, render props, refs, Hooks.</li>
+    </ul>
+  </div>
+
+  <!-- EX 8 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l3)">
+    <p class="exo-title">EXERCICE 8 — Choisir le bon outil selon la situation</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex08_choisir_outil_selon_situation</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex08.md</code></p>
+    <p class="text-sm mt-1">⭐⭐⭐ Niveau 3</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> composants tiers de l'architecture React</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Relier un besoin fonctionnel concret au bon composant tiers.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <p class="text-sm mt-1">Pour chaque situation, indique quelle famille de composants tiers utiliser (routage, animation, gestion d'état, appels API) :</p>
+      <ol class="list-decimal ml-5 text-sm mt-1 space-y-1">
+        <li>L'application doit afficher une page différente selon l'URL visitée.</li>
+        <li>Plusieurs composants éloignés dans l'arbre doivent partager et modifier un même état global (panier, utilisateur connecté...).</li>
+        <li>L'application doit récupérer une liste de produits depuis un serveur distant.</li>
+        <li>Un menu doit apparaître avec une transition en fondu.</li>
+      </ol>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Associer chaque numéro à une famille + un exemple d'outil cité dans le cours.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">Le schéma d'architecture du chapitre 3 liste exactement 4 familles de composants tiers.</div></details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm space-y-1">
+        <p><b>1.</b> Gestion des routes → React Router.</p>
+        <p><b>2.</b> Gestion avancée de l'état → Redux ou MobX.</p>
+        <p><b>3.</b> Gestion des API REST → JavaScript Fetch.</p>
+        <p><b>4.</b> Animation React → react-transition-group / react-animations.</p>
+      </div>
+    </details>
+    <details><summary>🔎 Explication de la solution</summary><div class="content text-sm">Ce type de question « associer besoin → outil » est très fréquent en EFM : elle vérifie que l'étudiant comprend l'usage, pas seulement le nom des bibliothèques.</div></details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <!-- EX 9 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l3)">
+    <p class="exo-title">EXERCICE 9 — Compléter le schéma d'architecture</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex09_completer_schema_architecture</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex09.md</code></p>
+    <p class="text-sm mt-1">⭐⭐⭐ Niveau 3</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> composant racine, composition, principes clés de l'architecture</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Restituer les principes clés d'une architecture React sous forme structurée.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <p class="text-sm mt-1">Complète les phrases suivantes :</p>
+      <pre>Une application React démarre avec un seul composant ______.
+Chaque composant est formé comme un composant de composants ______, plutôt que de dépendre d'un autre composant.
+La grande majorité des composants sont des composants ______.
+L'application peut ajouter des composants ______ à des fins spécifiques.</pre>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Compléter les 4 blancs.</li>
+        <li>Expliquer en une phrase pourquoi React privilégie la composition plutôt que l'héritage.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">Les 5 principes clés sont numérotés dans le cours, page 9.</div></details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm">
+        racine · plus petits · d'interface utilisateur (UI) · tiers
+        <br><br>
+        La composition permet d'assembler des composants indépendants et réutilisables, plus faciles à maintenir et à tester qu'une chaîne de dépendances/héritages.
+      </div>
+    </details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <!-- EX 10 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l3)">
+    <p class="exo-title">EXERCICE 10 — Expliquer le DOM virtuel avec une analogie</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex10_expliquer_dom_virtuel_analogie</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex10.md</code></p>
+    <p class="text-sm mt-1">⭐⭐⭐ Niveau 3</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> DOM virtuel, performance</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Reformuler un concept technique avec ses propres mots — compétence attendue à l'oral d'un EFM.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <p class="text-sm mt-1">Rédige un court paragraphe (4 à 6 lignes) expliquant le fonctionnement du DOM virtuel à un camarade qui n'a jamais suivi le cours, en utilisant une analogie de ton choix (liste de courses, brouillon, etc.).</p>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Ton paragraphe doit contenir : le terme « DOM virtuel », la comparaison avec la manipulation directe, et le gain de performance.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">Une bonne analogie : faire un brouillon avant de recopier au propre, pour éviter de raturer sans arrêt la copie finale.</div></details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm">Exemple de réponse : « Imagine que tu corriges un texte. Au lieu de réécrire directement sur la copie finale à chaque faute (lent, risque d'erreurs), tu corriges d'abord sur un brouillon, puis tu ne recopies au propre que les phrases qui ont réellement changé. React fait pareil avec le DOM virtuel : il prépare les changements sur une copie interne, compare avec l'état précédent, et ne touche le vrai DOM (la « copie finale » affichée à l'écran) que pour les parties qui ont vraiment changé. C'est ce qui rend React plus rapide qu'une manipulation directe comme avec jQuery. »</div>
+    </details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <div class="checkpoint">
+    <b>🏁 CHECKPOINT — Niveau 3</b>
+    <div class="checklist mt-2">
+      <label><input type="checkbox"> Je peux relier un besoin fonctionnel à la bonne famille de composants tiers.</label>
+      <label><input type="checkbox"> Je connais les 5 principes clés de l'architecture React.</label>
+      <label><input type="checkbox"> Je peux reformuler le DOM virtuel avec mes propres mots, sans réciter.</label>
+    </div>
+    <p class="text-xs text-[var(--muted)] mt-2">Si un point échoue → relire chapitre 03 en entier (p.8-9).</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- NIVEAU 4 -->
+<!-- ============================================================ -->
+<section id="niveau4">
+  <div class="flex items-center gap-3 mb-3 mt-10">
+    <span class="badge" style="background:var(--l4-bg); color:var(--l4); border:1px solid var(--l4)">NIVEAU 4</span>
+    <h2 class="text-lg font-bold">Avancé</h2>
+  </div>
+
+  <div class="savoir" style="border-left-color:var(--l4)">
+    <b>📌 À savoir avant de commencer</b>
+    <ul class="list-disc ml-5 mt-2 text-sm space-y-1">
+      <li>Cloner puis démarrer un projet React implique une séquence précise de commandes.</li>
+      <li><code class="inline">App.js</code> définit une fonction qui retourne du JSX, exportée avec <code class="inline">export default</code>.</li>
+      <li>Le fichier <code class="inline">public/index.html</code> ne contient (presque) aucun contenu visible : tout vient de <code class="inline">src/</code>.</li>
+    </ul>
+  </div>
+
+  <!-- EX 11 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l4)">
+    <p class="exo-title">EXERCICE 11 — Remettre dans l'ordre le démarrage d'un projet cloné</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex11_ordonner_etapes_projet_clone</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex11.md</code></p>
+    <p class="text-sm mt-1">⭐⭐⭐⭐ Niveau 4</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> npm, cycle de vie d'un projet</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Simuler une situation réelle de prise en main d'un projet React existant.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <p class="text-sm mt-1">Une stagiaire vient de recevoir le lien GitHub d'un projet React à reprendre. Voici, dans le désordre, les actions possibles :</p>
+      <pre>A. npm start
+B. git clone [lien-du-projet]
+C. npm install
+D. cd nom-du-projet
+E. ouvrir le projet dans l'éditeur de code
+F. modifier App.js et enregistrer</pre>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Remettre les lettres dans l'ordre logique d'exécution.</li>
+        <li>Expliquer pourquoi <code class="inline">npm install</code> doit obligatoirement se faire avant <code class="inline">npm start</code>.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">On ne peut pas installer de dépendances avant d'être entré dans le dossier du projet.</div></details>
+    <details><summary>⚠️ Piège fréquent</summary><div class="content text-sm piege">Beaucoup d'étudiants oublient que <code class="inline">node_modules</code> n'est jamais poussé sur GitHub (il est dans <code class="inline">.gitignore</code>) : il faut donc toujours réinstaller les dépendances après un clone.</div></details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm">Ordre : B → D → E → C → A → F.
+      <br><br>
+      <code class="inline">npm install</code> doit précéder <code class="inline">npm start</code> car <code class="inline">node_modules</code> n'existe pas après un clone (il est exclu du dépôt via <code class="inline">.gitignore</code>) : sans installation préalable, le projet ne trouve pas ses librairies et ne peut pas démarrer.</div>
+    </details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <!-- EX 12 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l4)">
+    <p class="exo-title">EXERCICE 12 — Analyse critique de App.js</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex12_analyse_critique_app_js</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex12.js</code></p>
+    <p class="text-sm mt-1">⭐⭐⭐⭐ Niveau 4</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> composant fonction, JSX, export default</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Lire un composant réel et en identifier tous les éléments constitutifs.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <pre>import logo from './logo.svg';
+import './App.css';
+
+function App() {
+  return (
+    &lt;div className="App"&gt;
+      &lt;header className="App-header"&gt;
+        &lt;img src={logo} className="App-logo" alt="logo" /&gt;
+        &lt;p&gt;Edit &lt;code&gt;src/App.js&lt;/code&gt; and save to reload.&lt;/p&gt;
+      &lt;/header&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default App;</pre>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Identifier : le nom du composant, ce qu'il retourne, et ce que fait la dernière ligne.</li>
+        <li>Expliquer pourquoi <code class="inline">className</code> est utilisé à la place de <code class="inline">class</code>.</li>
+        <li>Dire ce qui se produirait si on oubliait <code class="inline">export default App;</code>.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm"><code class="inline">class</code> est un mot réservé en JavaScript (pour les classes ES6) — le cours précise que le JSX se transforme en appels JavaScript.</div></details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm space-y-1">
+        <p>Le composant s'appelle <code class="inline">App</code>, c'est une fonction qui retourne une expression JSX définissant ce que le navigateur affichera.</p>
+        <p><code class="inline">export default App;</code> rend le composant disponible pour les autres modules (notamment <code class="inline">index.js</code> qui l'importe).</p>
+        <p><code class="inline">className</code> est utilisé car <code class="inline">class</code> est un mot réservé du langage JavaScript (pour les classes ES6) ; React utilise donc <code class="inline">className</code> pour éviter le conflit.</p>
+        <p>Sans <code class="inline">export default App;</code>, <code class="inline">index.js</code> ne pourrait pas importer le composant <code class="inline">App</code>, et l'application ne pourrait pas s'afficher (erreur d'import).</p>
+      </div>
+    </details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <div class="checkpoint">
+    <b>🏁 CHECKPOINT — Niveau 4</b>
+    <div class="checklist mt-2">
+      <label><input type="checkbox"> Je peux reconstituer la séquence complète de prise en main d'un projet React cloné.</label>
+      <label><input type="checkbox"> Je peux analyser un fichier <code class="inline">App.js</code> réel sans aide.</label>
+    </div>
+    <p class="text-xs text-[var(--muted)] mt-2">Si un point échoue → relire chapitre 04 en entier avant de passer au niveau EFM.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- NIVEAU 5 -->
+<!-- ============================================================ -->
+<section id="niveau5">
+  <div class="flex items-center gap-3 mb-3 mt-10">
+    <span class="badge" style="background:var(--l5-bg); color:var(--l5); border:1px solid var(--l5)">NIVEAU 5</span>
+    <h2 class="text-lg font-bold">EFM / Examen</h2>
+  </div>
+
+  <div class="savoir" style="border-left-color:var(--l5)">
+    <b>📌 À savoir avant de commencer</b>
+    <ul class="list-disc ml-5 mt-2 text-sm space-y-1">
+      <li>Ce niveau combine plusieurs chapitres dans un même exercice, comme un vrai sujet d'EFM.</li>
+      <li>Relis les 4 « À RETENIR » du cours avant de démarrer.</li>
+    </ul>
+  </div>
+
+  <!-- EX 13 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l5)">
+    <p class="exo-title">EXERCICE 13 — Étude de cas : convaincre une équipe de passer à React</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex13_convaincre_equipe_react</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex13.md</code></p>
+    <p class="text-sm mt-1">⭐⭐⭐⭐⭐ Niveau 5 — EFM</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> définition de React, DOM virtuel, écosystème, React Native</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Construire un argumentaire technique complet à partir de plusieurs chapitres.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ</p>
+      <p class="text-sm mt-1">Une équipe de développement utilise actuellement jQuery pour un site qui devient de plus en plus lent à mesure que le nombre de pages augmente. On te demande de rédiger une note (8-10 lignes) argumentant en faveur d'une migration vers React.</p>
+      <p class="text-sm font-semibold mt-3">🧑‍💻 À TOI DE JOUER</p>
+      <ul class="list-disc ml-5 text-sm mt-1 space-y-1">
+        <li>Expliquer la cause technique de la lenteur actuelle.</li>
+        <li>Présenter la solution apportée par React (DOM virtuel, composants réutilisables).</li>
+        <li>Mentionner un avantage supplémentaire (écosystème npm, ou React Native pour le mobile).</li>
+        <li>Conclure par une recommandation claire.</li>
+      </ul>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">Structure ta note en 3 temps : constat → solution technique → bénéfice stratégique.</div></details>
+    <details><summary>🧠 Astuce</summary><div class="content text-sm astuce">À l'EFM, une bonne réponse argumentée vaut mieux qu'une liste de mots-clés sans lien logique entre eux.</div></details>
+    <details>
+      <summary>✅ Corrigé</summary>
+      <div class="content text-sm space-y-2">
+        <p><b>1. Analyse :</b> l'énoncé demande un texte argumentatif, pas une liste de définitions.</p>
+        <p><b>2. Méthode :</b> relier la cause (manipulation directe du DOM, lente sur un site qui grossit) à la solution (DOM virtuel de React) puis élargir à l'écosystème.</p>
+        <p><b>3. Implémentation :</b> rédiger un texte structuré (voir solution).</p>
+        <p><b>5. Explication :</b> le jury attend une vraie mise en relation cause/conséquence, pas un simple copier-coller du cours.</p>
+      </div>
+    </details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm">Exemple de réponse : « Notre site utilise actuellement jQuery, qui manipule directement les éléments HTML du DOM réel à chaque mise à jour ; cette approche devient coûteuse en performance à mesure que le nombre de pages et d'interactions augmente. React résout ce problème grâce au DOM virtuel : les changements sont d'abord calculés sur une copie interne, puis seule la partie réellement modifiée est synchronisée avec le DOM réel, ce qui réduit fortement le travail du navigateur. React apporte également des composants d'affichage réutilisables, ce qui facilite la maintenance d'un site qui grandit, et s'appuie sur l'écosystème npm pour gérer proprement les dépendances. Enfin, migrer vers React ouvre la porte à React Native, qui permettrait de réutiliser une partie des compétences pour développer une future application mobile. Pour ces raisons, je recommande d'engager la migration progressivement, page par page. »</div>
+    </details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <!-- EX 14 -->
+  <article class="card p-5 mb-4" style="border-color:var(--l5)">
+    <p class="exo-title">EXERCICE 14 — QCM combiné (4 chapitres)</p>
+    <p class="text-xs text-[var(--muted)] mb-2">[Exercice d'entraînement]</p>
+    <div class="folder">📁 ex14_qcm_combine_4_chapitres</div>
+    <p class="text-sm mt-1">📄 Fichier principal : <code class="inline">ex14.md</code></p>
+    <p class="text-sm mt-1">⭐⭐⭐⭐⭐ Niveau 5 — EFM</p>
+    <p class="text-sm mt-2"><b>Notions mobilisées :</b> ensemble des 4 chapitres</p>
+    <p class="text-sm mt-2"><b>🎯 Objectif :</b> Test rapide de synthèse avant l'examen blanc.</p>
+    <div class="mt-3">
+      <p class="text-sm font-semibold">📝 ÉNONCÉ — Barème : 6 pts (1 pt/question)</p>
+      <ol class="list-decimal ml-5 text-sm mt-1 space-y-1">
+        <li>React est : (a) un framework complet (b) une bibliothèque JS (c) un langage de programmation</li>
+        <li>Le DOM virtuel sert à : (a) styliser les composants (b) limiter les manipulations coûteuses du DOM réel (c) remplacer npm</li>
+        <li>Quel outil transpile l'ES6 vers l'ES5 ? (a) Webpack (b) npm (c) Babel</li>
+        <li>Quelle commande installe les dépendances d'un projet cloné ? (a) npm start (b) npm install (c) npm test</li>
+        <li>Une application React démarre toujours avec : (a) plusieurs composants racines (b) un seul composant racine (c) aucun composant</li>
+        <li>Dans <code class="inline">src/index.js</code>, quelle méthode monte l'application dans le DOM ? (a) <code class="inline">App.render()</code> (b) <code class="inline">ReactDOM.createRoot(...).render(...)</code> (c) <code class="inline">React.mount()</code></li>
+      </ol>
+      <p class="text-sm mt-3">📊 STATUT : <label class="inline-flex items-center gap-1"><input type="checkbox"> À faire</label></p>
+    </div>
+    <details><summary>💡 Indice</summary><div class="content text-sm">Aucune des questions ne dépend d'une autre : traite-les dans l'ordre que tu veux.</div></details>
+    <details>
+      <summary>💻 Solution attendue</summary>
+      <div class="content text-sm">1-b, 2-b, 3-c, 4-b, 5-b, 6-b</div>
+    </details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+
+  <div class="checkpoint">
+    <b>🏁 CHECKPOINT — Niveau 5</b>
+    <div class="checklist mt-2">
+      <label><input type="checkbox"> Je peux rédiger un argumentaire technique combinant plusieurs chapitres.</label>
+      <label><input type="checkbox"> J'obtiens au moins 5/6 au QCM combiné sans revoir le cours.</label>
+    </div>
+    <p class="text-xs text-[var(--muted)] mt-2">Si le QCM n'est pas réussi → passe en revue les 4 encadrés « À RETENIR » avant le Mode Examen.</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- MODE EXAMEN -->
+<!-- ============================================================ -->
+<section id="examen">
+  <div class="flex items-center gap-3 mb-3 mt-10">
+    <span class="badge" style="background:var(--exam-bg); color:var(--exam); border:1px solid var(--exam)">MODE EXAMEN</span>
+    <h2 class="text-lg font-bold">Mini-sujet complet</h2>
+  </div>
+
+  <article class="card p-5 mb-4" style="border-color:var(--exam)">
+    <p class="exo-title">SUJET — Reprise en main d'un projet React existant</p>
+    <p class="text-sm text-[var(--muted)] mt-1">⏱️ Durée indicative : 25 min · ⭐⭐⭐⭐⭐ · 📊 Barème : 20 pts</p>
+
+    <div class="mt-4">
+      <p class="text-sm font-semibold">ÉNONCÉ</p>
+      <p class="text-sm mt-1">On te confie un projet React existant, généré avec <code class="inline">create-react-app</code>, récupéré depuis un dépôt GitHub. Le fichier <code class="inline">src/App.js</code> actuel est le suivant :</p>
+      <pre>import './App.css';
+
+function App() {
+  return (
+    &lt;div className="App"&gt;
+      &lt;h1&gt;Bienvenue&lt;/h1&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default App;</pre>
+      <p class="text-sm mt-2">Ce composant provoque actuellement une erreur au démarrage.</p>
+
+      <p class="text-sm font-semibold mt-4">TRAVAIL DEMANDÉ</p>
+      <ol class="list-decimal ml-5 text-sm mt-1 space-y-2">
+        <li>(4 pts) Liste, dans l'ordre, les commandes à exécuter dans un terminal pour récupérer ce projet depuis GitHub et le démarrer en local.</li>
+        <li>(4 pts) Identifie précisément l'erreur présente dans le code de <code class="inline">App.js</code> et explique sa cause technique (en te basant sur le fonctionnement du JSX).</li>
+        <li>(4 pts) Explique le rôle exact de <code class="inline">index.js</code> dans le fait que ce composant <code class="inline">App</code> s'affiche réellement dans le navigateur.</li>
+        <li>(4 pts) Un collègue propose d'ajouter Webpack seul (sans Babel) pour accélérer le build. Explique pourquoi cette proposition est incorrecte.</li>
+        <li>(4 pts) Le projet doit prochainement gérer plusieurs pages (accueil, contact, à propos) et un état utilisateur partagé entre plusieurs composants. Cite les deux familles de composants tiers à envisager, avec un exemple pour chacune.</li>
+      </ol>
+
+      <details class="mt-4"><summary>🧠 Conseil de gestion du temps</summary><div class="content text-sm">Compte environ 5 min par question. Traite la question 2 (l'erreur) en premier : c'est la plus concrète et elle rassure pour la suite. Garde 2 minutes en fin de sujet pour relire tes réponses aux questions 4 et 5, souvent bâclées par manque de temps.</div></details>
+    </div>
+
+    <details class="mt-4">
+      <summary>✅ Corrigé complet</summary>
+      <div class="content text-sm space-y-3">
+        <p><b>1.</b> <code class="inline">git clone [lien-du-dépôt]</code> → <code class="inline">cd nom-du-projet</code> → <code class="inline">npm install</code> → <code class="inline">npm start</code>.</p>
+        <p><b>2.</b> Il manque <code class="inline">import React from 'react';</code> en haut du fichier. Cause : tout composant React doit importer React, car le JSX écrit dans le <code class="inline">return</code> est transformé en <code class="inline">React.createElement()</code>, une méthode fournie par ce module. Sans cet import, la transformation échoue et une erreur est levée.</p>
+        <p><b>3.</b> <code class="inline">index.js</code> importe le composant <code class="inline">App</code>, crée une racine React sur la div <code class="inline">#root</code> de <code class="inline">public/index.html</code> via <code class="inline">ReactDOM.createRoot(...)</code>, puis appelle <code class="inline">.render(&lt;App /&gt;)</code> pour afficher ce composant dans cette racine. Sans ce fichier, <code class="inline">App</code> ne serait jamais monté dans le DOM réel du navigateur.</p>
+        <p><b>4.</b> Webpack seul ne sait fusionner que des fichiers déjà compréhensibles par le navigateur : il ne transforme ni le JSX, ni la syntaxe ES2015. Sans Babel (presets <code class="inline">es2015</code> et <code class="inline">react</code>), le code du projet ne sera pas transpilé et l'application ne fonctionnera pas dans la majorité des navigateurs.</p>
+        <p><b>5.</b> Gestion des routes → React Router (pour naviguer entre accueil/contact/à propos sans recharger la page) ; Gestion avancée de l'état → Redux ou MobX (pour partager l'état utilisateur entre plusieurs composants éloignés dans l'arbre).</p>
+      </div>
+    </details>
+    <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+  </article>
+</section>
+
+<footer class="max-w-5xl mx-auto px-5 mt-12 mb-6 text-xs text-[var(--muted)] border-t border-[var(--border)] pt-4">
+  Banque construite à partir du guide « Séance 3 — Comprendre les concepts de React JS » (OFPPT). Les concepts avancés (HOC, contexte, render props, refs, Hooks) sont cités mais non détaillés dans ce document source : ils ne sont donc testés qu'au niveau du vocabulaire, jamais en profondeur, pour ne pas dériver au-delà du cours.
+</footer>
+
+</main>
+</body>
+</html>
