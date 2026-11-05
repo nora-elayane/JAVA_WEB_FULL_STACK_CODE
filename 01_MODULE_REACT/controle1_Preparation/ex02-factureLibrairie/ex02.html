@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const client = "";
+      const estMembre = false;
+      const montant = 500;
+
+      let taux = estMembre ? 0.2 * montant : 0.1 * montant;
+      let final = montant - taux;
+      let nom = client ? client : "visiteur";
+      console.log(
+        `Bonjour ${nom} , remise de ${estMembre ? "20%" : "10%"} : ${final} DH au lieu de ${montant} DH`,
+      );
+    </script>
+  </body>
+</html>

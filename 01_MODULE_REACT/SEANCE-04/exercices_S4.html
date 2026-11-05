@@ -1,0 +1,3141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banque d'exercices — Le langage JSX (C12 S4)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8fafc;
+  --bg-panel: #ffffff;
+  --bg-card: #ffffff;
+  --border: #e2e8f0;
+  --border-subtle: #f1f5f9;
+  
+  --text: #334155;
+  --text-dim: #64748b;
+  --text-bright: #0f172a;
+  
+  --accent: #2563eb;
+  --accent-light: #eff6ff;
+  --accent-border: #bfdbfe;
+  
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Plus Jakarta Sans', sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+::selection { background: #dbeafe; color: #1e40af; }
+a { color: var(--accent); text-decoration: none; font-weight: 500; }
+a:hover { text-decoration: underline; }
+
+code {
+  font-family: var(--mono);
+  background: #f1f5f9;
+  color: #0f172a;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 0.88em;
+  border: 1px solid #e2e8f0;
+}
+
+pre.code {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 18px 20px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #f8fafc;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+pre.code code { background: none; color: inherit; padding: 0; border: none; }
+
+/* ---- top hero ---- */
+.hero {
+  padding: 56px 8vw 40px;
+  border-bottom: 1px solid var(--border);
+  background: #ffffff;
+}
+.hero .eyebrow {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.hero h1 {
+  font-size: 2.2em;
+  margin: 10px 0 8px;
+  color: var(--text-bright);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.hero p.lead {
+  max-width: 65ch;
+  color: var(--text-dim);
+  font-size: 1.05em;
+  margin-top: 0;
+}
+.hero .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+.hero .badge {
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-weight: 500;
+}
+
+/* ---- layout with sticky sidebar nav ---- */
+.layout { display: flex; max-width: 1200px; margin: 0 auto; align-items: flex-start; }
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  width: 270px;
+  flex-shrink: 0;
+  padding: 32px 16px 32px 2vw;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+  background: #ffffff;
+}
+.sidebar h4 {
+  color: var(--text-dim);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 12px 6px;
+  font-weight: 700;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 500;
+  margin-bottom: 3px;
+  transition: all 0.15s ease;
+}
+.nav-item:hover { background: #f1f5f9; color: var(--text-bright); text-decoration: none; }
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lvl-color); flex-shrink: 0; }
+.main { flex: 1; min-width: 0; padding: 32px 5vw 80px 4vw; }
+
+/* ---- level sections ---- */
+.level { margin-bottom: 48px; padding-top: 8px; }
+.level-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 2px solid var(--lvl-color);
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.level-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: #ffffff;
+  background: var(--lvl-color);
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.level-banner h2 { margin: 0; color: var(--text-bright); font-size: 1.4em; font-weight: 700; }
+.level-stars { color: var(--lvl-color); letter-spacing: 2px; font-size: 14px; }
+
+/* ---- Callouts ---- */
+.callout {
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--callout-color, var(--accent));
+  background: var(--callout-bg, #ffffff);
+}
+.callout strong { display: block; margin-bottom: 6px; font-size: 13.5px; color: var(--text-bright); }
+.callout p, .callout ul { margin: 0; color: var(--text); }
+.callout ul { padding-left: 18px; }
+.callout ul li { margin-bottom: 4px; }
+
+.callout.avant { --callout-color: #2563eb; --callout-bg: #eff6ff; }
+.callout.indice { --callout-color: #d97706; --callout-bg: #fffbeb; }
+.callout.astuce { --callout-color: #16a34a; --callout-bg: #f0fdf4; }
+.callout.piege { --callout-color: #dc2626; --callout-bg: #fef2f2; }
+.callout.reflexe { --callout-color: #9333ea; --callout-bg: #faf5ff; }
+.callout.conseil { --callout-color: #0284c7; --callout-bg: #f0f9ff; }
+
+/* ---- exercise cards ---- */
+.exercise {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  scroll-margin-top: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+.exercise-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 14px;
+}
+.exercise-head .ex-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #ffffff;
+  background: var(--lvl-color);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.exercise-head h3 { margin: 0; font-size: 1.15em; color: var(--text-bright); flex: 1; font-weight: 700; }
+.exercise-head .ex-tag { font-size: 12px; color: var(--text-dim); font-family: var(--mono); }
+
+.meta-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  background: #f8fafc;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+}
+.meta-label { color: var(--text-dim); margin-right: 4px; font-weight: 500; }
+.stars { color: var(--lvl-color); letter-spacing: 1px; }
+
+.notions-block { margin-bottom: 16px; font-size: 13px; }
+.notions-list { display: inline; padding: 0; margin: 0; list-style: none; }
+.notions-list li {
+  display: inline-block;
+  background: #f1f5f9;
+  color: var(--text);
+  border-radius: 6px;
+  padding: 2px 10px;
+  margin: 2px 4px 2px 0;
+  font-size: 12px;
+  border: 1px solid var(--border);
+}
+
+.objectif-block {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-size: 13.5px;
+}
+.section { margin-bottom: 18px; }
+.section h4 { margin: 0 0 8px; font-size: 14px; color: var(--text-bright); font-weight: 700; }
+.section ul { padding-left: 20px; margin: 0; }
+.section ul li { margin-bottom: 4px; }
+
+.statut-block { margin: 16px 0; font-size: 13.5px; }
+.statut-block label { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 500; }
+.statut-checkbox { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+
+/* reveal panels */
+details.reveal {
+  margin: 12px 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+}
+details.reveal summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-bright);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  background: #f8fafc;
+  transition: background 0.15s ease;
+}
+details.reveal summary::-webkit-details-marker { display: none; }
+details.reveal summary::after { content: '▸'; margin-left: auto; color: var(--text-dim); transition: transform .15s; }
+details.reveal[open] summary::after { transform: rotate(90deg); }
+details.reveal summary:hover { background: #f1f5f9; }
+details.reveal > div, details.reveal .callout { margin: 0; border-radius: 0; border-left: none; }
+details.reveal > .callout, details.reveal > div.callout { padding: 14px 16px; border-top: 1px solid var(--border); }
+
+.corrige-block, .solution-block, .explication-block { padding: 18px; border-top: 1px solid var(--border); background: #ffffff; }
+.corrige-step { margin-bottom: 14px; }
+.corrige-step:last-child { margin-bottom: 0; }
+.corrige-step h5 { margin: 0 0 4px; color: var(--accent); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+.corrige-step p { margin: 0; }
+
+.explication-item { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border); font-size: 13.5px; }
+.explication-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.expl-quoi, .expl-pourquoi, .expl-resultat { margin-bottom: 4px; }
+.expl-quoi strong { color: #2563eb; }
+.expl-pourquoi strong { color: #d97706; }
+.expl-resultat strong { color: #16a34a; }
+
+.sep { border: none; border-top: 1px dashed var(--border); margin: 20px 0; }
+.muted { color: var(--text-dim); font-size: 13.5px; margin: 0; }
+
+.github {
+  margin-top: 16px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--text-dim);
+  background: #f8fafc;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+/* checkpoint */
+.checkpoint {
+  background: #ffffff;
+  border: 1px solid var(--lvl-color);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+.checkpoint h4 { margin: 0 0 12px; color: var(--text-bright); font-weight: 700; }
+.checkpoint-list { list-style: none; padding: 0; margin: 0; }
+.checkpoint-list li { margin-bottom: 8px; }
+.checkpoint-list label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-size: 13.5px; }
+.checkpoint-list input { margin-top: 3px; accent-color: var(--lvl-color); cursor: pointer; }
+.checkpoint-note { font-size: 12.5px; color: var(--text-dim); margin: 12px 0 0; font-style: italic; }
+
+/* exam mode */
+#examen .level-banner { border-color: #9333ea; }
+.bareme-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13.5px; }
+.bareme-table th, .bareme-table td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
+.bareme-table th { background: #f8fafc; color: var(--text-bright); font-weight: 600; }
+
+/* progress dashboard */
+.progress-card { background: #ffffff; border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.progress-bar-outer { height: 8px; border-radius: 4px; background: #e2e8f0; overflow: hidden; margin-bottom: 12px; }
+.progress-bar-inner { height: 100%; width: 0%; background: var(--accent); transition: width .3s; }
+
+/* how-to strip */
+.howto {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0 8px;
+}
+.howto .step { background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 13px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+.howto .step .n { font-family: var(--mono); color: var(--accent); font-size: 12px; font-weight: 700; }
+.howto .step p { margin: 6px 0 0; color: var(--text-dim); }
+
+footer {
+  text-align: center;
+  padding: 40px 6vw;
+  color: var(--text-dim);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+  background: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { padding: 24px 5vw 60px; }
+  .hero { padding: 40px 5vw 30px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">OFPPT — C12 : Développer en Front-end · S4 : Le langage JSX</div>
+  <h1>Banque d'exercices JSX</h1>
+  <p class="lead">23 exercices progressifs + 2 mini-sujets d'examen, construits à partir de ton cours,
+  pour passer des fondamentaux jusqu'au niveau EFM / Examen National.</p>
+  <div class="badges">
+    <span class="badge">23 exercices</span>
+    <span class="badge">5 niveaux progressifs</span>
+    <span class="badge">2 mini-sujets d'examen</span>
+    <span class="badge">Corrigés + solutions + explications</span>
+  </div>
+  <div class="howto">
+    <div class="step"><span class="n">01</span><p>Lis l'énoncé et essaie de coder seul(e), sans ouvrir les sections repliées.</p></div>
+    <div class="step"><span class="n">02</span><p>Bloqué(e) ? Ouvre uniquement l'indice, jamais directement le corrigé.</p></div>
+    <div class="step"><span class="n">03</span><p>Compare ta solution au corrigé, comprends l'écart, puis ajoute ton lien GitHub.</p></div>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="sidebar">
+    <h4>Sommaire</h4>
+    <a href="#n1" class="nav-item" style="--lvl-color:#56b6c2"><span class="nav-dot"></span>Niveau 1 — Fondamentaux</a><a href="#n2" class="nav-item" style="--lvl-color:#98c379"><span class="nav-dot"></span>Niveau 2 — Application</a><a href="#n3" class="nav-item" style="--lvl-color:#e5c07b"><span class="nav-dot"></span>Niveau 3 — Intermédiaire</a><a href="#n4" class="nav-item" style="--lvl-color:#d19a66"><span class="nav-dot"></span>Niveau 4 — Avancé</a><a href="#n5" class="nav-item" style="--lvl-color:#e06c75"><span class="nav-dot"></span>Niveau 5 — EFM / Examen</a><a href="#examen" class="nav-item" style="--lvl-color:#c678dd"><span class="nav-dot"></span>Mode Examen</a><a href="#progression" class="nav-item" style="--lvl-color:#61afef"><span class="nav-dot"></span>Ma progression</a>
+  </nav>
+  <main class="main">
+    
+<section class="level" id="n1" style="--lvl-color:#56b6c2">
+  <div class="level-banner">
+    <span class="level-tag">NIVEAU 1</span>
+    <h2>Fondamentaux</h2>
+    <span class="level-stars">★☆☆☆☆</span>
+  </div>
+
+  <div class="callout avant">
+    <strong>📌 À savoir avant de commencer</strong>
+    <ul><li>JSX permet d'écrire des éléments React avec une syntaxe proche du HTML, à l'intérieur du code JavaScript.</li><li>Une balise commençant par une minuscule (div, p, ul, li...) est un élément HTML connu de React DOM.</li><li>Une balise commençant par une majuscule doit correspondre à un élément déjà déclaré (fonction, composant importé...).</li><li>Le code JSX doit être interprété par Babel avant d'être compris par le navigateur (balise &amp;lt;script type="text/babel"&amp;gt;).</li><li>ReactDOM.render(élément, cible) affiche un élément React dans la page HTML.</li><li>class devient className en JSX, car class est un mot réservé en JavaScript.</li></ul>
+  </div>
+
+  <div class="exercises-list">
+    
+<article class="exercise" id="ex01_reconnaitre_balises_jsx">
+  <div class="exercise-head" style="--lvl-color:#56b6c2">
+    <span class="ex-num">EXERCICE 1</span>
+    <h3>Front-end reconnu par React</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex01_reconnaitre_balises_jsx</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex01.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★☆☆☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Syntaxe JSX</li><li>Balises minuscules vs majuscules</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Reconnaître si une balise JSX sera traitée comme un élément HTML ou comme un composant React.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On te donne la liste de balises JSX suivante, telles qu'elles pourraient apparaître dans un programme React :
+     <code>&lt;div&gt;</code>, <code>&lt;Carte&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;Menu&gt;</code>,
+     <code>&lt;input&gt;</code>, <code>&lt;App&gt;</code>, <code>&lt;li&gt;</code>, <code>&lt;greetings&gt;</code>.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Classer chaque balise dans deux colonnes : « Élément HTML » ou « Composant React attendu ».</li><li>Pour chaque composant, indiquer ce qui est obligatoire pour qu'il fonctionne (déjà déclaré, importé...).</li><li>Repérer la balise qui, telle qu'écrite, provoquerait une erreur si l'intention était d'en faire un composant.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex01_reconnaitre_balises_jsx"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  <div class="callout piege"><strong>⚠️ Piège fréquent</strong><p><code>&lt;greetings&gt;</code> commence par une minuscule : même si l'intention est d'en faire un composant, React cherchera un élément HTML nommé « greetings », qui n'existe pas.</p></div>
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Regarde uniquement la première lettre de chaque balise : c'est elle qui décide du comportement de React.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : minuscule = HTML natif, majuscule = à toi de le fournir. Aucune balise commençant par une minuscule ne peut être un composant personnalisé.</p></div>
+  </details>
+
+  <div class="callout reflexe"><strong>🧠 Réflexe examen</strong><p>Minuscule = HTML natif. Majuscule = composant à fournir moi-même.</p></div>
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>L'exercice ne demande aucun code : il teste la compréhension de la règle des majuscules/minuscules en JSX.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On applique la règle du cours : minuscule → élément HTML déclaré par React DOM ; majuscule → élément du scope courant (fonction, import...).</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Éléments HTML : <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;li&gt;</code>.<br>
+        Composants React : <code>&lt;Carte&gt;</code>, <code>&lt;Menu&gt;</code>, <code>&lt;App&gt;</code>.<br>
+        Balise à problème : <code>&lt;greetings&gt;</code> — écrite en minuscule, elle sera interprétée comme une balise HTML inexistante et provoquera une erreur si l'intention était de créer un composant.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <p class="muted">Aucun code à produire pour cet exercice (analyse / réflexion écrite).</p>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Analyse de la casse</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — La casse de la première lettre est la seule information nécessaire pour classer une balise JSX.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Deux groupes bien identifiés.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Cas piège</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — greetings est en minuscule alors qu'un composant doit commencer par une majuscule.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — React lève une erreur d'élément HTML inconnu.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex02_premier_paragraphe_jsx">
+  <div class="exercise-head" style="--lvl-color:#56b6c2">
+    <span class="ex-num">EXERCICE 2</span>
+    <h3>Mon premier paragraphe JSX</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex02_premier_paragraphe_jsx</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex02.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★☆☆☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Variable JSX</li><li>ReactDOM.render()</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Écrire une première variable JSX et l'afficher dans la page grâce à ReactDOM.render().</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Tu dois créer une page <code>index.html</code> autonome (avec React, ReactDOM et Babel inclus par CDN)
+     qui affiche un paragraphe contenant le texte <em>« Bienvenue dans mon premier programme React ! »</em>.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Créer la structure HTML minimale avec une <code>&lt;div id="app"&gt;&lt;/div&gt;</code>.</li><li>Inclure les scripts React, ReactDOM et Babel (comme dans le cours).</li><li>Déclarer une variable JSX <code>message</code> contenant un paragraphe avec le texte demandé.</li><li>Afficher cette variable dans la <code>div#app</code> avec <code>ReactDOM.render()</code>.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex02_premier_paragraphe_jsx"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Reprends exactement la structure du fichier index.html vu en cours pour « Hello React », et remplace seulement le texte du paragraphe.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Vérifie toujours que la balise &lt;script&gt; contenant du JSX possède bien l'attribut type="text/babel", sinon le navigateur essaiera d'exécuter du JSX comme du JavaScript pur et affichera une erreur.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>On demande un seul élément JSX statique (un paragraphe) et son affichage, exactement comme l'exemple « Hello React » du cours.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On réutilise le squelette HTML+Babel du cours, on ne modifie que le texte contenu dans la balise &lt;p&gt;.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>La page affiche « Bienvenue dans mon premier programme React ! » dans le navigateur.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin&gt;&lt;/script&gt;
+    &lt;script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin&gt;&lt;/script&gt;
+    &lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="app"&gt;&lt;/div&gt;
+    &lt;script type="text/babel"&gt;
+      var message = &lt;p&gt;Bienvenue dans mon premier programme React !&lt;/p&gt;;
+      ReactDOM.render(message, document.getElementById("app"));
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Scripts CDN</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — React, ReactDOM et Babel sont chargés avant notre code.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le navigateur sait interpréter React et le JSX.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — type="text/babel"</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Indique à Babel quelle portion de script contient du JSX à transpiler.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le JSX est transformé en JavaScript pur en interne.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — ReactDOM.render()</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Insère l'élément React dans le DOM, à l'endroit ciblé.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le paragraphe apparaît dans la page.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex03_liste_saisons_jsx">
+  <div class="exercise-head" style="--lvl-color:#56b6c2">
+    <span class="ex-num">EXERCICE 3</span>
+    <h3>Une liste de saisons</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex03_liste_saisons_jsx</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex03.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★☆☆☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Liste JSX statique</li><li>Balises imbriquées</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Écrire une liste JSX statique à plusieurs éléments, sur le modèle de la liste d'éléments du cours.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Affiche une liste à puces contenant les 4 saisons : Printemps, Été, Automne, Hiver.
+     La liste ne doit contenir aucune donnée dynamique : chaque élément est écrit « en dur » dans le JSX.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Déclarer une variable JSX <code>liste</code> contenant un <code>&lt;ul&gt;</code>.</li><li>Ajouter 4 éléments <code>&lt;li&gt;</code>, un par saison.</li><li>Afficher la liste avec <code>ReactDOM.render()</code>.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex03_liste_saisons_jsx"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Une instruction JSX peut s'écrire sur plusieurs lignes, à condition de commencer par une balise ouvrante et de se terminer par la balise fermante correspondante.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Pense à bien fermer chaque balise &lt;li&gt;, comme en HTML classique : le JSX est strict sur la fermeture des balises.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Il s'agit d'une liste JSX purement statique, sans tableau ni boucle : on écrit chaque &lt;li&gt; directement.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On imite l'exemple « Créer une liste de cinq éléments en JSX » du cours, avec 4 éléments au lieu de 5 et un contenu différent.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>La page affiche une liste à puces avec Printemps, Été, Automne, Hiver.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var liste = &lt;ul&gt;
+  &lt;li&gt;Printemps&lt;/li&gt;
+  &lt;li&gt;Été&lt;/li&gt;
+  &lt;li&gt;Automne&lt;/li&gt;
+  &lt;li&gt;Hiver&lt;/li&gt;
+&lt;/ul&gt;;
+ReactDOM.render(liste, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Structure &lt;ul&gt;/&lt;li&gt;</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Le JSX reprend exactement la syntaxe HTML pour les listes.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — 4 éléments s'affichent dans l'ordre d'écriture.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Variable unique</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Toute la liste est stockée dans une seule variable liste.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — On peut la réutiliser telle quelle dans render().</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex04_attribut_classname_jsx">
+  <div class="exercise-head" style="--lvl-color:#56b6c2">
+    <span class="ex-num">EXERCICE 4</span>
+    <h3>Habiller un titre avec className</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex04_attribut_classname_jsx</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex04.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★☆☆☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Attribut className</li><li>Attribut id</li><li>CSS classique</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Appliquer un style CSS à un élément JSX grâce aux attributs id et className.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Une feuille de style définit la classe CSS suivante :
+     <pre>.titre-alerte {
+  color: orange;
+  font-weight: bold;
+}</pre>
+     Affiche un titre <code>&lt;h2&gt;</code> contenant le texte « Attention aux examens ! », avec l'id
+     <code>titrePrincipal</code> et la classe CSS <code>titre-alerte</code>.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Ajouter la balise <code>&lt;style&gt;</code> contenant la classe CSS donnée dans le <code>&lt;head&gt;</code>.</li><li>Créer la variable JSX <code>titre</code> avec le texte demandé.</li><li>Ajouter les attributs <code>id</code> et <code>className</code> à cet élément.</li><li>Afficher le titre avec <code>ReactDOM.render()</code>.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex04_attribut_classname_jsx"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  <div class="callout piege"><strong>⚠️ Piège fréquent</strong><p>Confondre className (une chaîne de caractères) avec style (un objet entre doubles accolades) : ce ne sont pas les mêmes types de valeurs.</p></div>
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>En JSX, l'attribut HTML class devient className. L'attribut id, lui, ne change pas.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Piège fréquent : écrire class={{...}} au lieu de className="..." — className attend une chaîne de caractères, pas un objet (contrairement à l'attribut style).</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Deux attributs sont demandés : id (identique au HTML) et className (spécifique à React) sur un même élément.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On reprend l'exemple du cours sur la liste avec id="list1" className="red", en l'appliquant à un titre h2.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Le titre « Attention aux examens ! » s'affiche en orange et en gras, avec l'id titrePrincipal.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>&lt;style type="text/css"&gt;
+  .titre-alerte {
+    color: orange;
+    font-weight: bold;
+  }
+&lt;/style&gt;
+...
+var titre = &lt;h2 id="titrePrincipal" className="titre-alerte"&gt;Attention aux examens !&lt;/h2&gt;;
+ReactDOM.render(titre, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — className</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — React utilise className à la place de class car class est un mot réservé en JavaScript.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — La classe CSS titre-alerte s'applique normalement.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — id</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — L'attribut id fonctionne exactement comme en HTML.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — L'élément est identifiable de façon unique dans le DOM.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex05_corriger_configuration_babel">
+  <div class="exercise-head" style="--lvl-color:#56b6c2">
+    <span class="ex-num">EXERCICE 5</span>
+    <h3>Réparer un fichier index.html</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex05_corriger_configuration_babel</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex05.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★☆☆☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Structure d'un fichier utilisant Babel</li><li>Débogage de configuration</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Identifier et corriger les erreurs de configuration empêchant un fichier JSX de fonctionner.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Un camarade a écrit le fichier ci-dessous, mais rien ne s'affiche dans le navigateur :
+     <pre>&lt;html&gt;
+  &lt;head&gt;
+    &lt;script src="https://unpkg.com/react@16/umd/react.development.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;script&gt;
+      var texte = &lt;p&gt;Bonjour !&lt;/p&gt;;
+      ReactDOM.render(texte, document.getElementById("app"));
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre></p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Lister toutes les erreurs présentes dans ce fichier (au moins 3).</li><li>Réécrire une version corrigée et fonctionnelle du fichier.</li><li>Tester mentalement (ou réellement) que la page affiche bien « Bonjour ! ».</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex05_corriger_configuration_babel"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Compare balise par balise avec le squelette « Hello React » du cours : que manque-t-il pour interpréter React, ReactDOM et le JSX ? Et dans le corps de la page ?</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Une erreur de configuration Babel/React ne provoque pas toujours un message clair dans la console : commence toujours par vérifier que les 3 scripts (React, ReactDOM, Babel) sont bien présents.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Le fichier contient plusieurs erreurs indépendantes : script ReactDOM manquant, script Babel manquant, attribut type="text/babel" manquant, et balise &lt;div id="app"&gt; absente du body.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On compare méthodiquement chaque partie du fichier fourni avec le squelette de référence du cours, ligne par ligne.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Une fois les 4 corrections apportées, la page affiche correctement « Bonjour ! ».</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin&gt;&lt;/script&gt;
+    &lt;script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin&gt;&lt;/script&gt;
+    &lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="app"&gt;&lt;/div&gt;
+    &lt;script type="text/babel"&gt;
+      var texte = &lt;p&gt;Bonjour !&lt;/p&gt;;
+      ReactDOM.render(texte, document.getElementById("app"));
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Script ReactDOM manquant</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — ReactDOM.render() n'existe pas sans ce script.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Sans lui, une erreur « ReactDOM is not defined » apparaît.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Script Babel manquant</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Sans Babel, le navigateur reçoit du JSX brut, qu'il ne sait pas exécuter.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Une erreur de syntaxe JavaScript apparaît.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — type="text/babel"</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Sans cet attribut, Babel n'intercepte pas le script.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le JSX n'est jamais transpilé.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — div#app absente</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — ReactDOM.render() cible un élément qui n'existe pas.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — getElementById renvoie null, rien ne s'affiche.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+  </div>
+
+  <div class="checkpoint">
+    <h4>🏁 Checkpoint — niveau 1</h4>
+    <ul class="checkpoint-list"><li><label><input type='checkbox'> Je peux dire si une balise JSX est un élément HTML ou un composant, juste en regardant sa première lettre.</label></li><li><label><input type='checkbox'> Je peux écrire une variable JSX simple et l'afficher avec ReactDOM.render().</label></li><li><label><input type='checkbox'> Je peux écrire une liste JSX statique avec plusieurs éléments &amp;lt;li&amp;gt;.</label></li><li><label><input type='checkbox'> Je peux ajouter les attributs id et className à un élément JSX.</label></li><li><label><input type='checkbox'> Je sais où placer les balises &amp;lt;script&amp;gt; de React, ReactDOM et Babel dans un fichier index.html.</label></li></ul>
+    <p class="checkpoint-note">Si tu ne coches pas tout : Relis la section « 4. Le langage JSX » et « 4.1. Hello React avec JSX » du cours avant de continuer.</p>
+  </div>
+</section>
+
+<section class="level" id="n2" style="--lvl-color:#98c379">
+  <div class="level-banner">
+    <span class="level-tag">NIVEAU 2</span>
+    <h2>Application</h2>
+    <span class="level-stars">★★☆☆☆</span>
+  </div>
+
+  <div class="callout avant">
+    <strong>📌 À savoir avant de commencer</strong>
+    <ul><li>L'attribut style en JSX attend un objet JavaScript : style={{ propriete: valeur }} (double accolade).</li><li>Les propriétés CSS composées s'écrivent en camelCase en JSX (list-style-type devient listStyleType).</li><li>Toute expression JavaScript insérée dans du JSX doit être entourée d'une seule accolade { }.</li><li>La méthode .map() permet de transformer chaque élément d'un tableau en élément JSX.</li><li>Chaque élément généré dans une boucle (map) doit posséder un attribut key unique.</li><li>La notation fléchée ES6 (elem, index) =&gt; ... peut remplacer function(elem, index) { return ... }.</li></ul>
+  </div>
+
+  <div class="exercises-list">
+    
+<article class="exercise" id="ex06_style_inline_jsx">
+  <div class="exercise-head" style="--lvl-color:#98c379">
+    <span class="ex-num">EXERCICE 6</span>
+    <h3>Une liste sans puces, en rouge</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex06_style_inline_jsx</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex06.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★☆☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Attribut style</li><li>Objet JavaScript</li><li>camelCase CSS</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Appliquer un style dynamique à un élément JSX à l'aide d'un objet JavaScript.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Affiche une liste de 4 langages (« HTML », « CSS », « JavaScript », « PHP ») sans puces
+     (<code>list-style-type: none</code>) et dont le texte est bleu marine (<code>color: navy</code>).</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Écrire la liste JSX statique avec les 4 langages.</li><li>Ajouter l'attribut <code>style</code> à l'élément <code>&lt;ul&gt;</code> pour retirer les puces.</li><li>Ajouter la couleur de texte demandée dans le même objet de style.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex06_style_inline_jsx"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  <div class="callout piege"><strong>⚠️ Piège fréquent</strong><p>Écrire style="list-style-type: none" comme en HTML classique : en JSX, style n'accepte jamais une chaîne de caractères, seulement un objet.</p></div>
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>L'attribut style attend deux accolades : la première dit « ceci est une expression JS », la seconde ouvre un objet JavaScript classique { propriete: valeur }.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : toute propriété CSS avec un tiret (list-style-type, background-color, font-size...) s'écrit en camelCase en JSX (listStyleType, backgroundColor, fontSize).</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>On demande deux styles combinés (suppression des puces + couleur) sur le même élément.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On reprend l'exemple du cours sur listStyleType et color, en ajoutant nos deux propriétés dans le même objet.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>La liste des 4 langages s'affiche sans puces et en bleu marine.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var liste = &lt;ul style={{ listStyleType: "none", color: "navy" }}&gt;
+  &lt;li&gt;HTML&lt;/li&gt;
+  &lt;li&gt;CSS&lt;/li&gt;
+  &lt;li&gt;JavaScript&lt;/li&gt;
+  &lt;li&gt;PHP&lt;/li&gt;
+&lt;/ul&gt;;
+ReactDOM.render(liste, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Double accolade</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — La première accolade marque une expression JS, la seconde ouvre l'objet de style.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Deux propriétés sont appliquées en une seule fois.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — camelCase</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — list-style-type devient listStyleType car le tiret n'est pas valide dans un nom de propriété JS.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le style s'applique sans erreur.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex07_expression_js_dans_jsx">
+  <div class="exercise-head" style="--lvl-color:#98c379">
+    <span class="ex-num">EXERCICE 7</span>
+    <h3>Couleur calculée par une variable</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex07_expression_js_dans_jsx</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex07.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★☆☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Expression JavaScript dans JSX</li><li>Variables réutilisées</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Injecter le résultat d'une variable JavaScript dans un élément JSX à l'aide des accolades { }.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On te donne la variable <code>var niveau = "avancé";</code>. Affiche un paragraphe qui dit
+     exactement : « Niveau actuel : avancé » (le mot « avancé » doit provenir de la variable, pas être recopié).
+     Le paragraphe doit aussi avoir une couleur qui dépend d'une variable <code>var couleurNiveau = "darkred";</code>.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Déclarer les deux variables <code>niveau</code> et <code>couleurNiveau</code>.</li><li>Construire l'objet de style à partir de <code>couleurNiveau</code>.</li><li>Écrire le paragraphe JSX en insérant <code>{niveau}</code> au milieu du texte.</li><li>Afficher le résultat.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex07_expression_js_dans_jsx"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Une expression JavaScript peut être insérée n'importe où dans le texte d'un élément JSX, pas seulement en tant qu'attribut : {niveau} fonctionne aussi entre deux mots.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Une variable insérée avec { } n'a pas besoin de guillemets : les guillemets ne s'utilisent que pour écrire une valeur littérale directement dans l'attribut (ex : className="red"), pas pour une variable.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Il faut combiner du texte fixe et une variable dans un même élément, plus un style qui dépend aussi d'une variable.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On construit d'abord l'objet styleParagraphe = { color: couleurNiveau }, comme dans l'exemple styleListe du cours, puis on insère {niveau} dans le texte.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Le paragraphe affiche « Niveau actuel : avancé » en rouge foncé.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var niveau = "avancé";
+var couleurNiveau = "darkred";
+var styleParagraphe = { color: couleurNiveau };
+var texte = &lt;p style={styleParagraphe}&gt;Niveau actuel : {niveau}&lt;/p&gt;;
+ReactDOM.render(texte, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — {niveau} dans le texte</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — L'accolade évalue l'expression niveau et insère sa valeur à cet endroit précis du texte.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le mot « avancé » apparaît sans être recopié en dur.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Objet de style externalisé</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — styleParagraphe est calculé avant d'être utilisé dans le JSX.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le code reste lisible, comme l'exemple styleListe du cours.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex08_liste_dynamique_map">
+  <div class="exercise-head" style="--lvl-color:#98c379">
+    <span class="ex-num">EXERCICE 8</span>
+    <h3>Afficher un tableau de notes</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex08_liste_dynamique_map</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex08.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★☆☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>.map() sur un tableau</li><li>Attribut key</li><li>Fonction classique</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Transformer un tableau de données en liste JSX à l'aide de la méthode .map().</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On te donne le tableau <code>var notes = [12, 15, 8, 17, 10];</code>.
+     Affiche une liste à puces où chaque élément affiche « Note : » suivi de la valeur.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Écrire l'élément <code>&lt;ul&gt;</code> contenant un bloc <code>{ }</code> avec l'appel à <code>notes.map(...)</code>.</li><li>Utiliser une fonction classique (mot-clé <code>function</code>) comme callback de <code>map</code>.</li><li>Retourner, pour chaque note, un élément <code>&lt;li&gt;</code> avec un attribut <code>key</code> unique.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex08_liste_dynamique_map"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  <div class="callout piege"><strong>⚠️ Piège fréquent</strong><p>Oublier l'attribut key : le code fonctionnera visuellement, mais la console affichera un avertissement React à corriger.</p></div>
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Le callback de map reçoit deux paramètres : l'élément du tableau, et son index — l'index est parfait pour servir de key ici.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : dès qu'on doit transformer chaque élément d'un tableau en élément JSX répété → penser à .map(), jamais à une boucle for classique en JSX.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Le tableau de notes doit devenir une liste de &lt;li&gt;, un par valeur, donc c'est une situation typique de map().</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On reprend exactement le modèle du cours (tableau elems), avec un tableau de nombres et un texte préfixé.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>La liste affiche : Note : 12, Note : 15, Note : 8, Note : 17, Note : 10.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var notes = [12, 15, 8, 17, 10];
+var liste = &lt;ul&gt;
+  {
+    notes.map(function(note, index) {
+      return &lt;li key={index}&gt;Note : {note}&lt;/li&gt;
+    })
+  }
+&lt;/ul&gt;;
+ReactDOM.render(liste, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Accolades autour de map</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — map() est une instruction JavaScript, donc elle doit être encadrée par { } dans le JSX.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le résultat de map() (un tableau de &lt;li&gt;) est inséré dans le &lt;ul&gt;.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — key={index}</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — React a besoin d'identifier chaque élément généré dans une boucle.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — L'avertissement « missing key prop » disparaît.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex09_map_notation_es6">
+  <div class="exercise-head" style="--lvl-color:#98c379">
+    <span class="ex-num">EXERCICE 9</span>
+    <h3>La même liste, en plus court</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex09_map_notation_es6</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex09.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★☆☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Notation fléchée ES6</li><li>Retour implicite</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Réécrire une fonction de callback map() avec la notation ES6 la plus concise possible.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Reprends l'exercice précédent (liste de notes) et réécris-le en deux étapes :
+     d'abord avec une fonction fléchée <code>(note, index) =&gt; { return ... }</code>,
+     puis sous la forme la plus courte possible, sans accolades ni <code>return</code>.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Réécrire le callback avec la notation <code>=&gt;</code> et un <code>return</code> explicite.</li><li>Simplifier ensuite en supprimant les accolades et le <code>return</code>, comme vu en cours.</li><li>Vérifier que le résultat affiché est identique à l'exercice précédent.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex09_map_notation_es6"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Les accolades et le return du callback ne sont nécessaires que s'il y a plusieurs instructions à l'intérieur : une seule expression JSX à retourner peut s'écrire directement après la flèche.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Piège fréquent : oublier que si le callback fléché tient sur une seule expression, il ne faut ni { } ni return autour — sinon rien n'est retourné (undefined).</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>L'exercice ne change rien au résultat visuel : il s'agit uniquement de réécrire la syntaxe de la fonction de callback.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On applique la même transformation que dans le cours : function(elem, index) { return ... } devient (elem, index) => ... .</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>La liste affiche exactement les mêmes 5 notes qu'à l'exercice 8, avec un code plus court.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var notes = [12, 15, 8, 17, 10];
+
+// Étape 1 : fléchée avec accolades et return
+var liste1 = &lt;ul&gt;
+  { notes.map((note, index) =&gt; { return &lt;li key={index}&gt;Note : {note}&lt;/li&gt; }) }
+&lt;/ul&gt;;
+
+// Étape 2 : fléchée courte, sans accolades ni return
+var liste2 = &lt;ul&gt;
+  { notes.map((note, index) =&gt; &lt;li key={index}&gt;Note : {note}&lt;/li&gt;) }
+&lt;/ul&gt;;
+
+ReactDOM.render(liste2, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Étape intermédiaire</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — On remplace function par (note, index) => tout en gardant { return ... }.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le comportement est identique, la syntaxe change.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Forme courte</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Une seule expression après la flèche est automatiquement retournée.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le code est plus court, toujours sans erreur.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex10_trouver_erreur_map_key">
+  <div class="exercise-head" style="--lvl-color:#98c379">
+    <span class="ex-num">EXERCICE 10</span>
+    <h3>Trouver l'erreur : liste sans clé</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex10_trouver_erreur_map_key</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex10.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★☆☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Débogage</li><li>Attribut key</li><li>map()</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Repérer une erreur classique liée à l'utilisation de map() et de l'attribut key en JSX.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Voici un code fourni par un camarade, qui fonctionne visuellement mais provoque un avertissement dans la console :
+     <pre>var villes = ["Rabat", "Casablanca", "Fès"];
+var liste = &lt;ul&gt;
+  { villes.map((ville) =&gt; &lt;li&gt;{ville}&lt;/li&gt;) }
+&lt;/ul&gt;;</pre></p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Identifier précisément quelle est l'erreur (ou l'avertissement) dans ce code.</li><li>Corriger le code pour que l'avertissement disparaisse.</li><li>Expliquer en une phrase pourquoi cette correction est nécessaire.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex10_trouver_erreur_map_key"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Compte les paramètres reçus par la fonction fléchée : un seul est utilisé alors que .map() en fournit deux.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : chaque fois que tu vois .map() suivi d'un élément JSX répété, vérifie immédiatement la présence de key avant de vérifier le reste.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Le callback ne récupère pas le second paramètre (index) fourni par map(), donc aucun attribut key ne peut être ajouté aux &lt;li&gt;.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On ajoute le paramètre index à la fonction fléchée, puis on l'utilise comme valeur de key sur chaque &lt;li&gt;.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Le message « Each child in a list should have a unique key prop » disparaît de la console.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var villes = ["Rabat", "Casablanca", "Fès"];
+var liste = &lt;ul&gt;
+  { villes.map((ville, index) =&gt; &lt;li key={index}&gt;{ville}&lt;/li&gt;) }
+&lt;/ul&gt;;
+ReactDOM.render(liste, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Paramètre index oublié</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — map() fournit toujours (élément, index) au callback.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Sans le récupérer, impossible de générer une clé différente à chaque tour.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Ajout de key={index}</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Chaque &lt;li&gt; reçoit désormais un identifiant unique dans la liste.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — React peut suivre chaque élément correctement lors des mises à jour.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+  </div>
+
+  <div class="checkpoint">
+    <h4>🏁 Checkpoint — niveau 2</h4>
+    <ul class="checkpoint-list"><li><label><input type='checkbox'> Je peux appliquer un style dynamique à un élément JSX avec un objet JavaScript.</label></li><li><label><input type='checkbox'> Je peux insérer une variable ou une expression JavaScript dans du JSX avec { }.</label></li><li><label><input type='checkbox'> Je peux transformer un tableau de données en liste JSX avec .map().</label></li><li><label><input type='checkbox'> Je sais pourquoi l'attribut key est obligatoire et je sais l'ajouter correctement.</label></li><li><label><input type='checkbox'> Je peux réécrire une fonction de callback avec la notation ES6 (=&gt;).</label></li></ul>
+    <p class="checkpoint-note">Si tu ne coches pas tout : Relis la section « 4.2. Utilisation d'instructions JavaScript dans le code JSX » avant de continuer.</p>
+  </div>
+</section>
+
+<section class="level" id="n3" style="--lvl-color:#e5c07b">
+  <div class="level-banner">
+    <span class="level-tag">NIVEAU 3</span>
+    <h2>Intermédiaire</h2>
+    <span class="level-stars">★★★☆☆</span>
+  </div>
+
+  <div class="callout avant">
+    <strong>📌 À savoir avant de commencer</strong>
+    <ul><li>Un composant JSX défini par une fonction doit obligatoirement commencer par une majuscule.</li><li>ReactDOM.render() peut afficher un composant personnalisé écrit sous la forme &amp;lt;MonComposant/&amp;gt;.</li><li>Les attributs écrits dans un élément JSX (ex : &amp;lt;ListeElements elems={elems}/&amp;gt;) sont transmis à la fonction via l'objet props.</li><li>props est un objet unique reçu en paramètre ; props.nomAttribut permet d'accéder à un attribut précis.</li><li>La déstructuration ES6 permet d'accéder directement aux propriétés : function({elems, color}) { ... }.</li><li>Un programme React se découpe en plusieurs composants qui s'utilisent les uns les autres (modularité, réutilisation).</li></ul>
+  </div>
+
+  <div class="exercises-list">
+    
+<article class="exercise" id="ex11_composant_fonction_titre">
+  <div class="exercise-head" style="--lvl-color:#e5c07b">
+    <span class="ex-num">EXERCICE 11</span>
+    <h3>Mon premier composant : Titre</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex11_composant_fonction_titre</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex11.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Composant fonction</li><li>Majuscule obligatoire</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Créer un composant React sous forme de fonction et l'utiliser via une balise JSX personnalisée.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Crée un composant nommé <code>Titre</code> qui retourne un élément <code>&lt;h1&gt;</code> contenant
+     le texte fixe « Banque d'exercices React ». Affiche ce composant dans la page.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Écrire une fonction <code>Titre</code> qui retourne le <code>&lt;h1&gt;</code> demandé.</li><li>Appeler ce composant en JSX sous la forme <code>&lt;Titre/&gt;</code>.</li><li>Afficher le résultat avec <code>ReactDOM.render()</code>.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex11_composant_fonction_titre"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Le nom de la fonction et le nom utilisé dans la balise JSX doivent être rigoureusement identiques, avec la même majuscule au début.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Piège fréquent : nommer la fonction titre (minuscule) puis écrire &lt;Titre/&gt; (majuscule) dans le JSX : React chercherait alors un composant Titre qui n'existe pas.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>On demande le composant le plus simple possible : aucune donnée transmise, un contenu fixe.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On applique le modèle ListeElements du cours, réduit à un seul élément statique, sans props.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Le titre « Banque d'exercices React » s'affiche dans la page.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var Titre = function() {
+  return &lt;h1&gt;Banque d'exercices React&lt;/h1&gt;;
+}
+ReactDOM.render(&lt;Titre/&gt;, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Fonction Titre</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Une fonction qui retourne du JSX est un composant React valide.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Elle peut être appelée comme une balise JSX.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — &lt;Titre/&gt;</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — La majuscule dit à React de chercher une fonction/variable nommée Titre dans le scope.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le composant est correctement rendu.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex12_composant_props_carte">
+  <div class="exercise-head" style="--lvl-color:#e5c07b">
+    <span class="ex-num">EXERCICE 12</span>
+    <h3>Une carte de profil avec props</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex12_composant_props_carte</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex12.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Props</li><li>Composant paramétrable</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Transmettre des données à un composant grâce à des attributs (props).</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Crée un composant <code>Carte</code> qui affiche un nom et un métier, sous la forme :
+     <code>&lt;h3&gt;nom&lt;/h3&gt;&lt;p&gt;métier&lt;/p&gt;</code>. Utilise-le pour afficher :
+     « Nora » / « Développeuse Digital » et « Youssef » / « Formateur ».</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Écrire le composant <code>Carte</code> qui reçoit <code>props</code> en paramètre.</li><li>Utiliser <code>props.nom</code> et <code>props.metier</code> dans le JSX retourné.</li><li>Afficher deux instances du composant <code>&lt;Carte/&gt;</code>, avec des attributs différents.</li><li>Encapsuler les deux cartes dans un seul élément parent avant l'affichage.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex12_composant_props_carte"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Chaque attribut écrit dans la balise JSX (nom={...} metier={...}) devient une propriété du même nom dans l'objet props reçu par la fonction.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : dès qu'un composant doit afficher des données différentes à chaque utilisation, il a besoin de props — s'il affiche toujours la même chose, une simple fonction sans paramètre suffit.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Deux affichages différents du même composant sont demandés : il faut donc transmettre les données variables en props plutôt que de les coder en dur.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On reprend le modèle ListeElements(props) du cours, adapté à deux propriétés (nom, metier) au lieu d'un tableau.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>La page affiche les deux cartes, chacune avec son nom et son métier.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var Carte = function(props) {
+  return &lt;div&gt;
+    &lt;h3&gt;{props.nom}&lt;/h3&gt;
+    &lt;p&gt;{props.metier}&lt;/p&gt;
+  &lt;/div&gt;;
+}
+var page = &lt;div&gt;
+  &lt;Carte nom="Nora" metier="Développeuse Digital" /&gt;
+  &lt;Carte nom="Youssef" metier="Formateur" /&gt;
+&lt;/div&gt;;
+ReactDOM.render(page, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — props.nom / props.metier</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Chaque attribut transmis dans &lt;Carte .../&gt; devient accessible via props.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Deux rendus différents avec le même composant.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — &lt;div&gt; englobant</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Deux éléments &lt;Carte/&gt; côte à côte doivent avoir un parent commun.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — ReactDOM.render() reçoit un seul élément racine.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex13_props_destructuration">
+  <div class="exercise-head" style="--lvl-color:#e5c07b">
+    <span class="ex-num">EXERCICE 13</span>
+    <h3>La carte de profil, en version déstructurée</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex13_props_destructuration</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex13.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Déstructuration ES6 des props</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Réécrire un composant en accédant directement aux propriétés grâce à la déstructuration ES6.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Reprends le composant <code>Carte</code> de l'exercice précédent et réécris-le en déstructurant
+     directement <code>nom</code> et <code>metier</code> dans les paramètres de la fonction, sans jamais écrire <code>props.</code>.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Réécrire l'en-tête de la fonction : <code>function({ nom, metier })</code>.</li><li>Adapter le corps de la fonction pour utiliser directement <code>nom</code> et <code>metier</code>.</li><li>Vérifier que l'affichage final est identique à l'exercice 12.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex13_props_destructuration"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>La déstructuration extrait immédiatement les propriétés demandées de l'objet props reçu, comme si on avait écrit var {nom, metier} = props; en première ligne de la fonction.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Piège fréquent : mélanger les deux écritures (déstructurer nom, mais continuer à écrire props.metier ailleurs dans la fonction) — choisis une seule syntaxe et reste cohérent.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Aucune fonctionnalité ne change : seule la façon de lire props est modifiée.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On applique la transformation vue en cours : function(props) devient function({elems, color}) adapté ici à {nom, metier}.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Le rendu est rigoureusement identique à celui de l'exercice 12.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var Carte = function({ nom, metier }) {
+  return &lt;div&gt;
+    &lt;h3&gt;{nom}&lt;/h3&gt;
+    &lt;p&gt;{metier}&lt;/p&gt;
+  &lt;/div&gt;;
+}
+var page = &lt;div&gt;
+  &lt;Carte nom="Nora" metier="Développeuse Digital" /&gt;
+  &lt;Carte nom="Youssef" metier="Formateur" /&gt;
+&lt;/div&gt;;
+ReactDOM.render(page, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Déstructuration en paramètre</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — { nom, metier } extrait directement ces deux propriétés de l'objet props.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le code est plus court et plus lisible.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Aucun props. restant</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Toutes les utilisations de props.nom et props.metier sont remplacées.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — La cohérence syntaxique est respectée dans toute la fonction.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex14_style_transmis_props">
+  <div class="exercise-head" style="--lvl-color:#e5c07b">
+    <span class="ex-num">EXERCICE 14</span>
+    <h3>Transmettre un style personnalisé</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex14_style_transmis_props</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex14.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Props de style</li><li>Composition de styles</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Transmettre un objet de style à un composant via les props, et l'appliquer à l'intérieur du composant.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Crée un composant <code>Alerte</code> qui affiche un texte transmis via une prop <code>texte</code>,
+     avec un style transmis via une prop <code>style</code>. Utilise-le pour afficher « Erreur de saisie »
+     en rouge gras, puis « Opération réussie » en vert.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Écrire le composant <code>Alerte</code> recevant <code>texte</code> et <code>style</code> en props.</li><li>Appliquer <code>props.style</code> à l'élément retourné par le composant.</li><li>Afficher deux <code>&lt;Alerte/&gt;</code> avec des styles différents.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex14_style_transmis_props"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Le style transmis en prop reste un objet JavaScript classique : il doit être écrit entre doubles accolades au moment de l'appel du composant, comme dans l'exemple ListeElements du cours.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : un style transmis en prop suit exactement les mêmes règles qu'un style direct — seule la provenance de l'objet change (il vient de props, pas d'une variable locale).</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Il faut transmettre deux informations variables (texte et style) à un même composant réutilisable.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On s'inspire de l'exemple « Transmission de l'attribut style dans l'élément JSX » du cours, en l'adaptant à un composant Alerte.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>La page affiche « Erreur de saisie » en rouge gras, puis « Opération réussie » en vert.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var Alerte = function(props) {
+  return &lt;p style={props.style}&gt;{props.texte}&lt;/p&gt;;
+}
+var page = &lt;div&gt;
+  &lt;Alerte texte="Erreur de saisie" style={{ color: "red", fontWeight: "bold" }} /&gt;
+  &lt;Alerte texte="Opération réussie" style={{ color: "green" }} /&gt;
+&lt;/div&gt;;
+ReactDOM.render(page, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — props.style</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — L'objet de style est reçu comme n'importe quelle autre prop.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Chaque &lt;Alerte/&gt; peut avoir une apparence totalement différente.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Réutilisation</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Le même composant Alerte sert pour deux messages très différents.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Illustration concrète de la modularité recherchée par React.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex15_composition_composants_produits">
+  <div class="exercise-head" style="--lvl-color:#e5c07b">
+    <span class="ex-num">EXERCICE 15</span>
+    <h3>Composer deux composants : une liste de produits</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex15_composition_composants_produits</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex15.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★☆☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Composition de composants</li><li>Props + map() combinés</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Découper un affichage en deux composants liés, sur le modèle Element / ListeElements du cours.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On te donne <code>var produits = ["Clavier", "Souris", "Écran"];</code>.
+     Crée un composant <code>Produit</code> qui affiche un seul élément de liste, et un composant
+     <code>ListeProduits</code> qui utilise <code>Produit</code> pour chaque élément du tableau.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Écrire le composant <code>Produit</code> qui reçoit un <code>nom</code> en prop et retourne un <code>&lt;li&gt;</code>.</li><li>Écrire le composant <code>ListeProduits</code> qui reçoit le tableau <code>produits</code> en prop.</li><li>Dans <code>ListeProduits</code>, utiliser <code>.map()</code> pour créer un <code>&lt;Produit/&gt;</code> par élément, avec une <code>key</code>.</li><li>Afficher <code>&lt;ListeProduits produits={produits}/&gt;</code>.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex15_composition_composants_produits"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>La clé (key) se place sur le composant &lt;Produit key={...}/&gt; lors de l'itération, exactement comme sur un &lt;li&gt; classique — jamais à l'intérieur du composant Produit lui-même.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : dès qu'un composant se répète dans une boucle, pense à séparer « le composant répété » (ici Produit) du « composant qui gère la boucle » (ici ListeProduits) — c'est la logique de composition de React.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>La structure demandée reproduit exactement le couple Element / ListeElements vu en cours, avec un vocabulaire « produits » à la place de « elems ».</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On écrit d'abord le composant le plus simple (Produit), puis le composant qui l'assemble en boucle (ListeProduits).</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>La page affiche une liste à puces avec Clavier, Souris, Écran, chacun généré par le composant Produit.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var produits = ["Clavier", "Souris", "Écran"];
+
+var Produit = function({ nom }) {
+  return &lt;li&gt;{nom}&lt;/li&gt;;
+}
+
+var ListeProduits = function({ produits }) {
+  return &lt;ul&gt;
+    {
+      produits.map((nom, index) =&gt; &lt;Produit key={index} nom={nom} /&gt;)
+    }
+  &lt;/ul&gt;;
+}
+
+ReactDOM.render(&lt;ListeProduits produits={produits} /&gt;, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Composant Produit</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Il ne connaît qu'un seul nom à la fois, transmis en prop.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Il est simple, réutilisable et indépendant.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Composant ListeProduits</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Il gère le tableau complet et délègue l'affichage de chaque ligne à Produit.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — La responsabilité de la boucle et celle de l'affichage sont bien séparées.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — key sur &lt;Produit/&gt;</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — La clé s'applique à l'élément généré directement par map(), pas à un élément interne au composant.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Aucun avertissement React dans la console.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+  </div>
+
+  <div class="checkpoint">
+    <h4>🏁 Checkpoint — niveau 3</h4>
+    <ul class="checkpoint-list"><li><label><input type='checkbox'> Je peux créer un composant sous forme de fonction qui retourne du JSX.</label></li><li><label><input type='checkbox'> Je peux transmettre des données à un composant grâce à des attributs (props).</label></li><li><label><input type='checkbox'> Je peux lire une valeur de props à l'intérieur d'un composant, avec ou sans déstructuration.</label></li><li><label><input type='checkbox'> Je peux transmettre un style en tant que prop et l'appliquer dans le composant enfant.</label></li><li><label><input type='checkbox'> Je peux découper un composant en deux composants liés (un composant parent qui utilise un composant enfant).</label></li></ul>
+    <p class="checkpoint-note">Si tu ne coches pas tout : Relis les sections « 4.3. Créer un élément JSX avec une fonction » avant de continuer.</p>
+  </div>
+</section>
+
+<section class="level" id="n4" style="--lvl-color:#d19a66">
+  <div class="level-banner">
+    <span class="level-tag">NIVEAU 4</span>
+    <h2>Avancé</h2>
+    <span class="level-stars">★★★★☆</span>
+  </div>
+
+  <div class="callout avant">
+    <strong>📌 À savoir avant de commencer</strong>
+    <ul><li>Un composant peut aussi être défini par une classe qui hérite de React.Component.</li><li>Une classe composant doit définir un constructeur qui appelle super(props), puis une méthode render() qui retourne le JSX.</li><li>Dans une classe, les props sont accessibles via this.props (et non plus props directement).</li><li>On choisit une fonction si le composant n'a pas besoin de state ni de méthodes ; on choisit une classe si un état (state) est nécessaire.</li><li>Un seul élément JSX parent peut être retourné : plusieurs éléments côte à côte doivent être encapsulés (div ou &amp;lt;React.Fragment&amp;gt;).</li><li>&amp;lt;React.Fragment&amp;gt; permet de regrouper plusieurs éléments sans ajouter de balise supplémentaire dans le DOM.</li></ul>
+  </div>
+
+  <div class="exercises-list">
+    
+<article class="exercise" id="ex16_composant_classe_carte">
+  <div class="exercise-head" style="--lvl-color:#d19a66">
+    <span class="ex-num">EXERCICE 16</span>
+    <h3>Transformer Carte en composant classe</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex16_composant_classe_carte</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex16.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★★☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>React.Component</li><li>constructor / super(props)</li><li>this.props</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Transformer un composant fonction existant en composant classe, en respectant la syntaxe imposée.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Reprends le composant <code>Carte</code> de l'exercice 12 (props <code>nom</code> et <code>metier</code>)
+     et réécris-le sous forme de classe qui hérite de <code>React.Component</code>.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Déclarer <code>class Carte extends React.Component { ... }</code>.</li><li>Écrire le <code>constructor(props)</code> qui appelle <code>super(props)</code>.</li><li>Écrire la méthode <code>render()</code> qui retourne le JSX, en utilisant <code>this.props</code>.</li><li>Afficher les deux mêmes cartes qu'à l'exercice 12 pour vérifier l'identité du résultat.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex16_composant_classe_carte"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Toutes les occurrences de props doivent devenir this.props à l'intérieur d'une classe : props seul n'existe plus dans ce contexte.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Piège fréquent : oublier super(props) dans le constructeur — sans cet appel, this.props serait indéfini dans le reste de la classe.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>La transformation fonction → classe ne change ni les props transmises ni le rendu visuel, seulement la syntaxe interne du composant.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On applique le modèle Element / ListeElements en classes vu en cours (4.4), avec constructor, super(props) et render().</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Le rendu est visuellement identique à celui de l'exercice 12.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>class Carte extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return &lt;div&gt;
+      &lt;h3&gt;{this.props.nom}&lt;/h3&gt;
+      &lt;p&gt;{this.props.metier}&lt;/p&gt;
+    &lt;/div&gt;;
+  }
+}
+var page = &lt;div&gt;
+  &lt;Carte nom="Nora" metier="Développeuse Digital" /&gt;
+  &lt;Carte nom="Youssef" metier="Formateur" /&gt;
+&lt;/div&gt;;
+ReactDOM.render(page, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — super(props)</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Transmet les props reçues au constructeur parent React.Component.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — this.props devient disponible dans toute la classe.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — render()</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Méthode obligatoire de toute classe composant : elle retourne le JSX à afficher.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — React sait quoi afficher à chaque rendu du composant.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex17_choisir_fonction_ou_classe">
+  <div class="exercise-head" style="--lvl-color:#d19a66">
+    <span class="ex-num">EXERCICE 17</span>
+    <h3>Fonction ou classe ? Choisir et justifier</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex17_choisir_fonction_ou_classe</code></div>
+    
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★★☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Critère de choix fonction/classe</li><li>state (notion introduite)</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Justifier, pour plusieurs situations données, s'il faut écrire un composant sous forme de fonction ou de classe.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Pour chacune des situations suivantes, indique s'il faut utiliser une fonction ou une classe, et justifie en une phrase :
+     <br>a) Un composant <code>Logo</code> qui affiche toujours la même image et le même texte.<br>
+     b) Un composant <code>Compteur</code> qui doit mémoriser un nombre qui change dans le temps (state).<br>
+     c) Un composant <code>Badge</code> qui affiche une couleur et un texte reçus en props, sans jamais les modifier lui-même.<br>
+     d) Un composant <code>FormulaireContact</code> qui doit garder en mémoire ce que l'utilisateur tape (state).</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Répondre fonction ou classe pour chacun des 4 cas.</li><li>Justifier chaque réponse par le critère vu en cours (présence ou non d'un état à gérer).</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex17_choisir_fonction_ou_classe"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Une seule question suffit à trancher à chaque fois : ce composant a-t-il besoin de retenir une information qui évolue dans le temps (state) ?</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : « affiche seulement ce qu'on lui donne » → fonction. « doit se souvenir de quelque chose qui change » → classe.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Le critère du cours est unique : la nécessité ou non d'un state pour gérer l'état du composant.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On applique ce critère aux 4 cas, sans écrire de code, en argumentant chaque réponse.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>a) Logo → fonction (aucune donnée ne change).<br>
+        b) Compteur → classe (state obligatoire pour mémoriser le nombre).<br>
+        c) Badge → fonction (il ne fait qu'afficher des props, sans état propre).<br>
+        d) FormulaireContact → classe (state obligatoire pour retenir la saisie de l'utilisateur).</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <p class="muted">Aucun code à produire pour cet exercice (analyse / réflexion écrite).</p>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Cas a et c</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Ni Logo ni Badge n'ont besoin de mémoriser une donnée qui évolue.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Une fonction suffit, plus simple à écrire et à lire.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Cas b et d</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Compteur et FormulaireContact doivent retenir une information qui change dans le temps.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Une classe (avec state) est nécessaire, comme l'indique le cours.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex18_react_fragment_correction">
+  <div class="exercise-head" style="--lvl-color:#d19a66">
+    <span class="ex-num">EXERCICE 18</span>
+    <h3>Corriger une erreur de parent multiple</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex18_react_fragment_correction</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex18.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★★☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Règle du parent unique</li><li>React.Fragment</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Corriger une erreur JSX classique liée au retour de plusieurs éléments frères, sans ajouter de &lt;div&gt; inutile.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Le code suivant provoque une erreur de compilation :
+     <pre>function Statistiques(props) {
+  return
+    &lt;h3&gt;Résultats&lt;/h3&gt;
+    &lt;p&gt;Moyenne : 14&lt;/p&gt;
+    &lt;p&gt;Mention : Bien&lt;/p&gt;
+}</pre>
+     Corrige ce composant pour qu'il fonctionne, sans ajouter d'élément <code>&lt;div&gt;</code> visible dans le DOM final.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Identifier la règle JSX qui est violée dans ce code.</li><li>Corriger le code en utilisant <code>&lt;React.Fragment&gt;</code>.</li><li>Vérifier que les trois éléments s'affichent bien, l'un après l'autre.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex18_react_fragment_correction"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Trois éléments de même niveau (h3, p, p) sont retournés côte à côte : ils ont besoin d'un seul parent commun pour être renvoyés ensemble.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : dès qu'un return JSX propose plusieurs balises côte à côte sans parent, pense d'abord à &lt;React.Fragment&gt; plutôt qu'à un &lt;div&gt;, si aucune balise supplémentaire n'est nécessaire pour le style.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Le composant tente de retourner trois éléments frères sans les envelopper : la règle du parent unique est violée.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On encapsule les trois éléments dans &lt;React.Fragment&gt; ... &lt;/React.Fragment&gt;, comme vu dans la section 4.6 du cours.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Les trois éléments (h3, p, p) s'affichent dans l'ordre, sans balise &lt;div&gt; supplémentaire dans le DOM.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>function Statistiques(props) {
+  return (
+    &lt;React.Fragment&gt;
+      &lt;h3&gt;Résultats&lt;/h3&gt;
+      &lt;p&gt;Moyenne : 14&lt;/p&gt;
+      &lt;p&gt;Mention : Bien&lt;/p&gt;
+    &lt;/React.Fragment&gt;
+  );
+}
+ReactDOM.render(&lt;Statistiques/&gt;, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Règle du parent unique</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — React exige un seul élément racine retourné par un composant.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Sans parent commun, une erreur de compilation apparaît.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — React.Fragment</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Sert de parent invisible : il n'apparaît jamais dans l'arborescence du DOM.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — La structure HTML finale reste propre, sans &lt;div&gt; superflu.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex19_parentheses_return_multiligne">
+  <div class="exercise-head" style="--lvl-color:#d19a66">
+    <span class="ex-num">EXERCICE 19</span>
+    <h3>Prédire puis corriger : parenthèses manquantes</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex19_parentheses_return_multiligne</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex19.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★★☆</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Parenthèses autour d'un return multi-lignes</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Prédire le résultat d'un code JSX mal formé, puis le corriger en ajoutant les parenthèses nécessaires.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Voici un composant tel qu'écrit par un stagiaire :
+     <pre>function Menu(props) {
+  return
+    &lt;ul&gt;
+      &lt;li&gt;Accueil&lt;/li&gt;
+      &lt;li&gt;Contact&lt;/li&gt;
+    &lt;/ul&gt;
+}</pre></p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Prédire ce qui va se passer à l'exécution de ce code, avant de le tester (rien ne s'affiche ? une erreur ? autre chose ?).</li><li>Expliquer pourquoi ce comportement se produit, en lien avec la règle vue en cours.</li><li>Corriger le code pour qu'il affiche correctement le menu.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex19_parentheses_return_multiligne"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>En JavaScript, un retour à la ligne juste après le mot-clé return peut provoquer l'ajout automatique d'un point-virgule invisible par le moteur JavaScript (return; ).</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : dès qu'un return JSX s'étale sur plusieurs lignes, fais immédiatement suivre return d'une parenthèse ouvrante sur la même ligne : return (</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Le mot-clé return est seul sur sa ligne : JavaScript considère alors qu'il s'agit d'un return; vide, et tout le JSX qui suit est ignoré.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>La fonction retourne donc undefined, et ReactDOM.render() ne reçoit rien à afficher — aucune erreur explicite n'est levée, mais la page reste vide.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Après correction, le menu (Accueil / Contact) s'affiche normalement.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>function Menu(props) {
+  return (
+    &lt;ul&gt;
+      &lt;li&gt;Accueil&lt;/li&gt;
+      &lt;li&gt;Contact&lt;/li&gt;
+    &lt;/ul&gt;
+  );
+}
+ReactDOM.render(&lt;Menu/&gt;, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — return seul sur sa ligne</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — JavaScript insère automatiquement un point-virgule après return, à la ligne.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — La fonction retourne undefined, rien ne s'affiche, sans message d'erreur clair.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Parenthèse après return</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Elle force JavaScript à considérer tout le bloc comme une seule expression à retourner.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le JSX complet, sur plusieurs lignes, est bien retourné et affiché.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+  </div>
+
+  <div class="checkpoint">
+    <h4>🏁 Checkpoint — niveau 4</h4>
+    <ul class="checkpoint-list"><li><label><input type='checkbox'> Je peux transformer un composant fonction en composant classe (et inversement).</label></li><li><label><input type='checkbox'> Je sais expliquer avec un exemple concret quand utiliser une fonction plutôt qu'une classe.</label></li><li><label><input type='checkbox'> Je reconnais l'erreur « un seul élément parent » et je sais la corriger.</label></li><li><label><input type='checkbox'> Je peux utiliser &amp;lt;React.Fragment&amp;gt; pour éviter une balise &amp;lt;div&amp;gt; inutile.</label></li><li><label><input type='checkbox'> Je sais placer correctement des parenthèses autour d'un retour JSX multi-lignes.</label></li></ul>
+    <p class="checkpoint-note">Si tu ne coches pas tout : Relis les sections « 4.4 » à « 4.6 » du cours (classe, fonction ou classe, règles d'écriture) avant de continuer.</p>
+  </div>
+</section>
+
+<section class="level" id="n5" style="--lvl-color:#e06c75">
+  <div class="level-banner">
+    <span class="level-tag">NIVEAU 5</span>
+    <h2>EFM / Examen</h2>
+    <span class="level-stars">★★★★★</span>
+  </div>
+
+  <div class="callout avant">
+    <strong>📌 À savoir avant de commencer</strong>
+    <ul><li>Un commentaire en JSX s'écrit {/* ... */} : les doubles slashs // ne fonctionnent pas dans le JSX.</li><li>Une expression conditionnelle en JSX s'écrit avec l'opérateur ternaire : { condition ? &amp;lt;A/&amp;gt; : &amp;lt;B/&amp;gt; } ou { condition ? &amp;lt;A/&amp;gt; : null }.</li><li>Un mini-projet combine souvent : tableau de données, .map(), key, composants avec props, style dynamique et affichage conditionnel.</li><li>Avant de coder, il faut toujours identifier : quelles données, quels composants, quelles props, quelles conditions.</li></ul>
+  </div>
+
+  <div class="exercises-list">
+    
+<article class="exercise" id="ex20_commentaires_jsx">
+  <div class="exercise-head" style="--lvl-color:#e06c75">
+    <span class="ex-num">EXERCICE 20</span>
+    <h3>Commenter un code JSX sans le casser</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex20_commentaires_jsx</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex20.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★★★</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Commentaires JSX {/* */}</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Commenter correctement une portion de code JSX, en évitant le piège des commentaires classiques //.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Voici une liste de 5 tâches. Mets en commentaire les tâches « Tâche 2 » et « Tâche 4 »
+     (elles ne doivent plus s'afficher), sans les supprimer du code :
+     <pre>function ListeTaches(props) {
+  return (
+    &lt;ul&gt;
+      &lt;li&gt;Tâche 1&lt;/li&gt;
+      &lt;li&gt;Tâche 2&lt;/li&gt;
+      &lt;li&gt;Tâche 3&lt;/li&gt;
+      &lt;li&gt;Tâche 4&lt;/li&gt;
+      &lt;li&gt;Tâche 5&lt;/li&gt;
+    &lt;/ul&gt;
+  );
+}</pre></p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Repérer la syntaxe correcte pour commenter du code à l'intérieur d'un bloc JSX.</li><li>Mettre en commentaire les deux <code>&lt;li&gt;</code> demandés.</li><li>Vérifier que seules les tâches 1, 3 et 5 s'affichent.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex20_commentaires_jsx"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  <div class="callout piege"><strong>⚠️ Piège fréquent</strong><p>Essayer de commenter seulement &lt;li&gt;Tâche 2&lt;/li&gt; avec // en fin de ligne : le JSX ne reconnaît pas ce type de commentaire.</p></div>
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Un commentaire JSX doit être entouré d'une accolade { } car il s'agit d'une expression JavaScript, à l'intérieur de laquelle on utilise la syntaxe /* ... */.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Piège fréquent : utiliser // pour commenter une ligne JSX — cela ne fonctionne pas et provoque une erreur ou un affichage incorrect.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Il faut faire disparaître deux éléments sans les supprimer physiquement du fichier : la solution est un commentaire, pas une suppression.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On applique l'exemple du cours : {/* ... */} autour des éléments à cacher, en accolade unique englobant les deux &lt;li&gt; à la fois si besoin, ou séparément.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Seules les tâches 1, 3 et 5 apparaissent à l'écran.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>function ListeTaches(props) {
+  return (
+    &lt;ul&gt;
+      &lt;li&gt;Tâche 1&lt;/li&gt;
+      {/* &lt;li&gt;Tâche 2&lt;/li&gt; */}
+      &lt;li&gt;Tâche 3&lt;/li&gt;
+      {/* &lt;li&gt;Tâche 4&lt;/li&gt; */}
+      &lt;li&gt;Tâche 5&lt;/li&gt;
+    &lt;/ul&gt;
+  );
+}
+ReactDOM.render(&lt;ListeTaches/&gt;, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — {/* ... */}</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — L'accolade signale une expression JS ; à l'intérieur, /* */ commente le contenu.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Les éléments commentés ne sont ni évalués, ni affichés.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — // interdit ici</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Le JSX ne traite pas // comme un commentaire à l'intérieur d'un bloc de balises.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Utiliser // provoquerait une erreur de syntaxe ou un texte affiché par erreur.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex21_affichage_conditionnel_ternaire">
+  <div class="exercise-head" style="--lvl-color:#e06c75">
+    <span class="ex-num">EXERCICE 21</span>
+    <h3>Afficher ou cacher selon une condition</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex21_affichage_conditionnel_ternaire</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex21.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★★★</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Expression conditionnelle ternaire en JSX</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Afficher ou cacher un élément JSX selon la valeur d'une prop, à l'aide de l'opérateur ternaire.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Crée un composant <code>Profil</code> qui reçoit une prop <code>estAdmin</code> (true/false).
+     Le composant doit toujours afficher <code>&lt;p&gt;Nom : Sara&lt;/p&gt;</code>, et afficher en plus
+     <code>&lt;p&gt;Accès administrateur&lt;/p&gt;</code> uniquement si <code>estAdmin</code> vaut <code>true</code>.</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Écrire le composant <code>Profil</code> avec sa condition d'affichage.</li><li>Afficher deux instances du composant : une avec <code>estAdmin={true}</code>, une avec <code>estAdmin={false}</code>.</li><li>Vérifier que le message d'accès administrateur n'apparaît que dans le premier cas.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex21_affichage_conditionnel_ternaire"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>L'opérateur ternaire s'écrit condition ? valeurSiVrai : valeurSiFaux, et il doit être placé entre accolades { } dans le JSX ; utilise null pour ne rien afficher dans le cas faux.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : dès qu'un élément doit apparaître « seulement si... », pense à { condition ? &lt;Element/&gt; : null } plutôt qu'à une instruction if classique, qui n'est pas utilisable directement dans le JSX retourné.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Il s'agit d'un affichage conditionnel simple, à choisir entre un élément et rien du tout (null).</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On reprend l'exemple hideFirstItem du cours, en l'adaptant à un message d'administration conditionnel.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Seul le profil avec estAdmin={true} affiche la ligne « Accès administrateur ».</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>function Profil({ estAdmin }) {
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Nom : Sara&lt;/p&gt;
+      { estAdmin ? &lt;p&gt;Accès administrateur&lt;/p&gt; : null }
+    &lt;/div&gt;
+  );
+}
+var page = &lt;div&gt;
+  &lt;Profil estAdmin={true} /&gt;
+  &lt;Profil estAdmin={false} /&gt;
+&lt;/div&gt;;
+ReactDOM.render(page, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Opérateur ternaire</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Une seule expression JavaScript décide quel élément (ou null) retourner.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le message d'administrateur apparaît uniquement quand estAdmin est vrai.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — null comme alternative</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — null indique à React de ne rien rendre à cet endroit.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Aucun élément vide ou balise inutile n'est ajoutée au DOM.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex22_mini_annuaire_contacts">
+  <div class="exercise-head" style="--lvl-color:#e06c75">
+    <span class="ex-num">EXERCICE 22</span>
+    <h3>Mini-annuaire de contacts</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex22_mini_annuaire_contacts</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex22.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★★★</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Composition de composants</li><li>map()+key</li><li>props</li><li>affichage conditionnel</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Combiner tableau de données, composition de composants, props et affichage conditionnel dans un seul mini-programme.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>On te donne le tableau suivant :
+     <pre>var contacts = [
+  { nom: "Amine", favori: true },
+  { nom: "Salma", favori: false },
+  { nom: "Karim", favori: true }
+];</pre>
+     Affiche la liste des contacts. Le nom des contacts favoris doit être précédé d'une étoile « ★ ».</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Créer un composant <code>Contact</code> qui reçoit un objet contact (<code>nom</code>, <code>favori</code>) et affiche son nom, précédé d'une étoile si c'est un favori.</li><li>Créer un composant <code>Annuaire</code> qui reçoit le tableau <code>contacts</code> et génère un <code>&lt;Contact/&gt;</code> par entrée, avec <code>key</code>.</li><li>Afficher <code>&lt;Annuaire contacts={contacts}/&gt;</code> dans la page.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex22_mini_annuaire_contacts"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Le composant Contact peut recevoir directement l'objet complet en prop (ex : contact={c}) puis déstructurer nom et favori depuis cet objet à l'intérieur.</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : quand un mini-sujet combine plusieurs notions, commence toujours par écrire le plus petit composant (celui qui affiche une seule donnée), puis construis le composant qui boucle autour.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Le sujet combine trois notions du chapitre : props sur objet complexe, .map() avec key, et condition ternaire sur une propriété booléenne.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On construit d'abord Contact (affichage d'un seul élément, avec sa condition), puis Annuaire (boucle sur le tableau via map), en suivant la logique de composition vue en cours.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>La liste affiche : ★ Amine, Salma, ★ Karim.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var contacts = [
+  { nom: "Amine", favori: true },
+  { nom: "Salma", favori: false },
+  { nom: "Karim", favori: true }
+];
+
+function Contact({ contact }) {
+  return &lt;li&gt;{ contact.favori ? "★ " : "" }{contact.nom}&lt;/li&gt;;
+}
+
+function Annuaire({ contacts }) {
+  return (
+    &lt;ul&gt;
+      { contacts.map((c, index) =&gt; &lt;Contact key={index} contact={c} /&gt;) }
+    &lt;/ul&gt;
+  );
+}
+
+ReactDOM.render(&lt;Annuaire contacts={contacts} /&gt;, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Objet complet en prop</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — contact={c} transmet tout l'objet (nom + favori) en une seule prop.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Contact peut lire toutes les informations dont il a besoin.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Condition sur favori</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — L'étoile n'apparaît que si contact.favori est vrai, sinon une chaîne vide est insérée.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — L'affichage s'adapte à chaque contact individuellement.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — map() + key</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Chaque &lt;Contact/&gt; généré reçoit une clé unique basée sur l'index.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Aucun avertissement React, structure conforme au cours.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise" id="ex23_debogage_multi_erreurs">
+  <div class="exercise-head" style="--lvl-color:#e06c75">
+    <span class="ex-num">EXERCICE 23</span>
+    <h3>Retrouver 4 erreurs dans un même fichier</h3>
+    <span class="ex-tag">[Exercice d'entraînement]</span>
+  </div>
+
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">📁 Nom du dossier :</span> <code>ex23_debogage_multi_erreurs</code></div>
+    <div class="meta-row"><span class="meta-label">📄 Fichier principal :</span> <code>ex23.html</code></div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★★★</span></div>
+  </div>
+
+  <div class="notions-block">
+    <span class="meta-label">Notions mobilisées :</span>
+    <ul class="notions-list"><li>Débogage global</li><li>Révision de toutes les règles du chapitre</li></ul>
+  </div>
+
+  <div class="objectif-block">🎯 <strong>Objectif</strong> — Repérer et corriger plusieurs erreurs JSX différentes cumulées dans un seul programme, comme lors d'un examen.</div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Voici un code contenant exactement 4 erreurs liées au chapitre JSX :
+     <pre>var couleurs = ["rouge", "vert", "bleu"];
+
+function element(props) {
+  return &lt;li style="color:red"&gt;{props.nom}&lt;/li&gt;
+}
+
+function Liste(props) {
+  return
+    &lt;ul&gt;
+      { couleurs.map((c) =&gt; &lt;element nom={c}&gt;&lt;/element&gt;) }
+    &lt;/ul&gt;
+}
+
+ReactDOM.render(&lt;Liste/&gt;, document.getElementById("app"));</pre></p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 À toi de jouer</h4>
+    <ul><li>Repérer les 4 erreurs présentes dans ce code (une par ligne concernée environ).</li><li>Corriger le code intégralement.</li><li>Vérifier que la liste des 3 couleurs s'affiche correctement, sans avertissement dans la console.</li></ul>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="ex23_debogage_multi_erreurs"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  
+
+  <details class="reveal indice-reveal">
+    <summary>💡 Voir l'indice</summary>
+    <div class="callout indice"><p>Relis un par un : le nom du composant element, la syntaxe de l'attribut style, la présence du mot return isolé, et l'attribut key sur les éléments générés par map().</p></div>
+  </details>
+
+  <details class="reveal astuce-reveal">
+    <summary>🧠 Voir l'astuce</summary>
+    <div class="callout astuce"><p>Réflexe examen : en cas de bug JSX, vérifie dans l'ordre : 1) la casse des noms de composants, 2) la syntaxe de style, 3) les parenthèses autour d'un return multi-lignes, 4) la présence de key dans les boucles.</p></div>
+  </details>
+
+  
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé pédagogique</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Quatre erreurs indépendantes sont cumulées : (1) le composant <code>element</code> est en minuscule alors qu'il doit être une majuscule ;
+        (2) l'attribut <code>style</code> est écrit comme une chaîne HTML au lieu d'un objet JavaScript ; (3) le <code>return</code> de <code>Liste</code>
+        est seul sur sa ligne, sans parenthèse ; (4) aucun attribut <code>key</code> n'est présent sur les éléments générés par <code>map()</code>.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On corrige chaque erreur une par une, en vérifiant après chaque correction que le code reste cohérent avec les règles du chapitre.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir la solution attendue ci-dessous, construite étape par étape à partir de la méthode.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>La liste affiche « rouge », « vert », « bleu » en rouge, sans erreur ni avertissement dans la console.</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block">
+      <pre class="code"><code>var couleurs = ["rouge", "vert", "bleu"];
+
+function Element(props) {
+  return &lt;li style={{ color: "red" }}&gt;{props.nom}&lt;/li&gt;;
+}
+
+function Liste(props) {
+  return (
+    &lt;ul&gt;
+      { couleurs.map((c, index) =&gt; &lt;Element key={index} nom={c} /&gt;) }
+    &lt;/ul&gt;
+  );
+}
+
+ReactDOM.render(&lt;Liste/&gt;, document.getElementById("app"));</code></pre>
+    </div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+      
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — element → Element</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Un composant doit commencer par une majuscule pour être reconnu comme tel par React.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — La balise &lt;element&gt; qui cherchait un tag HTML inexistant est corrigée.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — style="..." → style={{...}}</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — L'attribut style attend un objet JavaScript, jamais une chaîne de caractères en JSX.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le texte s'affiche bien en rouge, sans erreur de rendu.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — return isolé → return (</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Le retour à la ligne après return provoquait un retour undefined.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le &lt;ul&gt; complet est maintenant bien retourné.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — key manquante</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Le paramètre index du callback map() est récupéré et utilisé comme clé.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — L'avertissement React sur les listes disparaît.</div>
+        </div>
+    </div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+  </div>
+
+  <div class="checkpoint">
+    <h4>🏁 Checkpoint — niveau 5</h4>
+    <ul class="checkpoint-list"><li><label><input type='checkbox'> Je peux commenter correctement une portion de code JSX.</label></li><li><label><input type='checkbox'> Je peux afficher ou cacher un élément selon une condition, avec l'opérateur ternaire.</label></li><li><label><input type='checkbox'> Je peux combiner plusieurs composants, des props et une condition dans un même mini-programme.</label></li><li><label><input type='checkbox'> Je peux relire un code JSX fourni et repérer plusieurs erreurs différentes.</label></li></ul>
+    <p class="checkpoint-note">Si tu ne coches pas tout : Relis l'ensemble du chapitre 4, en particulier les règles d'écriture (4.6), avant l'examen blanc.</p>
+  </div>
+</section>
+
+    <section class="level" id="examen" style="--lvl-color:#c678dd">
+      <div class="level-banner">
+        <span class="level-tag">MODE EXAMEN</span>
+        <h2>Mini-sujets d'examen blanc</h2>
+      </div>
+      <p class="muted">Ces deux mini-sujets combinent plusieurs notions du chapitre, dans des conditions proches d'un EFM réel : lis l'énoncé en entier avant de commencer à coder.</p>
+      
+<article class="exercise exam-sujet" id="examen_sujet01">
+  <div class="exercise-head" style="--lvl-color:#c678dd">
+    <span class="ex-num">SUJET 1</span>
+    <h3>Vitrine de produits en promotion</h3>
+  </div>
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">⏱️ Durée indicative :</span> 45 min</div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★★★</span></div>
+    <div class="meta-row"><span class="meta-label">Barème :</span> 20 points</div>
+  </div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Une petite boutique en ligne veut afficher ses produits directement en JSX (sans backend).
+         On te fournit le tableau de données suivant :
+         <pre>var produits = [
+  { nom: "Sac à dos", prix: 250, promo: true },
+  { nom: "Gourde inox", prix: 90, promo: false },
+  { nom: "Casquette", prix: 60, promo: true }
+];</pre></p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 Travail demandé</h4>
+    <ul><li>Créer un composant <code>ProduitCard</code> qui affiche le nom et le prix d'un produit reçu en prop, avec un badge « PROMO » (en rouge) affiché uniquement si <code>promo</code> vaut <code>true</code>.</li><li>Créer un composant <code>Vitrine</code> qui reçoit le tableau <code>produits</code> et affiche un <code>&lt;ProduitCard/&gt;</code> par produit, chacun avec une <code>key</code> correcte.</li><li>Appliquer un style (au choix, avec un objet JavaScript) qui met en valeur les produits en promotion.</li><li>Afficher le tout avec <code>ReactDOM.render()</code>, dans un seul élément racine.</li></ul>
+  </div>
+
+  <table class="bareme-table">
+    <thead><tr><th>Critère</th><th>Points</th></tr></thead>
+    <tbody><tr><td>Composant ProduitCard correctement écrit (props, condition ternaire)</td><td>7 pts</td></tr><tr><td>Composant Vitrine avec map() et key</td><td>6 pts</td></tr><tr><td>Style appliqué correctement (objet JS, camelCase)</td><td>4 pts</td></tr><tr><td>Structure générale, un seul parent, code qui s'exécute sans erreur</td><td>3 pts</td></tr></tbody>
+  </table>
+
+  <div class="callout conseil">
+    <strong>⏳ Conseil de gestion du temps</strong>
+    <p>Commence par écrire et tester ProduitCard tout seul avec un produit fixe, avant de brancher la boucle map() dans Vitrine : tu limites les erreurs à corriger en même temps.</p>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="examen_sujet01"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé complet</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Le sujet combine props, condition ternaire, .map()+key et style dynamique — les quatre notions centrales du chapitre JSX, dans un contexte réaliste de vitrine e-commerce.</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On procède du plus petit composant vers le plus grand : ProduitCard isolé d'abord, puis Vitrine qui l'utilise en boucle, exactement comme la méthode Element/ListeElements du cours.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir le code ci-dessous.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>La page affiche 3 cartes produit, celles en promotion étant visuellement mises en avant (badge PROMO rouge).</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block"><pre class="code"><code>var produits = [
+  { nom: "Sac à dos", prix: 250, promo: true },
+  { nom: "Gourde inox", prix: 90, promo: false },
+  { nom: "Casquette", prix: 60, promo: true }
+];
+
+function ProduitCard({ produit }) {
+  var styleCarte = { border: "1px solid #ccc", padding: "10px", marginBottom: "8px",
+    backgroundColor: produit.promo ? "#fff5f5" : "#ffffff" };
+  return (
+    &lt;div style={styleCarte}&gt;
+      &lt;h4&gt;{produit.nom}&lt;/h4&gt;
+      &lt;p&gt;{produit.prix} DH&lt;/p&gt;
+      { produit.promo ? &lt;span style={{ color: "red", fontWeight: "bold" }}&gt;PROMO&lt;/span&gt; : null }
+    &lt;/div&gt;
+  );
+}
+
+function Vitrine({ produits }) {
+  return (
+    &lt;div&gt;
+      { produits.map((p, index) =&gt; &lt;ProduitCard key={index} produit={p} /&gt;) }
+    &lt;/div&gt;
+  );
+}
+
+ReactDOM.render(&lt;Vitrine produits={produits} /&gt;, document.getElementById("app"));</code></pre></div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — styleCarte conditionnel</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — La couleur de fond dépend de produit.promo, calculée avant le retour du JSX.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Les produits en promo ressortent visuellement sans dupliquer le code.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Badge PROMO ternaire</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Le badge n'est inséré dans le JSX que si la condition est vraie.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Les produits non promotionnels n'affichent aucun badge, ni élément vide.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Vitrine + map + key</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Chaque carte produit est générée dynamiquement à partir du tableau.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Le code reste identique même si la boutique ajoute des produits.</div>
+        </div></div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+<article class="exercise exam-sujet" id="examen_sujet02">
+  <div class="exercise-head" style="--lvl-color:#c678dd">
+    <span class="ex-num">SUJET 2</span>
+    <h3>Bulletin de résultats d'une classe</h3>
+  </div>
+  <div class="meta-block">
+    <div class="meta-row"><span class="meta-label">⏱️ Durée indicative :</span> 50 min</div>
+    <div class="meta-row"><span class="meta-label">Niveau :</span> <span class="stars">★★★★★</span></div>
+    <div class="meta-row"><span class="meta-label">Barème :</span> 20 points</div>
+  </div>
+
+  <div class="section enonce">
+    <h4>📝 Énoncé</h4>
+    <p>Un formateur souhaite un affichage JSX de son bulletin de classe :
+         <pre>var eleves = [
+  { nom: "Yassine", moyenne: 8 },
+  { nom: "Imane", moyenne: 14 },
+  { nom: "Othmane", moyenne: 17 }
+];</pre>
+         La règle de mention est : moyenne &lt; 10 → « Insuffisant » (rouge) ; moyenne entre 10 et 14 (exclu) → « Passable » (orange) ;
+         moyenne ≥ 14 → « Bien » (vert).</p>
+  </div>
+
+  <div class="section taches">
+    <h4>🧑‍💻 Travail demandé</h4>
+    <ul><li>Créer une fonction JavaScript classique <code>getMention(moyenne)</code> qui retourne le texte de la mention selon la règle donnée (elle peut être écrite hors JSX).</li><li>Créer un composant <code>LigneEleve</code> qui affiche le nom, la moyenne, et la mention (avec sa couleur), pour un élève reçu en prop.</li><li>Créer un composant <code>Bulletin</code> qui affiche un tableau de résultats (une ligne <code>&lt;LigneEleve/&gt;</code> par élève).</li><li>Afficher le bulletin complet pour les 3 élèves donnés.</li></ul>
+  </div>
+
+  <table class="bareme-table">
+    <thead><tr><th>Critère</th><th>Points</th></tr></thead>
+    <tbody><tr><td>Fonction getMention correcte (3 cas bien gérés)</td><td>5 pts</td></tr><tr><td>Composant LigneEleve avec props et couleur dynamique</td><td>7 pts</td></tr><tr><td>Composant Bulletin avec map() et key</td><td>6 pts</td></tr><tr><td>Résultat conforme, code sans erreur</td><td>2 pts</td></tr></tbody>
+  </table>
+
+  <div class="callout conseil">
+    <strong>⏳ Conseil de gestion du temps</strong>
+    <p>Écris et vérifie d'abord getMention() seule (par exemple avec console.log) avant de l'utiliser dans le JSX : une erreur de logique sera bien plus facile à repérer isolée du rendu React.</p>
+  </div>
+
+  <div class="statut-block">
+    <label><input type="checkbox" class="statut-checkbox" data-id="examen_sujet02"> 📊 Statut : <span class="statut-text">À faire</span></label>
+  </div>
+
+  <hr class="sep">
+
+  <details class="reveal corrige-reveal">
+    <summary>✅ Voir le corrigé complet</summary>
+    <div class="corrige-block">
+      <div class="corrige-step"><h5>1. Analyse</h5><p>Le sujet ajoute une couche de logique métier (calcul de mention) avant d'aborder les notions JSX habituelles (props, style dynamique, map, key).</p></div>
+      <div class="corrige-step"><h5>2. Méthode / Raisonnement</h5><p>On sépare bien le calcul (fonction JavaScript pure getMention) de l'affichage (composants JSX), ce qui est une bonne pratique même en dehors de cet exercice.</p></div>
+      <div class="corrige-step"><h5>3. Implémentation</h5><p>Voir le code ci-dessous.</p></div>
+      <div class="corrige-step"><h5>4. Résultat attendu</h5><p>Le bulletin affiche Yassine (Insuffisant, rouge), Imane (Passable, orange), Othmane (Bien, vert).</p></div>
+    </div>
+  </details>
+
+  <details class="reveal solution-reveal">
+    <summary>💻 Voir la solution attendue</summary>
+    <div class="solution-block"><pre class="code"><code>var eleves = [
+  { nom: "Yassine", moyenne: 8 },
+  { nom: "Imane", moyenne: 14 },
+  { nom: "Othmane", moyenne: 17 }
+];
+
+function getMention(moyenne) {
+  if (moyenne &lt; 10) { return { texte: "Insuffisant", couleur: "red" }; }
+  if (moyenne &lt; 14) { return { texte: "Passable", couleur: "orange" }; }
+  return { texte: "Bien", couleur: "green" };
+}
+
+function LigneEleve({ eleve }) {
+  var mention = getMention(eleve.moyenne);
+  return (
+    &lt;p&gt;
+      {eleve.nom} — {eleve.moyenne}/20 —
+      &lt;span style={{ color: mention.couleur, fontWeight: "bold" }}&gt; {mention.texte}&lt;/span&gt;
+    &lt;/p&gt;
+  );
+}
+
+function Bulletin({ eleves }) {
+  return (
+    &lt;div&gt;
+      { eleves.map((e, index) =&gt; &lt;LigneEleve key={index} eleve={e} /&gt;) }
+    &lt;/div&gt;
+  );
+}
+
+ReactDOM.render(&lt;Bulletin eleves={eleves} /&gt;, document.getElementById("app"));</code></pre></div>
+  </details>
+
+  <details class="reveal explication-reveal">
+    <summary>🔎 Voir l'explication de la solution</summary>
+    <div class="explication-block">
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — getMention hors JSX</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — Le calcul de la mention est une fonction JavaScript classique, indépendante de React.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Elle est facilement testable seule et réutilisable ailleurs.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Couleur dynamique</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — La couleur du span provient directement de l'objet retourné par getMention.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Chaque mention s'affiche avec la bonne couleur, sans condition répétée dans le JSX.</div>
+        </div>
+        <div class="explication-item">
+          <div class="expl-quoi"><strong>Ce qu'on fait</strong> — Bulletin + map + key</div>
+          <div class="expl-pourquoi"><strong>Pourquoi</strong> — La liste des élèves est parcourue une seule fois pour générer toutes les lignes.</div>
+          <div class="expl-resultat"><strong>Résultat attendu</strong> — Ajouter un élève au tableau suffit à mettre à jour tout le bulletin.</div>
+        </div></div>
+  </details>
+
+  <div class="github">🔗<code>[<a href="">Ma solution GitHub</a></code></div>
+</article>
+
+    </section>
+    
+<section class="level" id="progression" style="--lvl-color:#61afef">
+  <div class="level-banner">
+    <span class="level-tag">SUIVI</span>
+    <h2>Ma progression</h2>
+  </div>
+  <div class="progress-card">
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBarInner"></div></div>
+    <p id="progressText">0 / 25 exercices marqués comme faits</p>
+    <p class="muted">La coche de chaque exercice se sauvegarde dans ce navigateur (aucune donnée envoyée nulle part). Rouvre ce fichier plus tard : ta progression reste affichée.</p>
+  </div>
+</section>
+
+  </main>
+</div>
+
+<footer>Banque d'exercices générée à partir du cours « C12 : Développer en Front-end — S4 : Le langage JSX » (OFPPT — DRIF). À utiliser comme support d'entraînement personnel.</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var STORAGE_KEY = 'jsx_banque_progress_v1';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { state = {}; }
+
+  var boxes = document.querySelectorAll('.statut-checkbox');
+  var total = boxes.length;
+
+  function updateProgress() {
+    var done = 0;
+    boxes.forEach(function (b) { if (b.checked) done++; });
+    var bar = document.getElementById('progressBarInner');
+    var txt = document.getElementById('progressText');
+    if (bar) bar.style.width = (total ? (done / total * 100) : 0) + '%';
+    if (txt) txt.textContent = done + ' / ' + total + ' exercices marqués comme faits';
+  }
+
+  boxes.forEach(function (box) {
+    var id = box.getAttribute('data-id');
+    if (state[id]) {
+      box.checked = true;
+      var label = box.closest('label');
+      var txt = label ? label.querySelector('.statut-text') : null;
+      if (txt) txt.textContent = 'Terminé';
+    }
+    box.addEventListener('change', function () {
+      state[id] = box.checked;
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+      var label = box.closest('label');
+      var txt = label ? label.querySelector('.statut-text') : null;
+      if (txt) txt.textContent = box.checked ? 'Terminé' : 'À faire';
+      updateProgress();
+    });
+  });
+  updateProgress();
+});
+</script>
+</body>
+</html>

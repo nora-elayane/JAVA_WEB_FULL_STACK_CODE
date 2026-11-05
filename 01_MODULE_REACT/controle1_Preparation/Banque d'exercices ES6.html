@@ -1,0 +1,1688 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Banque d'exercices ES6</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+:root{
+  --paper:#f4f6fb; --surface:#ffffff; --ink:#18203a; --ink-soft:#505b75; --line:#d8dfec; --line-strong:#b9c4da;
+  --accent:#2a56c6; --accent-ink:#ffffff; --accent-soft:#e7eefc;
+  --ok:#15764d; --ok-soft:#dff3e8; --warn:#9b5608; --warn-soft:#fbeed7; --bad:#b0322b; --bad-soft:#fbe4e1;
+  --code-bg:#eef2f9; --c-com:#566282; --c-str:#9c3d17; --c-kw:#2a56c6; --c-num:#7a3fb5;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Consolas,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
+body{background:var(--paper);color:var(--ink);font:17px/1.62 var(--f-body);
+  padding-block:0 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:30}
+.wrap{max-width:900px;margin-inline:auto}
+h1,h2,h3,h4,h5{font-family:var(--f-display);line-height:1.2;text-wrap:balance;margin:0}
+p{margin:0 0 .8em;max-width:68ch}
+a{color:var(--accent)}
+code{font-family:var(--f-mono);font-size:.88em;background:var(--code-bg);padding:.1em .35em;border-radius:4px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+  margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:8px max(16px,env(safe-area-inset-left,0px))}
+.topbar-in{max-width:900px;margin-inline:auto;display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px}
+.topbar nav{display:flex;flex-wrap:wrap;gap:4px 16px;font-weight:600;font-size:.95rem}
+.topbar nav a{text-decoration:none;color:var(--ink);padding:4px 0;border-bottom:2px solid transparent}
+.topbar nav a:hover{border-color:var(--accent)}
+.count{margin-left:auto;font-size:.9rem;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.count strong{color:var(--ok)}
+
+.hero{padding:40px 0 8px}
+.eyebrow{font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:10px}
+h1{font-size:clamp(2rem,5.5vw,3.1rem);font-weight:800;letter-spacing:-.02em}
+.lead{font-size:1.15rem;color:var(--ink-soft);margin-top:14px}
+
+section{margin-top:56px}
+h2{font-size:clamp(1.5rem,3.6vw,2rem);font-weight:700;margin-bottom:6px}
+.sec-sub{color:var(--ink-soft);margin-bottom:22px}
+
+.method{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:20px}
+.method > div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;min-width:0}
+.method b{display:block;font-family:var(--f-display);margin-bottom:4px}
+.method p{margin:0;font-size:.97rem;color:var(--ink-soft)}
+
+.table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);background:var(--paper)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{margin-top:14px;padding:12px 16px;border-left:4px solid var(--warn);background:var(--warn-soft);border-radius:0 8px 8px 0;font-size:.97rem;max-width:none}
+
+.map{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px;margin-top:6px}
+.tile{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px 8px;text-decoration:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line-strong);border-radius:8px;font-family:var(--f-display);font-weight:700;font-size:1.15rem}
+.tile:hover{border-color:var(--accent)}
+.tile .bars{display:flex;gap:2px}
+.tile .bars i{display:block;width:6px;height:6px;border-radius:50%;background:var(--line-strong)}
+.tile .bars i.on{background:var(--accent)}
+.tile.is-done{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.tile.is-review{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:.88rem;color:var(--ink-soft)}
+.legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1.5px solid var(--line-strong)}
+.legend .l-done::before{background:var(--ok-soft);border-color:var(--ok)}
+.legend .l-review::before{background:var(--warn-soft);border-color:var(--warn)}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:14px;max-width:420px}
+.bar > i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:26px clamp(16px,4vw,32px);margin-bottom:26px}
+.ex-head{display:flex;gap:18px;align-items:flex-start;margin-bottom:16px}
+.ex-num{font-family:var(--f-display);font-weight:800;font-size:3rem;line-height:.9;color:var(--accent);min-width:1.1ch}
+.ex h3{font-size:1.3rem;font-weight:700;text-transform:none}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:8px 0 0}
+.chip{font-size:.78rem;font-weight:600;background:var(--accent-soft);color:var(--accent);padding:3px 10px;border-radius:99px}
+.stars{color:var(--warn);letter-spacing:.1em;font-size:.95rem}
+.stars small{color:var(--ink-soft);letter-spacing:0}
+.facts{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:0 0 18px;padding:12px 16px;background:var(--paper);border-radius:8px;font-size:.96rem}
+.facts dt{font-weight:700;color:var(--ink-soft)}
+.facts dd{margin:0;min-width:0}
+.tag{display:inline-block;margin:0 6px 4px 0;padding:1px 9px;border:1px solid var(--line-strong);border-radius:99px;font-size:.82rem;background:var(--surface)}
+.block{margin-top:18px}
+.block h4,.corr-body h4{font-size:.8rem;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;margin-top:18px}
+.block h4{margin-top:0}
+.block ol,.block ul,.corr-body ul,.corr-body ol,.aide div ul{margin:0 0 .8em;padding-left:1.35em;max-width:68ch}
+li{margin-bottom:.3em}
+.sub{font-size:1.02rem;margin:22px 0 8px;color:var(--ink)}
+.corr-body h5{font-size:.95rem;margin:18px 0 6px}
+
+.code{border:1px solid var(--line);border-radius:8px;margin:10px 0 14px;overflow:hidden;background:var(--code-bg)}
+.code-top{display:flex;justify-content:space-between;align-items:center;padding:4px 10px;border-bottom:1px solid var(--line);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+.code pre{margin:0;padding:12px 14px;overflow-x:auto;font:.86rem/1.55 var(--f-mono);color:var(--ink);tab-size:2}
+.code code{background:none;padding:0;font-size:inherit}
+.c{color:var(--c-com);font-style:italic}.s{color:var(--c-str)}.k{color:var(--c-kw);font-weight:600}.n{color:var(--c-num)}
+.mini{font:600 .72rem var(--f-body);letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);border-radius:5px;padding:3px 9px;cursor:pointer}
+.mini:hover{border-color:var(--accent);color:var(--accent)}
+
+.statut{border:0;margin:20px 0 0;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.statut legend{float:left;margin-right:10px;padding:0;font-family:var(--f-display);font-weight:700;font-size:.95rem}
+.pill{position:relative}
+.pill input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
+.pill span{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line-strong);border-radius:99px;padding:5px 14px;font-size:.92rem;font-weight:600;background:var(--surface)}
+.pill span::before{content:"";width:12px;height:12px;border:1.5px solid var(--line-strong);border-radius:3px}
+.pill input:checked + span{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.pill input:checked + span::before{background:var(--accent);border-color:var(--accent)}
+.pill input[value=done]:checked + span{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.pill input[value=done]:checked + span::before{background:var(--ok);border-color:var(--ok)}
+.pill input[value=review]:checked + span{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
+.pill input[value=review]:checked + span::before{background:var(--warn);border-color:var(--warn)}
+.pill input:focus-visible + span{outline:3px solid var(--accent);outline-offset:2px}
+
+.aide{margin-top:12px;border-radius:8px;border:1px solid var(--line)}
+.aide summary{cursor:pointer;padding:9px 14px;font-weight:700;font-family:var(--f-display);font-size:.95rem}
+.aide > div{padding:0 16px 8px}
+.hint{background:var(--accent-soft);border-color:#c5d4f5}
+.tip{background:var(--warn-soft);border-color:#ecd3a5}
+.to-corr{margin:18px 0 0;font-weight:600}
+
+.lab{margin-top:20px;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden}
+.lab-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:7px 10px;background:var(--paper);border-bottom:1px solid var(--line)}
+.lab-bar.flat{border:0;padding:0;background:none;margin:2px 0 8px}
+.lab-bar label{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--ink-soft)}
+.spacer{flex:1}
+.btn{font:700 .88rem var(--f-body);border:1.5px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:7px;padding:6px 14px;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--surface);color:var(--accent)}
+.lab textarea{display:block;width:100%;border:0;resize:vertical;padding:12px 14px;font:.86rem/1.55 var(--f-mono);background:var(--surface);color:var(--ink);tab-size:2;min-height:120px}
+.out{margin:0;padding:10px 14px;font:.84rem/1.5 var(--f-mono);background:#0f1830;color:#e8eefc;white-space:pre-wrap;overflow-x:auto;overflow-wrap:anywhere}
+.out.err{background:var(--bad-soft);color:var(--bad)}
+.out.static{border-radius:8px}
+.lab .out{border-top:1px solid var(--line)}
+pre.out + .back{margin-top:12px}
+
+.corr{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+.corr > summary{cursor:pointer;padding:13px 18px;font-family:var(--f-display);font-weight:700;font-size:1.05rem;display:flex;gap:14px;align-items:baseline}
+.corr-n{color:var(--accent);font-weight:800;min-width:1.6ch}
+.corr[open] > summary{border-bottom:1px solid var(--line)}
+.corr-body{padding:6px clamp(14px,3.5vw,28px) 20px}
+.corr-body > .code,.corr-body .out{max-width:100%}
+.back{margin:18px 0 0;font-size:.92rem}
+.tools{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+
+.timer{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:18px 0;padding:12px 16px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.clock{font:700 2rem var(--f-mono);font-variant-numeric:tabular-nums;color:var(--accent);min-width:5.6ch}
+.clock.low{color:var(--bad)}
+.mc-meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin:12px 0 4px;font-weight:600}
+.mc-meta span{background:var(--accent-soft);color:var(--accent);padding:4px 12px;border-radius:99px;font-size:.9rem}
+.mc-enonce{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px clamp(16px,4vw,30px) 14px;margin-top:20px}
+.gate{margin:26px 0 12px;padding:16px 18px;border:1.5px dashed var(--line-strong);border-radius:10px;background:var(--surface)}
+.gate p{margin:0 0 10px}
+.corr-mc{margin-top:16px;background:var(--surface);border:1px solid var(--ok);border-radius:12px;padding:6px clamp(16px,4vw,30px) 20px}
+.corr-mc > h3{font-size:1.25rem;margin:18px 0 4px;color:var(--ok)}
+
+.src{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.src li{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:0}
+.src a{font-weight:700;overflow-wrap:anywhere}
+.src span{display:block;font-size:.92rem;color:var(--ink-soft)}
+footer{margin-top:56px;color:var(--ink-soft);font-size:.9rem}
+
+@media (max-width:560px){
+  body{font-size:16px}
+  .ex-head{gap:12px}.ex-num{font-size:2.3rem}
+  .facts{grid-template-columns:1fr;gap:2px}.facts dd{margin-bottom:8px}
+  .count{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar > i{transition:none}}
+</style>
+
+<div class="topbar"><div class="topbar-in">
+<nav aria-label="Navigation"><a href="#enonces">Énoncés</a><a href="#corriges">Corrigés</a><a href="#controle">Contrôle blanc</a><a href="#sources">Sources</a></nav>
+<span class="count" id="count" aria-live="polite"></span></div></div>
+
+<div class="wrap">
+<header class="hero">
+<p class="eyebrow">OFPPT · DRIF · C12 Développer en Front-end · S1</p>
+<h1>Banque d'exercices ES6</h1>
+<p class="lead">Niveau 5, préparation intensive au contrôle. 21 exercices de difficulté progressive sur le JavaScript ES6 du cours « Comprendre les concepts de base du web front-end », puis un mini-contrôle blanc de 20 points avec correction.</p>
+<div class="method">
+<div><b>Cherche seule</b><p>Lis l'énoncé, tente le code dans la zone d'essai, utilise l'indice seulement si tu bloques.</p></div>
+<div><b>Marque ton statut</b><p>Chaque exercice se classe en « À faire », « Terminé » ou « À revoir ». Ta progression est gardée dans ce navigateur.</p></div>
+<div><b>Compare ensuite</b><p>Les corrigés détaillés sont regroupés après les énoncés et se déplient un par un.</p></div>
+</div>
+</header>
+
+<section id="analyse">
+<h2>Ce que le cours couvre</h2>
+<p class="sec-sub">Analyse du PDF (24 pages) et exercices qui travaillent chaque notion.</p>
+<div class="table-wrap"><table><thead><tr><th>Notion</th><th>Pages</th><th class="num">Exercices</th></tr></thead><tbody>
+<tr><td>Front-end, back-end, frameworks, React, Virtual DOM</td><td>p. 1 à 5</td><td class="num">1</td></tr><tr><td>Classes ES6, constructeur, méthodes</td><td>p. 6 et 7</td><td class="num">3, 21</td></tr><tr><td>Héritage, extends, super</td><td>p. 7 et 8</td><td class="num">11</td></tr><tr><td>Modules : export, export default, import, alias</td><td>p. 8 et 9</td><td class="num">12</td></tr><tr><td>Template literals</td><td>p. 10</td><td class="num">2</td></tr><tr><td>Opérateur ternaire, valeurs nulles</td><td>p. 10 et 11</td><td class="num">2, 7, 21</td></tr><tr><td>Déstructuration d'objet et de tableau, rest, permutation</td><td>p. 11, 14, 15</td><td class="num">4, 5</td></tr><tr><td>map, filter, find, reduce</td><td>p. 12 à 14</td><td class="num">6, 7, 8, 9</td></tr><tr><td>Spread, copie de tableau, fonctions fléchées</td><td>p. 14 et 19</td><td class="num">5, 10</td></tr><tr><td>Fermetures, fonction comme objet de première classe</td><td>p. 16 à 18</td><td class="num">13, 20</td></tr><tr><td>Récursivité</td><td>p. 16</td><td class="num">16</td></tr><tr><td>Fonctions pures, ajout, suppression et modification sans muter</td><td>p. 19 à 24</td><td class="num">14, 15, 17, 18, 19</td></tr>
+</tbody></table></div>
+<p class="note">Le cours renvoie à quatre annexes React (JSX, ternaire, déstructuration, <code>map</code> et <code>filter</code> dans React) qui ne figurent pas dans le PDF fourni. Aucun exercice de JSX ou de composant React n'a donc été inventé : la banque reste sur le JavaScript ES6 que le cours détaille. La page 21 du PDF est vide.</p>
+</section>
+
+<section id="carte">
+<h2>Carte des exercices</h2>
+<p class="sec-sub">La difficulté monte sans saut brutal. Les points sous chaque numéro indiquent l'estimation sur 5.</p>
+<div class="map"><a class="tile" href="#ex-1" data-tile="1" aria-label="Exercice 1, difficulté 1 sur 5">1<span class="bars"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-2" data-tile="2" aria-label="Exercice 2, difficulté 1 sur 5">2<span class="bars"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-3" data-tile="3" aria-label="Exercice 3, difficulté 1 sur 5">3<span class="bars"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-4" data-tile="4" aria-label="Exercice 4, difficulté 2 sur 5">4<span class="bars"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-5" data-tile="5" aria-label="Exercice 5, difficulté 2 sur 5">5<span class="bars"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-6" data-tile="6" aria-label="Exercice 6, difficulté 2 sur 5">6<span class="bars"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-7" data-tile="7" aria-label="Exercice 7, difficulté 2 sur 5">7<span class="bars"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-8" data-tile="8" aria-label="Exercice 8, difficulté 3 sur 5">8<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-9" data-tile="9" aria-label="Exercice 9, difficulté 3 sur 5">9<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-10" data-tile="10" aria-label="Exercice 10, difficulté 3 sur 5">10<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-11" data-tile="11" aria-label="Exercice 11, difficulté 3 sur 5">11<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-12" data-tile="12" aria-label="Exercice 12, difficulté 3 sur 5">12<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></a><a class="tile" href="#ex-13" data-tile="13" aria-label="Exercice 13, difficulté 4 sur 5">13<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></a><a class="tile" href="#ex-14" data-tile="14" aria-label="Exercice 14, difficulté 4 sur 5">14<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></a><a class="tile" href="#ex-15" data-tile="15" aria-label="Exercice 15, difficulté 4 sur 5">15<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></a><a class="tile" href="#ex-16" data-tile="16" aria-label="Exercice 16, difficulté 4 sur 5">16<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></a><a class="tile" href="#ex-17" data-tile="17" aria-label="Exercice 17, difficulté 4 sur 5">17<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></a><a class="tile" href="#ex-18" data-tile="18" aria-label="Exercice 18, difficulté 5 sur 5">18<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></a><a class="tile" href="#ex-19" data-tile="19" aria-label="Exercice 19, difficulté 5 sur 5">19<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></a><a class="tile" href="#ex-20" data-tile="20" aria-label="Exercice 20, difficulté 5 sur 5">20<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></a><a class="tile" href="#ex-21" data-tile="21" aria-label="Exercice 21, difficulté 5 sur 5">21<span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></a></div>
+<div class="legend"><span>À faire</span><span class="l-done">Terminé</span><span class="l-review">À revoir</span></div>
+<div class="bar" role="progressbar" aria-label="Exercices terminés" aria-valuemin="0" aria-valuemax="21"><i id="barfill"></i></div>
+</section>
+
+<section id="enonces">
+<h2>Partie A — Les énoncés</h2>
+<p class="sec-sub">Niveau 5 — Préparation intensive au contrôle. Chaque énoncé renvoie à son corrigé, mais essaie d'abord seule.</p>
+<article class="ex" id="ex-1" data-n="1">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">1</span><div><h3>EXERCICE 1 — Concepts du web front-end</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 1 sur 5">★☆☆☆☆ <small>1/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">site statique</span><span class="tag">front-end et back-end</span><span class="tag">framework et bibliothèque</span><span class="tag">Virtual DOM</span><span class="tag">application d'une seule page</span></dd><dt>Objectif</dt><dd>Reformuler avec tes propres mots les notions du chapitre 1 (pages 1 à 5 du cours), qui sont souvent demandées en début de contrôle.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Réponds par écrit, sans regarder le cours, en deux ou trois lignes par question.</p></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Qu'est-ce qu'un site web statique ? Donne une limite par rapport à une application moderne.</li><li>Dans une boutique en ligne, classe ces éléments en front-end ou back-end : le panier affiché à l'écran, l'enregistrement de la commande, la base de données, le bouton « Payer ».</li><li>Associe Node.js, Angular, Bootstrap, Laravel, React et Vue.js à : framework back-end, framework front-end applicatif, framework front-end de présentation.</li><li>Cite deux avantages d'un framework, puis une situation où l'on peut s'en passer.</li><li>Explique en une phrase le rôle du Virtual DOM dans React et donne le nom du processus de synchronisation avec le vrai DOM.</li><li>Pourquoi une bonne maîtrise de JavaScript ES6 est-elle demandée avant d'apprendre React ?</li></ol></div>
+
+<fieldset class="statut" id="statut-1"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-1" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-1" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-1" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Reprends les mots-clés du cours : « page physique », « côté serveur », « composants réutilisables », « réconciliation ».</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Pour React, le cours insiste moins sur l'étiquette « bibliothèque » ou « framework » que sur son utilité : construire des interfaces plus vite grâce aux composants. Retiens l'idée, pas le débat.</p></div></details>
+<p class="to-corr"><a href="#corr-1" data-open="corr-1">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-2" data-n="2">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">2</span><div><h3>EXERCICE 2 — Facture d'une librairie</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 1 sur 5">★☆☆☆☆ <small>1/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">template literals</span><span class="tag">opérateur ternaire</span><span class="tag">const</span></dd><dt>Objectif</dt><dd>Construire une chaîne dynamique et choisir une valeur selon une condition sans écrire de <code>if...else</code>.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Une librairie accorde 20 % de remise aux membres et 10 % aux autres clients. Le client peut aussi être inconnu (valeur <code>null</code>). Données de départ :</p><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">const</span> client = <span class="s">&quot;Salma&quot;</span>; <span class="c">// essaie aussi avec null</span>
+<span class="k">const</span> estMembre = <span class="k">true</span>;
+<span class="k">const</span> montant = <span class="n">500</span>;</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Calculer <code>taux</code> avec l'opérateur ternaire.</li><li>Calculer le montant final après remise.</li><li>Déterminer le nom à afficher : le nom du client, ou <code>&quot;visiteur&quot;</code> si le client est <code>null</code>.</li><li>Afficher avec un template literal : <code>&quot;Bonjour Salma, remise de 20% : 400 DH au lieu de 500 DH&quot;</code>.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-2">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-2">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-2">Réinitialiser</button></div><textarea id="ta-2" spellcheck="false" autocomplete="off" autocapitalize="off" rows="7" data-default="const client = &quot;Salma&quot;;
+const estMembre = true;
+const montant = 500;
+
+// Votre code ici">const client = &quot;Salma&quot;;
+const estMembre = true;
+const montant = 500;
+
+// Votre code ici</textarea><pre class="out" id="out-ta-2" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-2"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-2" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-2" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-2" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Un ternaire a trois parties : condition ? valeur si vrai : valeur si faux. La valeur <code>null</code> est considérée comme fausse dans une condition.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Pour afficher un pourcentage calculé, pense à arrondir : en JavaScript, <code>0.07 * 100</code> donne <code>7.000000000000001</code>. Ici 0.2 et 0.1 ne posent pas de problème, mais le réflexe <code>Math.round</code> est utile.</p></div></details>
+<p class="to-corr"><a href="#corr-2" data-open="corr-2">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-3" data-n="3">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">3</span><div><h3>EXERCICE 3 — Classe Produit</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 1 sur 5">★☆☆☆☆ <small>1/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">classe</span><span class="tag">constructor</span><span class="tag">paramètre par défaut</span><span class="tag">méthodes</span><span class="tag">this</span><span class="tag">new</span></dd><dt>Objectif</dt><dd>Écrire une classe ES6 simple avec un constructeur, une valeur par défaut et deux méthodes.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Un magasin gère des produits. Chaque produit possède un nom, un prix unitaire et une quantité, égale à 1 si elle n'est pas précisée.</p></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Écrire la classe <code>Produit</code> avec un constructeur à trois paramètres, <code>quantite</code> valant 1 par défaut.</li><li>Ajouter la méthode <code>total()</code> qui renvoie prix × quantité.</li><li>Ajouter la méthode <code>info()</code> qui renvoie une phrase du type <code>&quot;Cahier x5 = 60 DH&quot;</code>.</li><li>Créer <code>p1</code> (Cahier, 12 DH, 5 exemplaires) et <code>p2</code> (Stylo, 3 DH, quantité non précisée), puis afficher leur <code>info()</code>.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-3">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-3">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-3">Réinitialiser</button></div><textarea id="ta-3" spellcheck="false" autocomplete="off" autocapitalize="off" rows="7" data-default="// Votre code ici">// Votre code ici</textarea><pre class="out" id="out-ta-3" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-3"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-3" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-3" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-3" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Dans <code>info()</code>, appelle <code>this.total()</code> : une méthode peut en utiliser une autre grâce à <code>this</code>.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Sans <code>new</code>, le constructeur ne s'exécute pas : JavaScript lève une <code>TypeError</code>. Le nom d'une classe commence par une majuscule, celui d'un objet par une minuscule.</p></div></details>
+<p class="to-corr"><a href="#corr-3" data-open="corr-3">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-4" data-n="4">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">4</span><div><h3>EXERCICE 4 — Déstructurer un objet imbriqué</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 2 sur 5">★★☆☆☆ <small>2/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">déstructuration d'objet</span><span class="tag">renommage</span><span class="tag">valeur par défaut</span><span class="tag">paramètre déstructuré</span></dd><dt>Objectif</dt><dd>Extraire rapidement des propriétés, y compris imbriquées, et déstructurer directement les paramètres d'une fonction.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Voici le dossier d'une étudiante :</p><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">const</span> etudiant = {
+  nom: <span class="s">&quot;Imane&quot;</span>,
+  age: <span class="n">21</span>,
+  adresse: { rue: <span class="n">14</span>, ville: <span class="s">&quot;Rabat&quot;</span> },
+  notes: { algo: <span class="n">15</span>, poo: <span class="n">17</span> }
+};</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>En une seule instruction, extraire <code>nom</code>, <code>age</code> et <code>ville</code> (qui se trouve dans <code>adresse</code>).</li><li>Extraire <code>ville</code> en la renommant <code>city</code>, puis afficher <code>city</code>.</li><li>Écrire <code>resume({ nom, notes: { algo, poo } })</code> qui renvoie <code>&quot;Imane : moyenne 16&quot;</code>.</li><li>Extraire une propriété <code>mention</code> absente de l'objet, avec la valeur par défaut <code>&quot;Passable&quot;</code>.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-4">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-4">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-4">Réinitialiser</button></div><textarea id="ta-4" spellcheck="false" autocomplete="off" autocapitalize="off" rows="10" data-default="const etudiant = {
+  nom: &quot;Imane&quot;,
+  age: 21,
+  adresse: { rue: 14, ville: &quot;Rabat&quot; },
+  notes: { algo: 15, poo: 17 }
+};
+
+// Votre code ici">const etudiant = {
+  nom: &quot;Imane&quot;,
+  age: 21,
+  adresse: { rue: 14, ville: &quot;Rabat&quot; },
+  notes: { algo: 15, poo: 17 }
+};
+
+// Votre code ici</textarea><pre class="out" id="out-ta-4" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-4"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-4" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-4" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-4" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Pour descendre dans un objet imbriqué, la syntaxe reprend la forme de l'objet : <code>adresse: { ville }</code>. Pour renommer : <code>ville: city</code>.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Dans <code>adresse: { ville }</code>, le nom <code>adresse</code> n'est pas créé comme variable : seule <code>ville</code> l'est. Si tu as besoin des deux, écris-les séparément.</p></div></details>
+<p class="to-corr"><a href="#corr-4" data-open="corr-4">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-5" data-n="5">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">5</span><div><h3>EXERCICE 5 — Déstructurer et copier un tableau</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 2 sur 5">★★☆☆☆ <small>2/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">déstructuration de tableau</span><span class="tag">rest</span><span class="tag">spread</span><span class="tag">permutation</span><span class="tag">copie</span></dd><dt>Objectif</dt><dd>Manipuler les tableaux sans les modifier : extraire, copier, permuter.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Un professeur dispose de la liste de scores suivante :</p><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">const</span> scores = [<span class="n">12</span>, <span class="n">18</span>, <span class="n">9</span>, <span class="n">15</span>, <span class="n">20</span>];</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Extraire <code>premier</code>, <code>deuxieme</code> et le <code>reste</code> des scores, puis les afficher.</li><li>Permuter les valeurs de <code>a = &quot;gauche&quot;</code> et <code>b = &quot;droite&quot;</code> sans variable temporaire.</li><li>Créer <code>copie</code> avec l'opérateur spread, y ajouter la valeur 11 avec <code>push</code>, puis afficher <code>copie</code> et <code>scores</code> pour vérifier que l'original est intact.</li><li>Obtenir <code>meilleur</code> (le plus grand score) et <code>autres</code> (les scores restants triés) sans modifier <code>scores</code>.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-5">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-5">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-5">Réinitialiser</button></div><textarea id="ta-5" spellcheck="false" autocomplete="off" autocapitalize="off" rows="7" data-default="const scores = [12, 18, 9, 15, 20];
+
+// Votre code ici">const scores = [12, 18, 9, 15, 20];
+
+// Votre code ici</textarea><pre class="out" id="out-ta-5" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-5"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-5" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-5" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-5" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p><code>const [a, b, ...reste] = tableau</code> : le rest récupère tout ce qui n'a pas encore été extrait. Pour trier sans toucher l'original, trie une copie.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p><code>sort()</code> modifie le tableau d'origine. Sans fonction de comparaison, il trie en texte : <code>[9, 12]</code> ne serait pas dans l'ordre numérique. Écris <code>sort((x, y) =&gt; y - x)</code> pour l'ordre décroissant. Autre piège : ajoute un point-virgule avant <code>[a, b] = [b, a]</code>, sinon JavaScript lit la ligne précédente et la ligne courante comme une seule instruction.</p></div></details>
+<p class="to-corr"><a href="#corr-5" data-open="corr-5">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-6" data-n="6">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">6</span><div><h3>EXERCICE 6 — Transformer avec map</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 2 sur 5">★★☆☆☆ <small>2/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">map</span><span class="tag">fonction fléchée</span><span class="tag">objet littéral</span></dd><dt>Objectif</dt><dd>Produire un nouveau tableau à partir d'un autre, de même taille, avec <code>map</code>.</dd></dl>
+<div class="block"><h4>Énoncé</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">const</span> nums = [<span class="n">4</span>, <span class="n">9</span>, <span class="n">2</span>, <span class="n">7</span>, <span class="n">5</span>];
+<span class="k">const</span> produits = [
+  { nom: <span class="s">&quot;Clavier&quot;</span>, prix: <span class="n">150</span> },
+  { nom: <span class="s">&quot;Souris&quot;</span>, prix: <span class="n">80</span> },
+  { nom: <span class="s">&quot;Écran&quot;</span>, prix: <span class="n">1200</span> }
+];</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>À partir de <code>nums</code>, créer <code>fois5</code> : chaque élément multiplié par 5.</li><li>À partir de <code>produits</code>, créer <code>noms</code> : le tableau des noms.</li><li>Créer <code>ttc</code> : un tableau d'objets <code>{ nom, prixTTC }</code> avec une TVA de 20 %, arrondie à l'entier.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-6">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-6">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-6">Réinitialiser</button></div><textarea id="ta-6" spellcheck="false" autocomplete="off" autocapitalize="off" rows="10" data-default="const nums = [4, 9, 2, 7, 5];
+const produits = [
+  { nom: &quot;Clavier&quot;, prix: 150 },
+  { nom: &quot;Souris&quot;, prix: 80 },
+  { nom: &quot;Écran&quot;, prix: 1200 }
+];
+
+// Votre code ici">const nums = [4, 9, 2, 7, 5];
+const produits = [
+  { nom: &quot;Clavier&quot;, prix: 150 },
+  { nom: &quot;Souris&quot;, prix: 80 },
+  { nom: &quot;Écran&quot;, prix: 1200 }
+];
+
+// Votre code ici</textarea><pre class="out" id="out-ta-6" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-6"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-6" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-6" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-6" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p><code>map</code> renvoie toujours un tableau de la même taille. Pour renvoyer un objet avec une fonction fléchée à une expression, entoure l'objet de parenthèses.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p><code>p =&gt; { nom: p.nom }</code> ne renvoie pas un objet : les accolades sont lues comme le corps de la fonction. Écris <code>p =&gt; ({ nom: p.nom })</code>.</p></div></details>
+<p class="to-corr"><a href="#corr-6" data-open="corr-6">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-7" data-n="7">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">7</span><div><h3>EXERCICE 7 — Filtrer et chercher</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 2 sur 5">★★☆☆☆ <small>2/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">filter</span><span class="tag">find</span><span class="tag">undefined</span><span class="tag">chaînage simple</span></dd><dt>Objectif</dt><dd>Distinguer <code>filter</code> (un tableau) de <code>find</code> (un élément ou <code>undefined</code>).</dd></dl>
+<div class="block"><h4>Énoncé</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">const</span> employes = [
+  { nom: <span class="s">&quot;Rami&quot;</span>, age: <span class="n">33</span>, salaire: <span class="n">6000</span>, actif: <span class="k">true</span> },
+  { nom: <span class="s">&quot;Fatihi&quot;</span>, age: <span class="n">24</span>, salaire: <span class="n">4200</span>, actif: <span class="k">false</span> },
+  { nom: <span class="s">&quot;Chakib&quot;</span>, age: <span class="n">45</span>, salaire: <span class="n">9500</span>, actif: <span class="k">true</span> },
+  { nom: <span class="s">&quot;Mounir&quot;</span>, age: <span class="n">37</span>, salaire: <span class="n">5200</span>, actif: <span class="k">true</span> }
+];</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Compter les employés actifs.</li><li>Obtenir les noms des employés actifs dont le salaire est au moins 5000.</li><li>Trouver le premier employé dont le salaire dépasse 8000 et l'afficher.</li><li>Chercher un salaire supérieur à 20000 et afficher le nom trouvé, ou <code>&quot;Aucun&quot;</code> si rien n'est trouvé.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-7">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-7">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-7">Réinitialiser</button></div><textarea id="ta-7" spellcheck="false" autocomplete="off" autocapitalize="off" rows="10" data-default="const employes = [
+  { nom: &quot;Rami&quot;, age: 33, salaire: 6000, actif: true },
+  { nom: &quot;Fatihi&quot;, age: 24, salaire: 4200, actif: false },
+  { nom: &quot;Chakib&quot;, age: 45, salaire: 9500, actif: true },
+  { nom: &quot;Mounir&quot;, age: 37, salaire: 5200, actif: true }
+];
+
+// Votre code ici">const employes = [
+  { nom: &quot;Rami&quot;, age: 33, salaire: 6000, actif: true },
+  { nom: &quot;Fatihi&quot;, age: 24, salaire: 4200, actif: false },
+  { nom: &quot;Chakib&quot;, age: 45, salaire: 9500, actif: true },
+  { nom: &quot;Mounir&quot;, age: 37, salaire: 5200, actif: true }
+];
+
+// Votre code ici</textarea><pre class="out" id="out-ta-7" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-7"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-7" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-7" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-7" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p><code>filter</code> donne un tableau (peut-être vide), <code>find</code> donne un élément ou <code>undefined</code>. Combine <code>filter</code> puis <code>map</code> pour obtenir des noms.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p><code>if (employes.filter(...))</code> est toujours vrai, même pour un tableau vide. Pour tester la présence, regarde <code>.length</code> ou utilise <code>find</code>.</p></div></details>
+<p class="to-corr"><a href="#corr-7" data-open="corr-7">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-8" data-n="8">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">8</span><div><h3>EXERCICE 8 — Calculer avec reduce</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 3 sur 5">★★★☆☆ <small>3/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">reduce</span><span class="tag">valeur initiale</span><span class="tag">accumulateur</span><span class="tag">filter + reduce</span></dd><dt>Objectif</dt><dd>Réduire un tableau à une seule valeur (somme, comptage, maximum).</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Panier d'un client :</p><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">const</span> panier = [
+  { nom: <span class="s">&quot;Cahier&quot;</span>, prix: <span class="n">12</span>, qte: <span class="n">5</span>, categorie: <span class="s">&quot;papeterie&quot;</span> },
+  { nom: <span class="s">&quot;Stylo&quot;</span>, prix: <span class="n">3</span>, qte: <span class="n">10</span>, categorie: <span class="s">&quot;papeterie&quot;</span> },
+  { nom: <span class="s">&quot;Clé USB&quot;</span>, prix: <span class="n">70</span>, qte: <span class="n">2</span>, categorie: <span class="s">&quot;informatique&quot;</span> },
+  { nom: <span class="s">&quot;Souris&quot;</span>, prix: <span class="n">80</span>, qte: <span class="n">1</span>, categorie: <span class="s">&quot;informatique&quot;</span> }
+];</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Calculer le total du panier (prix × quantité de chaque ligne).</li><li>Calculer le nombre total d'articles.</li><li>Trouver, avec <code>reduce</code>, la ligne dont le prix unitaire est le plus élevé.</li><li>Calculer le total des seules lignes de la catégorie <code>&quot;papeterie&quot;</code>.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-8">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-8">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-8">Réinitialiser</button></div><textarea id="ta-8" spellcheck="false" autocomplete="off" autocapitalize="off" rows="10" data-default="const panier = [
+  { nom: &quot;Cahier&quot;, prix: 12, qte: 5, categorie: &quot;papeterie&quot; },
+  { nom: &quot;Stylo&quot;, prix: 3, qte: 10, categorie: &quot;papeterie&quot; },
+  { nom: &quot;Clé USB&quot;, prix: 70, qte: 2, categorie: &quot;informatique&quot; },
+  { nom: &quot;Souris&quot;, prix: 80, qte: 1, categorie: &quot;informatique&quot; }
+];
+
+// Votre code ici">const panier = [
+  { nom: &quot;Cahier&quot;, prix: 12, qte: 5, categorie: &quot;papeterie&quot; },
+  { nom: &quot;Stylo&quot;, prix: 3, qte: 10, categorie: &quot;papeterie&quot; },
+  { nom: &quot;Clé USB&quot;, prix: 70, qte: 2, categorie: &quot;informatique&quot; },
+  { nom: &quot;Souris&quot;, prix: 80, qte: 1, categorie: &quot;informatique&quot; }
+];
+
+// Votre code ici</textarea><pre class="out" id="out-ta-8" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-8"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-8" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-8" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-8" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p><code>reduce((acc, ligne) =&gt; nouvelAcc, valeurInitiale)</code>. Pour le plus cher, l'accumulateur peut être une ligne entière : à chaque tour, on garde la plus chère des deux.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Sur un tableau vide, <code>reduce</code> sans valeur initiale lève une <code>TypeError</code>. Donne toujours une valeur initiale (0 pour une somme).</p></div></details>
+<p class="to-corr"><a href="#corr-8" data-open="corr-8">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-9" data-n="9">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">9</span><div><h3>EXERCICE 9 — Chaîner filter, map et reduce</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 3 sur 5">★★★☆☆ <small>3/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">filter</span><span class="tag">map</span><span class="tag">reduce</span><span class="tag">toFixed</span><span class="tag">template literal</span></dd><dt>Objectif</dt><dd>Enchaîner plusieurs méthodes de tableau pour répondre à une question plus complexe.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Relevé de notes d'une classe :</p><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">const</span> notes = [
+  { etudiant: <span class="s">&quot;Rami&quot;</span>, module: <span class="s">&quot;Algo&quot;</span>, note: <span class="n">15</span> },
+  { etudiant: <span class="s">&quot;Rami&quot;</span>, module: <span class="s">&quot;POO&quot;</span>, note: <span class="n">17</span> },
+  { etudiant: <span class="s">&quot;Karimi&quot;</span>, module: <span class="s">&quot;Algo&quot;</span>, note: <span class="n">11</span> },
+  { etudiant: <span class="s">&quot;Karimi&quot;</span>, module: <span class="s">&quot;POO&quot;</span>, note: <span class="n">9</span> },
+  { etudiant: <span class="s">&quot;Chaouki&quot;</span>, module: <span class="s">&quot;POO&quot;</span>, note: <span class="n">14</span> },
+  { etudiant: <span class="s">&quot;Chaouki&quot;</span>, module: <span class="s">&quot;Algo&quot;</span>, note: <span class="n">16</span> }
+];</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Isoler les notes du module <code>&quot;POO&quot;</code>.</li><li>Obtenir la liste des étudiants qui ont au moins 10 en POO.</li><li>Calculer la moyenne de POO, affichée avec deux décimales.</li><li>Produire des lignes de texte du type <code>&quot;Rami : 17/20&quot;</code> pour le module POO.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-9">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-9">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-9">Réinitialiser</button></div><textarea id="ta-9" spellcheck="false" autocomplete="off" autocapitalize="off" rows="12" data-default="const notes = [
+  { etudiant: &quot;Rami&quot;, module: &quot;Algo&quot;, note: 15 },
+  { etudiant: &quot;Rami&quot;, module: &quot;POO&quot;, note: 17 },
+  { etudiant: &quot;Karimi&quot;, module: &quot;Algo&quot;, note: 11 },
+  { etudiant: &quot;Karimi&quot;, module: &quot;POO&quot;, note: 9 },
+  { etudiant: &quot;Chaouki&quot;, module: &quot;POO&quot;, note: 14 },
+  { etudiant: &quot;Chaouki&quot;, module: &quot;Algo&quot;, note: 16 }
+];
+
+// Votre code ici">const notes = [
+  { etudiant: &quot;Rami&quot;, module: &quot;Algo&quot;, note: 15 },
+  { etudiant: &quot;Rami&quot;, module: &quot;POO&quot;, note: 17 },
+  { etudiant: &quot;Karimi&quot;, module: &quot;Algo&quot;, note: 11 },
+  { etudiant: &quot;Karimi&quot;, module: &quot;POO&quot;, note: 9 },
+  { etudiant: &quot;Chaouki&quot;, module: &quot;POO&quot;, note: 14 },
+  { etudiant: &quot;Chaouki&quot;, module: &quot;Algo&quot;, note: 16 }
+];
+
+// Votre code ici</textarea><pre class="out" id="out-ta-9" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-9"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-9" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-9" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-9" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Commence par stocker le résultat du premier <code>filter</code> dans une variable : tu t'en serviras trois fois. Pour une moyenne : somme divisée par le nombre d'éléments de la liste filtrée.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p><code>toFixed(2)</code> renvoie une chaîne de caractères, pas un nombre. Divise par la longueur de la liste filtrée (<code>poo.length</code>), pas par celle de <code>notes</code>.</p></div></details>
+<p class="to-corr"><a href="#corr-9" data-open="corr-9">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-10" data-n="10">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">10</span><div><h3>EXERCICE 10 — Fonctions fléchées et spread</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 3 sur 5">★★★☆☆ <small>3/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">arrow function</span><span class="tag">spread</span><span class="tag">rest</span><span class="tag">Math.max</span></dd><dt>Objectif</dt><dd>Réécrire des fonctions classiques en fonctions fléchées et utiliser spread et rest.</dd></dl>
+<div class="block"><h4>Énoncé</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">function</span> somme(a, b) { <span class="k">return</span> a + b; }
+<span class="k">function</span> produit(a, b, c) { <span class="k">return</span> a * b * c; }
+<span class="k">const</span> nombres = [<span class="n">2</span>, <span class="n">3</span>, <span class="n">4</span>];</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Réécrire <code>somme</code> et <code>produit</code> sous forme de fonctions fléchées d'une ligne.</li><li>Appeler <code>produit</code> avec les éléments de <code>nombres</code> en utilisant le spread.</li><li>Écrire <code>maximum</code>, une fonction fléchée qui accepte un nombre quelconque d'arguments et renvoie le plus grand.</li><li>Prédire puis vérifier l'affichage de ce code :</li></ol><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">const</span> base = [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>];
+<span class="k">const</span> a = [...base, <span class="n">4</span>];
+<span class="k">const</span> b = [<span class="n">0</span>, ...base];
+console.log(a, b, base);</code></pre></div><ol><li>Expliquer pourquoi <code>const Pers = (nom) =&gt; { this.nom = nom; }; new Pers(&quot;a&quot;);</code> échoue.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-10">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-10">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-10">Réinitialiser</button></div><textarea id="ta-10" spellcheck="false" autocomplete="off" autocapitalize="off" rows="7" data-default="const nombres = [2, 3, 4];
+
+// Votre code ici">const nombres = [2, 3, 4];
+
+// Votre code ici</textarea><pre class="out" id="out-ta-10" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-10"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-10" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-10" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-10" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Le rest (<code>...nums</code> dans les paramètres) rassemble des arguments dans un tableau. Le spread (<code>...tableau</code> dans un appel) fait l'inverse.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Le même symbole <code>...</code> a deux rôles selon sa position : dans la liste des paramètres c'est un rest, dans un appel ou un littéral c'est un spread.</p></div></details>
+<p class="to-corr"><a href="#corr-10" data-open="corr-10">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-11" data-n="11">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">11</span><div><h3>EXERCICE 11 — Héritage de classe</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 3 sur 5">★★★☆☆ <small>3/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">extends</span><span class="tag">super</span><span class="tag">redéfinition de méthode</span><span class="tag">instanceof</span></dd><dt>Objectif</dt><dd>Créer une classe dérivée, appeler le constructeur parent et enrichir une méthode.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Une entreprise gère des employés. Un manager est un employé qui dirige une équipe.</p></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Écrire la classe <code>Employe</code> (nom, salaire) avec <code>info()</code> et <code>annuel()</code> (salaire × 12).</li><li>Écrire <code>Manager</code> qui hérite d'<code>Employe</code>, ajoute <code>equipe</code> et redéfinit <code>info()</code> en réutilisant celle du parent.</li><li>Créer <code>e1</code> (Rami, 6000) et <code>m1</code> (Salma, 12000, équipe « Dev web »), puis afficher leurs informations.</li><li>Afficher <code>m1.annuel()</code> et <code>m1 instanceof Employe</code>.</li><li>Dans une phrase, dire ce qui se passe si on oublie <code>super(...)</code> dans le constructeur de <code>Manager</code>.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-11">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-11">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-11">Réinitialiser</button></div><textarea id="ta-11" spellcheck="false" autocomplete="off" autocapitalize="off" rows="7" data-default="// Votre code ici">// Votre code ici</textarea><pre class="out" id="out-ta-11" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-11"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-11" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-11" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-11" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Dans une classe dérivée, <code>super(...)</code> appelle le constructeur du parent et <code>super.info()</code> appelle la méthode du parent.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Dans le constructeur d'une classe dérivée, <code>super(...)</code> doit être appelé avant tout usage de <code>this</code>.</p></div></details>
+<p class="to-corr"><a href="#corr-11" data-open="corr-11">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-12" data-n="12">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">12</span><div><h3>EXERCICE 12 — Modules ES6</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 3 sur 5">★★★☆☆ <small>3/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">export</span><span class="tag">export default</span><span class="tag">import</span><span class="tag">alias</span><span class="tag">type=&quot;module&quot;</span></dd><dt>Objectif</dt><dd>Organiser du code en modules et distinguer export nommé et export par défaut.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Tu dois répartir le code d'un panier d'achats sur deux fichiers JavaScript et une page HTML.</p></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Dans <code>Panier.js</code>, exporter la constante <code>TVA</code> (0.2) et la fonction <code>ttc(prix)</code>, ainsi que la classe <code>Panier</code> en export par défaut. <code>Panier</code> possède un tableau <code>articles</code>, une méthode <code>ajouter(nom, prix)</code> et une méthode <code>total()</code>.</li><li>Dans <code>Index.js</code>, importer la classe par défaut et les deux éléments nommés, en renommant <code>ttc</code> en <code>prixTTC</code>.</li><li>Créer un panier, y ajouter « Livre » à 50 DH et « Cahier » à 10 DH, puis afficher le total, le total TTC et le texte <code>&quot;TVA : 20%&quot;</code>.</li><li>Écrire la page <code>index.html</code> qui charge <code>Index.js</code>.</li><li>Expliquer pourquoi <code>import { Panier } from &quot;./Panier.js&quot;</code> échoue.</li></ol></div>
+
+<fieldset class="statut" id="statut-12"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-12" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-12" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-12" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Un export par défaut s'importe sans accolades et avec le nom de ton choix. Les exports nommés s'importent avec des accolades, et <code>as</code> sert à renommer.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Une page qui charge un module doit déclarer <code>type=&quot;module&quot;</code> sur sa balise <code>&lt;script&gt;</code>. Il n'y a qu'un seul <code>export default</code> par module.</p></div></details>
+<p class="to-corr"><a href="#corr-12" data-open="corr-12">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-13" data-n="13">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">13</span><div><h3>EXERCICE 13 — Fermetures et compteurs</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 4 sur 5">★★★★☆ <small>4/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">closure</span><span class="tag">portée</span><span class="tag">variable privée</span><span class="tag">paramètres par défaut</span><span class="tag">indépendance des instances</span></dd><dt>Objectif</dt><dd>Comprendre qu'une fonction garde l'accès aux variables de l'endroit où elle a été créée.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Le cours donne un compteur qui renvoie une fonction. Tu vas en construire une version plus riche, avec un état privé.</p></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Écrire <code>creerCompteur(debut = 0, pas = 1)</code> qui renvoie un objet avec trois méthodes : <code>incrementer()</code> (ajoute <code>pas</code> et renvoie la valeur), <code>valeur()</code> et <code>reset()</code>.</li><li>Créer un compteur <code>a</code> par défaut et un compteur <code>b</code> qui démarre à 100 avec un pas de 10.</li><li>Appeler <code>a.incrementer()</code> deux fois et <code>b.incrementer()</code> une fois, puis afficher <code>a.valeur()</code> et <code>b.valeur()</code>.</li><li>Afficher <code>a.count</code> et expliquer le résultat.</li><li>Appeler <code>a.reset()</code> puis afficher <code>a.valeur()</code>.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-13">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-13">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-13">Réinitialiser</button></div><textarea id="ta-13" spellcheck="false" autocomplete="off" autocapitalize="off" rows="7" data-default="// Votre code ici">// Votre code ici</textarea><pre class="out" id="out-ta-13" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-13"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-13" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-13" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-13" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>La variable <code>count</code> est déclarée dans <code>creerCompteur</code>, pas dans l'objet renvoyé. Les méthodes y ont accès parce qu'elles ont été créées dans cette fonction.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Chaque appel à <code>creerCompteur</code> crée un nouvel environnement : <code>a</code> et <code>b</code> ne partagent aucun état.</p></div></details>
+<p class="to-corr"><a href="#corr-13" data-open="corr-13">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-14" data-n="14">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">14</span><div><h3>EXERCICE 14 — Fonctions pures sur les tableaux</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 4 sur 5">★★★★☆ <small>4/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">fonction pure</span><span class="tag">immutabilité</span><span class="tag">spread</span><span class="tag">filter</span><span class="tag">slice</span></dd><dt>Objectif</dt><dd>Ajouter, supprimer et insérer des éléments sans jamais modifier le tableau d'origine.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Liste des inscriptions d'une filière :</p><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">const</span> inscriptions = [
+  { id: <span class="n">10</span>, nom: <span class="s">&quot;Rami&quot;</span>, filiere: <span class="s">&quot;DEV&quot;</span> },
+  { id: <span class="n">11</span>, nom: <span class="s">&quot;Kamali&quot;</span>, filiere: <span class="s">&quot;DEV&quot;</span> },
+  { id: <span class="n">12</span>, nom: <span class="s">&quot;Fahmi&quot;</span>, filiere: <span class="s">&quot;DEV&quot;</span> }
+];</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Écrire <code>ajouter(liste, inscription)</code> qui renvoie une nouvelle liste avec l'inscription en plus.</li><li>Écrire <code>supprimer(liste, id)</code> qui renvoie une nouvelle liste sans l'inscription portant cet <code>id</code>.</li><li>Écrire <code>inserer(liste, index, inscription)</code> qui insère à la position voulue.</li><li>Enchaîner : ajouter l'inscription 13 (Chaouki), supprimer la 11, puis insérer l'inscription 20 (Salma) à l'index 1. Afficher les identifiants de chaque étape ainsi que ceux de la liste d'origine.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-14">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-14">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-14">Réinitialiser</button></div><textarea id="ta-14" spellcheck="false" autocomplete="off" autocapitalize="off" rows="9" data-default="const inscriptions = [
+  { id: 10, nom: &quot;Rami&quot;, filiere: &quot;DEV&quot; },
+  { id: 11, nom: &quot;Kamali&quot;, filiere: &quot;DEV&quot; },
+  { id: 12, nom: &quot;Fahmi&quot;, filiere: &quot;DEV&quot; }
+];
+
+// Votre code ici">const inscriptions = [
+  { id: 10, nom: &quot;Rami&quot;, filiere: &quot;DEV&quot; },
+  { id: 11, nom: &quot;Kamali&quot;, filiere: &quot;DEV&quot; },
+  { id: 12, nom: &quot;Fahmi&quot;, filiere: &quot;DEV&quot; }
+];
+
+// Votre code ici</textarea><pre class="out" id="out-ta-14" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-14"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-14" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-14" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-14" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p><code>[...liste, element]</code> ajoute en fin. <code>filter</code> retire. <code>slice(0, index)</code> et <code>slice(index)</code> donnent les deux moitiés autour du point d'insertion.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p><code>push</code>, <code>splice</code> et <code>sort</code> modifient le tableau d'origine. Ici, ces méthodes sont interdites. Les fonctions reçoivent la liste en paramètre : une fonction qui lit une variable extérieure n'est pas vraiment pure, puisque son résultat dépend d'un état qui peut changer.</p></div></details>
+<p class="to-corr"><a href="#corr-14" data-open="corr-14">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-15" data-n="15">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">15</span><div><h3>EXERCICE 15 — Modifier sans muter</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 4 sur 5">★★★★☆ <small>4/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">fonction pure</span><span class="tag">map</span><span class="tag">spread d'objet</span><span class="tag">Object.assign</span><span class="tag">conservation de l'ordre</span></dd><dt>Objectif</dt><dd>Mettre à jour un élément d'un tableau et un objet sans modifier l'original.</dd></dl>
+<div class="block"><h4>Énoncé</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">const</span> notes = [
+  { id: <span class="n">10</span>, module: <span class="s">&quot;Algorithme&quot;</span>, note: <span class="n">15</span> },
+  { id: <span class="n">10</span>, module: <span class="s">&quot;POO&quot;</span>, note: <span class="n">17</span> },
+  { id: <span class="n">11</span>, module: <span class="s">&quot;Algorithme&quot;</span>, note: <span class="n">16</span> },
+  { id: <span class="n">11</span>, module: <span class="s">&quot;POO&quot;</span>, note: <span class="n">14</span> }
+];
+<span class="k">const</span> personne = { id: <span class="n">10</span>, nom: <span class="s">&quot;Rami&quot;</span> };</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Écrire <code>modifierNote(liste, id, module, note)</code> qui renvoie une nouvelle liste où la note de l'étudiant et du module concernés est remplacée, <strong>dans le même ordre</strong> que la liste d'origine.</li><li>L'appliquer à la note POO de l'étudiant 10 (nouvelle valeur 18) et afficher le résultat sous forme de lignes <code>&quot;id-module-note&quot;</code>, puis la liste d'origine.</li><li>Écrire <code>avecAge(p, age)</code> avec le spread d'objet, puis <code>avecAge2</code> avec <code>Object.assign({}, p, ...)</code>. Afficher les deux résultats et l'objet d'origine.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-15">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-15">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-15">Réinitialiser</button></div><textarea id="ta-15" spellcheck="false" autocomplete="off" autocapitalize="off" rows="11" data-default="const notes = [
+  { id: 10, module: &quot;Algorithme&quot;, note: 15 },
+  { id: 10, module: &quot;POO&quot;, note: 17 },
+  { id: 11, module: &quot;Algorithme&quot;, note: 16 },
+  { id: 11, module: &quot;POO&quot;, note: 14 }
+];
+const personne = { id: 10, nom: &quot;Rami&quot; };
+
+// Votre code ici">const notes = [
+  { id: 10, module: &quot;Algorithme&quot;, note: 15 },
+  { id: 10, module: &quot;POO&quot;, note: 17 },
+  { id: 11, module: &quot;Algorithme&quot;, note: 16 },
+  { id: 11, module: &quot;POO&quot;, note: 14 }
+];
+const personne = { id: 10, nom: &quot;Rami&quot; };
+
+// Votre code ici</textarea><pre class="out" id="out-ta-15" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-15"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-15" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-15" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-15" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p><code>map</code> conserve l'ordre. Pour chaque élément : si c'est celui qu'on cherche, renvoie une copie modifiée <code>{ ...n, note }</code>, sinon renvoie l'élément inchangé.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Le cours fait un <code>filter</code> puis un ajout en fin de liste : le résultat modifié se retrouve à la fin et l'ordre change. Avec <code>map</code>, la position est conservée.</p></div></details>
+<p class="to-corr"><a href="#corr-15" data-open="corr-15">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-16" data-n="16">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">16</span><div><h3>EXERCICE 16 — Récursivité</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 4 sur 5">★★★★☆ <small>4/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">récursivité</span><span class="tag">cas de base</span><span class="tag">déstructuration</span><span class="tag">fonction fléchée</span><span class="tag">ternaire</span></dd><dt>Objectif</dt><dd>Écrire des fonctions qui s'appellent elles-mêmes, avec un cas de base clair.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Le cours présente la factorielle récursive. Tu vas l'étendre à d'autres calculs.</p></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Écrire <code>fact(n)</code> avec un ternaire (la factorielle de 0 vaut 1).</li><li>Écrire <code>somme(tableau)</code>, récursive, qui additionne tous les éléments en déstructurant <code>[premier, ...reste]</code>.</li><li>Écrire <code>puissance(x, n)</code> qui calcule x puissance n (n entier positif ou nul).</li><li>Afficher <code>fact(5)</code>, <code>somme([4, 8, 15, 16])</code> et <code>puissance(2, 10)</code>.</li><li>Dérouler à la main les appels de <code>fact(3)</code>.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-16">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-16">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-16">Réinitialiser</button></div><textarea id="ta-16" spellcheck="false" autocomplete="off" autocapitalize="off" rows="7" data-default="// Votre code ici">// Votre code ici</textarea><pre class="out" id="out-ta-16" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-16"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-16" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-16" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-16" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Toute fonction récursive a un cas de base (qui s'arrête) et un cas récursif (qui se rapproche du cas de base). Pour <code>somme</code>, le cas de base est le tableau vide.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Sans cas de base, la fonction s'appelle indéfiniment : <code>RangeError: Maximum call stack size exceeded</code>. Teste toujours le tableau vide ou <code>n === 0</code> en premier.</p></div></details>
+<p class="to-corr"><a href="#corr-16" data-open="corr-16">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-17" data-n="17">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">17</span><div><h3>EXERCICE 17 — Prédire et corriger</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 4 sur 5">★★★★☆ <small>4/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">effets de bord</span><span class="tag">fonction impure</span><span class="tag">référence de tableau</span><span class="tag">fonction pure</span></dd><dt>Objectif</dt><dd>Prévoir le résultat d'un code sans l'exécuter, repérer les effets de bord et réécrire en version pure.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Voici un code à analyser, <strong>sans l'exécuter d'abord</strong> :</p><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">let</span> panier = [<span class="s">&quot;pomme&quot;</span>, <span class="s">&quot;poire&quot;</span>];
+<span class="k">function</span> ajouter(fruit) {
+  panier.push(fruit);
+  <span class="k">return</span> panier;
+}
+<span class="k">const</span> copie = ajouter(<span class="s">&quot;kiwi&quot;</span>);
+console.log(panier.length, copie === panier);
+
+<span class="k">let</span> total = <span class="n">0</span>;
+<span class="k">function</span> addToTotal(x) {
+  total += x;
+  <span class="k">return</span> total;
+}
+addToTotal(<span class="n">5</span>);
+addToTotal(<span class="n">5</span>);
+console.log(total);</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Écrire sur papier ce que le code affiche, puis l'exécuter pour vérifier.</li><li>Expliquer pourquoi <code>ajouter</code> et <code>addToTotal</code> ne sont pas des fonctions pures.</li><li>Écrire <code>ajouterPur(liste, fruit)</code> et <code>addPur(total, x)</code>.</li><li>Montrer avec un nouveau code que <code>ajouterPur</code> laisse la liste d'origine intacte.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-17">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-17">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-17">Réinitialiser</button></div><textarea id="ta-17" spellcheck="false" autocomplete="off" autocapitalize="off" rows="18" data-default="let panier = [&quot;pomme&quot;, &quot;poire&quot;];
+function ajouter(fruit) {
+  panier.push(fruit);
+  return panier;
+}
+const copie = ajouter(&quot;kiwi&quot;);
+console.log(panier.length, copie === panier);
+
+let total = 0;
+function addToTotal(x) {
+  total += x;
+  return total;
+}
+addToTotal(5);
+addToTotal(5);
+console.log(total);
+
+// Votre version pure ici">let panier = [&quot;pomme&quot;, &quot;poire&quot;];
+function ajouter(fruit) {
+  panier.push(fruit);
+  return panier;
+}
+const copie = ajouter(&quot;kiwi&quot;);
+console.log(panier.length, copie === panier);
+
+let total = 0;
+function addToTotal(x) {
+  total += x;
+  return total;
+}
+addToTotal(5);
+addToTotal(5);
+console.log(total);
+
+// Votre version pure ici</textarea><pre class="out" id="out-ta-17" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-17"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-17" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-17" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-17" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Une fonction pure ne modifie rien en dehors d'elle et donne toujours le même résultat pour les mêmes arguments. <code>copie</code> et <code>panier</code> désignent-ils deux tableaux ou un seul ?</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>En JavaScript, un tableau passé ou renvoyé n'est pas copié : c'est la même référence. <code>copie === panier</code> compare des références, pas des contenus.</p></div></details>
+<p class="to-corr"><a href="#corr-17" data-open="corr-17">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-18" data-n="18">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">18</span><div><h3>EXERCICE 18 — Gestion de stock</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 5 sur 5">★★★★★ <small>5/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">classe</span><span class="tag">reduce</span><span class="tag">filter</span><span class="tag">map</span><span class="tag">fonction pure</span><span class="tag">ternaire</span></dd><dt>Objectif</dt><dd>Combiner une classe et des fonctions pures sur une liste d'objets.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Un magasin informatique gère son stock avec des objets de la classe <code>Article</code> (nom, prix, stock).</p></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Écrire la classe <code>Article</code> avec une méthode <code>valeur()</code> qui renvoie prix × stock.</li><li>Créer le stock : Clavier (150 DH, 4 en stock), Souris (80 DH, 0), Écran (1200 DH, 2).</li><li>Écrire <code>valeurStock(articles)</code> qui calcule la valeur totale du stock.</li><li>Écrire <code>enRupture(articles)</code> qui renvoie les noms des articles dont le stock est à 0.</li><li>Écrire <code>vendre(articles, nom, qte)</code>, <strong>pure</strong>, qui renvoie une nouvelle liste où le stock de l'article est diminué de <code>qte</code> si le stock suffit, et la liste inchangée sinon.</li><li>Vendre 1 écran, puis afficher la valeur du stock avant et après, le stock de l'écran avant et après, et le stock de la souris après avoir tenté d'en vendre 1.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-18">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-18">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-18">Réinitialiser</button></div><textarea id="ta-18" spellcheck="false" autocomplete="off" autocapitalize="off" rows="7" data-default="// Votre code ici">// Votre code ici</textarea><pre class="out" id="out-ta-18" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-18"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-18" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-18" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-18" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Pour <code>vendre</code>, crée un nouvel <code>Article</code> à la place de celui qui est modifié et garde les autres tels quels : c'est un <code>map</code> avec un ternaire.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Comme les articles sont des instances de classe, on ne peut pas utiliser le spread d'objet pour les copier (les méthodes seraient perdues). Reconstruis avec <code>new Article(...)</code>.</p></div></details>
+<p class="to-corr"><a href="#corr-18" data-open="corr-18">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-19" data-n="19">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">19</span><div><h3>EXERCICE 19 — Gérer un état avec un réducteur</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 5 sur 5">★★★★★ <small>5/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">fonction pure</span><span class="tag">switch</span><span class="tag">spread</span><span class="tag">map</span><span class="tag">filter</span><span class="tag">immutabilité</span></dd><dt>Objectif</dt><dd>Écrire une fonction pure <code>(état, action) =&gt; nouvelEtat</code>, schéma utilisé avec React et Redux.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Une application de tâches conserve la liste des tâches dans un tableau. Chaque tâche a un <code>id</code>, un <code>titre</code> et un booléen <code>faite</code>. Les modifications sont décrites par des actions, par exemple <code>{ type: &quot;AJOUTER&quot;, id: 1, titre: &quot;Réviser ES6&quot; }</code>.</p></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Écrire <code>reducteur(taches, action)</code> qui gère trois actions : <code>AJOUTER</code> (ajoute une tâche non faite), <code>BASCULER</code> (inverse <code>faite</code> pour l'<code>id</code> donné) et <code>SUPPRIMER</code> (retire la tâche d'<code>id</code> donné). Toute autre action renvoie la liste inchangée.</li><li>Partir d'une liste vide, ajouter les tâches 1 (« Réviser ES6 ») et 2 (« Faire les exercices »), basculer la tâche 1, puis supprimer la tâche 2.</li><li>Afficher la longueur de la liste de départ, puis l'état au format JSON après le basculement et après la suppression.</li><li>Vérifier que la liste de départ n'a jamais changé.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-19">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-19">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-19">Réinitialiser</button></div><textarea id="ta-19" spellcheck="false" autocomplete="off" autocapitalize="off" rows="7" data-default="// Votre code ici">// Votre code ici</textarea><pre class="out" id="out-ta-19" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-19"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-19" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-19" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-19" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Chaque <code>case</code> du <code>switch</code> renvoie un nouveau tableau : <code>[...taches, nouvelle]</code>, <code>taches.map(...)</code>, <code>taches.filter(...)</code>. Les identifiants sont fournis par l'action : le réducteur ne les fabrique pas lui-même.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Un réducteur ne doit ni modifier son argument, ni dépendre d'un compteur global, ni utiliser l'heure ou un nombre aléatoire : toute donnée nécessaire arrive par l'action.</p></div></details>
+<p class="to-corr"><a href="#corr-19" data-open="corr-19">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-20" data-n="20">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">20</span><div><h3>EXERCICE 20 — Chronomètre : fermeture et fonction pure</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 5 sur 5">★★★★★ <small>5/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">closure</span><span class="tag">fonction pure</span><span class="tag">déstructuration</span><span class="tag">padStart</span><span class="tag">objet littéral</span></dd><dt>Objectif</dt><dd>Combiner une fonction pure de calcul et une fermeture qui garde l'état, comme le compteur horaire du cours.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Le cours construit une horloge avec <code>setInterval</code> : <code>incrementer</code> renvoie une fonction (fermeture) qui avance d'une seconde. Tu dois en écrire une version sans DOM, qui se teste dans la console.</p></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Écrire <code>suivant({ heure, minute, seconde })</code>, pure, qui renvoie le temps une seconde plus tard dans un <strong>nouvel</strong> objet (gestion des retenues, retour à 0 h après 23 h 59 min 59 s).</li><li>Écrire <code>format(temps)</code> qui renvoie <code>&quot;hh:mm:ss&quot;</code> avec deux chiffres partout.</li><li>Écrire <code>creerChrono(initial)</code> qui renvoie une fonction <code>tick</code> : à chaque appel, elle avance d'une seconde, mémorise le nouvel état et le renvoie.</li><li>Tester : départ à 10:59:58, trois <code>tick()</code> consécutifs, puis un chrono qui démarre à 23:59:59 et un seul <code>tick()</code>.</li><li>Dire comment on brancherait <code>tick</code> sur une horloge réelle dans un navigateur.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-20">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-20">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-20">Réinitialiser</button></div><textarea id="ta-20" spellcheck="false" autocomplete="off" autocapitalize="off" rows="7" data-default="// Votre code ici">// Votre code ici</textarea><pre class="out" id="out-ta-20" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-20"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-20" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-20" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-20" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p>Les retenues : seconde 60 donne seconde 0 et minute + 1 ; minute 60 donne minute 0 et heure + 1 ; heure 24 donne heure 0. Pour les deux chiffres : <code>String(n).padStart(2, &quot;0&quot;)</code>.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p><code>suivant</code> ne doit pas modifier son paramètre. Crée de nouvelles variables locales, puis renvoie un nouvel objet.</p></div></details>
+<p class="to-corr"><a href="#corr-20" data-open="corr-20">Voir le corrigé détaillé</a></p>
+</article>
+<article class="ex" id="ex-21" data-n="21">
+<header class="ex-head"><span class="ex-num" aria-hidden="true">21</span><div><h3>EXERCICE 21 — Dossier complet : résultats d'une promotion</h3><p class="meta"><span class="chip">Niveau 5 — Préparation au contrôle</span><span class="stars" role="img" aria-label="Difficulté progressive 5 sur 5">★★★★★ <small>5/5</small></span></p></div></header>
+<dl class="facts"><dt>Notions mobilisées</dt><dd><span class="tag">classe</span><span class="tag">paramètre par défaut</span><span class="tag">map</span><span class="tag">filter</span><span class="tag">reduce</span><span class="tag">sort</span><span class="tag">ternaires</span><span class="tag">déstructuration</span><span class="tag">fonction pure</span></dd><dt>Objectif</dt><dd>Résoudre un problème complet en autonomie, comme dans la dernière partie d'un contrôle.</dd></dl>
+<div class="block"><h4>Énoncé</h4><p>Une promotion contient quatre étudiants. Chacun est une instance de la classe <code>Etudiant</code> définie ainsi (à compléter) :</p><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">const</span> promo = [
+  <span class="k">new</span> Etudiant(<span class="s">&quot;Rami&quot;</span>, [<span class="n">15</span>, <span class="n">17</span>, <span class="n">16</span>]),
+  <span class="k">new</span> Etudiant(<span class="s">&quot;Karimi&quot;</span>, [<span class="n">11</span>, <span class="n">9</span>, <span class="n">10</span>]),
+  <span class="k">new</span> Etudiant(<span class="s">&quot;Chaouki&quot;</span>, [<span class="n">14</span>, <span class="n">16</span>, <span class="n">12</span>]),
+  <span class="k">new</span> Etudiant(<span class="s">&quot;Fahmi&quot;</span>, [<span class="n">8</span>, <span class="n">9</span>, <span class="n">7</span>])
+];</code></pre></div></div>
+<div class="block"><h4>Travail demandé</h4><ol><li>Écrire la classe <code>Etudiant</code> (nom et tableau de notes, vide par défaut) avec la méthode <code>moyenne()</code> (0 si aucune note).</li><li>Écrire <code>mention(m)</code> : « Très bien » à partir de 16, « Bien » à partir de 14, « Assez bien » à partir de 12, « Passable » à partir de 10, sinon « Ajourné » (ternaires chaînés).</li><li>Écrire <code>classement(etudiants)</code> : un tableau <code>{ nom, moyenne }</code> trié de la meilleure moyenne à la plus faible, <strong>sans modifier</strong> la liste d'origine. Afficher chaque ligne sous la forme <code>&quot;Rami : 16 (Très bien)&quot;</code>.</li><li>Écrire <code>statistiques(etudiants)</code> qui renvoie <code>{ meilleur, moyenneClasse, admis }</code> (nom du premier, moyenne de la classe, nombre d'étudiants avec au moins 10).</li><li>Écrire <code>ajouterNote(etudiant, note)</code>, pure, qui renvoie un nouvel étudiant avec la note en plus. L'appliquer à Fahmi avec 20 et afficher sa nouvelle moyenne et sa mention, puis le nombre de notes de l'original.</li></ol></div>
+<div class="lab"><div class="lab-bar"><label for="ta-21">Zone d'essai</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-21">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-21">Réinitialiser</button></div><textarea id="ta-21" spellcheck="false" autocomplete="off" autocapitalize="off" rows="10" data-default="// Écris d'abord la classe Etudiant, puis la promo ci-dessous
+
+// const promo = [
+//   new Etudiant(&quot;Rami&quot;, [15, 17, 16]),
+//   new Etudiant(&quot;Karimi&quot;, [11, 9, 10]),
+//   new Etudiant(&quot;Chaouki&quot;, [14, 16, 12]),
+//   new Etudiant(&quot;Fahmi&quot;, [8, 9, 7])
+// ];">// Écris d'abord la classe Etudiant, puis la promo ci-dessous
+
+// const promo = [
+//   new Etudiant(&quot;Rami&quot;, [15, 17, 16]),
+//   new Etudiant(&quot;Karimi&quot;, [11, 9, 10]),
+//   new Etudiant(&quot;Chaouki&quot;, [14, 16, 12]),
+//   new Etudiant(&quot;Fahmi&quot;, [8, 9, 7])
+// ];</textarea><pre class="out" id="out-ta-21" aria-live="polite" hidden></pre></div>
+<fieldset class="statut" id="statut-21"><legend>Statut</legend>
+<label class="pill"><input type="radio" name="st-21" value="todo" checked><span>À faire</span></label>
+<label class="pill"><input type="radio" name="st-21" value="done"><span>Terminé</span></label>
+<label class="pill"><input type="radio" name="st-21" value="review"><span>À revoir</span></label></fieldset>
+<details class="aide hint"><summary>Indice</summary><div><p><code>classement</code> : <code>map</code> pour obtenir <code>{ nom, moyenne }</code>, puis <code>sort</code> sur ce nouveau tableau (le <code>map</code> crée déjà une copie). Pour <code>statistiques</code>, déstructure le premier élément du classement.</p></div></details>
+<details class="aide tip"><summary>Astuce</summary><div><p>Teste chaque fonction séparément avant de passer à la suivante. Pour <code>mention</code>, vérifie les valeurs limites : 16, 14, 12, 10 et 9.99.</p></div></details>
+<p class="to-corr"><a href="#corr-21" data-open="corr-21">Voir le corrigé détaillé</a></p>
+</article>
+</section>
+
+<section id="corriges">
+<h2>Partie B — Les corrigés détaillés</h2>
+<p class="sec-sub">Analyse, raisonnement, solution complète, résultat attendu et explication pour chaque exercice. Les résultats affichés viennent d'une exécution réelle des solutions.</p>
+<div class="tools"><button type="button" class="btn ghost" id="toggle-all">Tout déplier</button></div>
+<details class="corr" id="corr-1"><summary><span class="corr-n">1</span>Concepts du web front-end</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Aucun code ici : il s'agit de vérifier que le vocabulaire de base est acquis.</p>
+<h4>2. Raisonnement</h4><p>Pour chaque question, cherche d'abord le mot-clé du cours, puis formule une phrase complète avec un exemple.</p>
+<h4>3. Réponses attendues</h4><ol><li><strong>Site statique</strong> : une série de fichiers HTML, chaque page étant un fichier distinct. Chaque demande recharge la page entière, ce qui ralentit l'affichage et charge le serveur et le navigateur.</li><li><strong>Front-end</strong> : le panier affiché, le bouton « Payer ». <strong>Back-end</strong> : l'enregistrement de la commande et la base de données, qui vivent sur le serveur.</li><li><strong>Back-end</strong> : Node.js, Laravel (le cours cite aussi Ruby, Django, Flask). <strong>Front-end applicatif</strong> : Angular, React, Vue.js. <strong>Front-end de présentation</strong> : Bootstrap.</li><li><strong>Avantages</strong> : on se concentre sur la partie métier, l'architecture sépare les couches techniques (travail en équipe, maintenance), le framework est maintenu par son organisme fondateur. <strong>Se passer d'un framework</strong> : possible, le cours précise qu'il n'est jamais obligatoire, par exemple pour un petit site vitrine.</li><li>Le Virtual DOM est une représentation de l'interface gardée en mémoire. React la compare à la version précédente (diff) puis la synchronise avec le vrai DOM : c'est la <strong>réconciliation</strong>.</li><li>Parce que React utilise en permanence les classes, les modules, la déstructuration, <code>map</code>, <code>filter</code>, les fonctions fléchées et les fonctions pures, vus dans la suite du chapitre.</li></ol>
+
+<h4>4. Explication pédagogique</h4><p>Une réponse complète contient une définition, un exemple et, si possible, le terme exact du cours. Les termes à ne pas oublier : <strong>composants réutilisables</strong>, <strong>single page application</strong>, <strong>réconciliation</strong>.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Confondre le front-end (ce que voit l'utilisateur) et le back-end (serveur et base de données).</li><li>Citer Bootstrap comme un framework applicatif : c'est un framework de présentation.</li><li>Dire que le Virtual DOM remplace le vrai DOM : il sert à calculer les différences avant de mettre à jour le vrai DOM.</li></ul>
+<p class="back"><a href="#ex-1" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-2"><summary><span class="corr-n">2</span>Facture d'une librairie</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>La phrase finale dépend de trois informations : le statut du client, le montant et le nom éventuel.</p>
+<h4>2. Raisonnement</h4><p>Calcule <code>taux</code> selon <code>estMembre</code>, puis le montant final, puis le nom avec un second ternaire, et assemble le tout dans un template literal.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-2"><code><span class="k">const</span> client = <span class="s">&quot;Salma&quot;</span>;
+<span class="k">const</span> estMembre = <span class="k">true</span>;
+<span class="k">const</span> montant = <span class="n">500</span>;
+
+<span class="k">const</span> taux = estMembre ? <span class="n">0.2</span> : <span class="n">0.1</span>;
+<span class="k">const</span> final = montant - montant * taux;
+<span class="k">const</span> nom = client ? client : <span class="s">&quot;visiteur&quot;</span>;
+
+console.log(<span class="s">`Bonjour ${nom}, remise de ${taux * 100}% : ${final} DH au lieu de ${montant} DH`</span>);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-2">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-2" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">Bonjour Salma, remise de 20% : 400 DH au lieu de 500 DH</pre>
+<h4>5. Explication pédagogique</h4><p>Un template literal s'écrit avec des accents graves (backticks). Tout ce qui est dans <code>${...}</code> est une expression JavaScript évaluée puis insérée. Un ternaire est lui aussi une expression : on peut donc l'utiliser dans une affectation ou même directement dans <code>${...}</code>.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Écrire le texte avec des guillemets au lieu des backticks : <code>${nom}</code> s'affiche alors tel quel.</li><li>Oublier que <code>null ? a : b</code> renvoie <code>b</code>.</li><li>Écrire <code>estMembre == true ? ...</code> : cela fonctionne, mais <code>estMembre ? ...</code> suffit.</li></ul>
+<p class="back"><a href="#ex-2" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-3"><summary><span class="corr-n">3</span>Classe Produit</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Il faut modéliser un produit (données et comportements) avec une classe, puis créer deux instances.</p>
+<h4>2. Raisonnement</h4><p>Les données (nom, prix, quantité) sont mémorisées dans <code>this</code> par le constructeur. Les comportements (<code>total</code>, <code>info</code>) deviennent des méthodes de la classe.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-3"><code><span class="k">class</span> Produit {
+  constructor(nom, prix, quantite = <span class="n">1</span>) {
+    <span class="k">this</span>.nom = nom;
+    <span class="k">this</span>.prix = prix;
+    <span class="k">this</span>.quantite = quantite;
+  }
+  total() {
+    <span class="k">return</span> <span class="k">this</span>.prix * <span class="k">this</span>.quantite;
+  }
+  info() {
+    <span class="k">return</span> <span class="s">`${this.nom} x${this.quantite} = ${this.total()} DH`</span>;
+  }
+}
+
+<span class="k">const</span> p1 = <span class="k">new</span> Produit(<span class="s">&quot;Cahier&quot;</span>, <span class="n">12</span>, <span class="n">5</span>);
+<span class="k">const</span> p2 = <span class="k">new</span> Produit(<span class="s">&quot;Stylo&quot;</span>, <span class="n">3</span>);
+console.log(p1.info());
+console.log(p2.info());</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-3">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-3" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">Cahier x5 = 60 DH
+Stylo x1 = 3 DH</pre>
+<h4>5. Explication pédagogique</h4><p>Quand l'argument <code>quantite</code> est absent, la valeur par défaut <code>1</code> est utilisée. Les méthodes n'ont pas besoin du mot-clé <code>function</code> dans une classe.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Oublier <code>this.</code> devant <code>nom</code> ou <code>prix</code> dans une méthode : <code>ReferenceError</code>.</li><li>Mettre une virgule entre les méthodes d'une classe : c'est une erreur de syntaxe.</li><li>Appeler <code>total</code> sans parenthèses : on affiche alors la fonction elle-même.</li></ul>
+<p class="back"><a href="#ex-3" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-4"><summary><span class="corr-n">4</span>Déstructurer un objet imbriqué</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Plusieurs extractions sont demandées, avec une imbrication, un renommage, une valeur par défaut et une déstructuration dans les paramètres.</p>
+<h4>2. Raisonnement</h4><p>Reproduis la forme de l'objet côté gauche de l'affectation. Pour la fonction, place directement la déstructuration dans la liste des paramètres.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-4"><code><span class="k">const</span> etudiant = {
+  nom: <span class="s">&quot;Imane&quot;</span>,
+  age: <span class="n">21</span>,
+  adresse: { rue: <span class="n">14</span>, ville: <span class="s">&quot;Rabat&quot;</span> },
+  notes: { algo: <span class="n">15</span>, poo: <span class="n">17</span> }
+};
+
+<span class="k">const</span> { nom, age, adresse: { ville } } = etudiant;
+console.log(nom, age, ville);
+
+<span class="k">const</span> { adresse: { ville: city } } = etudiant;
+console.log(city);
+
+<span class="k">function</span> resume({ nom, notes: { algo, poo } }) {
+  <span class="k">const</span> moyenne = (algo + poo) / <span class="n">2</span>;
+  <span class="k">return</span> <span class="s">`${nom} : moyenne ${moyenne}`</span>;
+}
+console.log(resume(etudiant));
+
+<span class="k">const</span> { mention = <span class="s">&quot;Passable&quot;</span> } = etudiant;
+console.log(mention);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-4">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-4" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">Imane 21 Rabat
+Rabat
+Imane : moyenne 16
+Passable</pre>
+<h4>5. Explication pédagogique</h4><p>La déstructuration évite de répéter <code>etudiant.adresse.ville</code>. La valeur par défaut ne s'applique que si la propriété vaut <code>undefined</code>.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Déclarer deux fois <code>ville</code> dans la même portée : <code>SyntaxError</code>.</li><li>Écrire <code>{ ville: adresse }</code> en pensant descendre dans l'objet : cela renomme <code>ville</code> en <code>adresse</code>.</li><li>Déstructurer une propriété imbriquée qui n'existe pas (<code>undefined.ville</code>) : <code>TypeError</code>.</li></ul>
+<p class="back"><a href="#ex-4" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-5"><summary><span class="corr-n">5</span>Déstructurer et copier un tableau</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Quatre mini-tâches sur les tableaux, dont deux exigent de ne pas modifier l'original.</p>
+<h4>2. Raisonnement</h4><p>La déstructuration lit les éléments par position. Le spread <code>[...tableau]</code> fabrique une copie indépendante. Pour trier sans effet de bord, on trie cette copie.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-5"><code><span class="k">const</span> scores = [<span class="n">12</span>, <span class="n">18</span>, <span class="n">9</span>, <span class="n">15</span>, <span class="n">20</span>];
+<span class="k">const</span> [premier, deuxieme, ...reste] = scores;
+console.log(premier, deuxieme, reste);
+
+<span class="k">let</span> a = <span class="s">&quot;gauche&quot;</span>, b = <span class="s">&quot;droite&quot;</span>;
+[a, b] = [b, a];
+console.log(a, b);
+
+<span class="k">const</span> copie = [...scores];
+copie.push(<span class="n">11</span>);
+console.log(copie);
+console.log(scores);
+
+<span class="k">const</span> [meilleur, ...autres] = [...scores].sort((x, y) =&gt; y - x);
+console.log(meilleur, autres);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-5">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-5" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">12 18 [ 9, 15, 20 ]
+droite gauche
+[ 12, 18, 9, 15, 20, 11 ]
+[ 12, 18, 9, 15, 20 ]
+20 [ 18, 15, 12, 9 ]</pre>
+<h4>5. Explication pédagogique</h4><p><code>[a, b] = [b, a]</code> crée un tableau temporaire puis le déstructure : c'est la permutation du cours. Le spread copie les éléments dans un nouveau tableau, c'est pourquoi <code>scores</code> reste inchangé après le <code>push</code> sur <code>copie</code>. Attention : la copie est superficielle (les objets contenus restent partagés).</p>
+<h5>Erreurs fréquentes</h5><ul><li>Écrire <code>const copie = scores</code> : les deux noms désignent le même tableau.</li><li>Trier <code>scores</code> directement : l'original est modifié.</li><li>Oublier la fonction de comparaison dans <code>sort</code>.</li></ul>
+<p class="back"><a href="#ex-5" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-6"><summary><span class="corr-n">6</span>Transformer avec map</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Trois transformations élément par élément : un calcul, une extraction et la construction d'objets.</p>
+<h4>2. Raisonnement</h4><p>Dans chaque cas, la fonction passée à <code>map</code> décrit ce qu'il faut faire d'un seul élément.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-6"><code><span class="k">const</span> nums = [<span class="n">4</span>, <span class="n">9</span>, <span class="n">2</span>, <span class="n">7</span>, <span class="n">5</span>];
+<span class="k">const</span> produits = [
+  { nom: <span class="s">&quot;Clavier&quot;</span>, prix: <span class="n">150</span> },
+  { nom: <span class="s">&quot;Souris&quot;</span>, prix: <span class="n">80</span> },
+  { nom: <span class="s">&quot;Écran&quot;</span>, prix: <span class="n">1200</span> }
+];
+
+<span class="k">const</span> fois5 = nums.map(n =&gt; n * <span class="n">5</span>);
+console.log(fois5);
+
+<span class="k">const</span> noms = produits.map(p =&gt; p.nom);
+console.log(noms);
+
+<span class="k">const</span> ttc = produits.map(p =&gt; ({ nom: p.nom, prixTTC: Math.round(p.prix * <span class="n">1.2</span>) }));
+console.log(ttc);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-6">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-6" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">[ 20, 45, 10, 35, 25 ]
+[ 'Clavier', 'Souris', 'Écran' ]
+[ { nom: 'Clavier', prixTTC: 180 }, { nom: 'Souris', prixTTC: 96 }, { nom: 'Écran', prixTTC: 1440 } ]</pre>
+<h4>5. Explication pédagogique</h4><p><code>map</code> ne modifie pas le tableau d'origine et renvoie un nouveau tableau de même longueur. C'est la base de l'affichage de listes en React.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Utiliser <code>map</code> sans récupérer son résultat : le tableau d'origine n'est pas modifié.</li><li>Oublier <code>return</code> quand la fonction fléchée a des accolades.</li><li>Utiliser <code>map</code> pour supprimer des éléments : c'est le rôle de <code>filter</code>.</li></ul>
+<p class="back"><a href="#ex-6" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-7"><summary><span class="corr-n">7</span>Filtrer et chercher</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Deux tâches de sélection multiple et deux tâches de recherche d'un seul élément.</p>
+<h4>2. Raisonnement</h4><p>Un critère pour chaque besoin : <code>filter</code> pour plusieurs éléments, <code>find</code> pour un seul, et un ternaire pour gérer <code>undefined</code>.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-7"><code><span class="k">const</span> employes = [
+  { nom: <span class="s">&quot;Rami&quot;</span>, age: <span class="n">33</span>, salaire: <span class="n">6000</span>, actif: <span class="k">true</span> },
+  { nom: <span class="s">&quot;Fatihi&quot;</span>, age: <span class="n">24</span>, salaire: <span class="n">4200</span>, actif: <span class="k">false</span> },
+  { nom: <span class="s">&quot;Chakib&quot;</span>, age: <span class="n">45</span>, salaire: <span class="n">9500</span>, actif: <span class="k">true</span> },
+  { nom: <span class="s">&quot;Mounir&quot;</span>, age: <span class="n">37</span>, salaire: <span class="n">5200</span>, actif: <span class="k">true</span> }
+];
+
+<span class="k">const</span> actifs = employes.filter(e =&gt; e.actif);
+console.log(actifs.length);
+
+<span class="k">const</span> bienPayes = employes
+  .filter(e =&gt; e.actif &amp;&amp; e.salaire &gt;= <span class="n">5000</span>)
+  .map(e =&gt; e.nom);
+console.log(bienPayes);
+
+<span class="k">const</span> riche = employes.find(e =&gt; e.salaire &gt; <span class="n">8000</span>);
+console.log(riche);
+
+<span class="k">const</span> inconnu = employes.find(e =&gt; e.salaire &gt; <span class="n">20000</span>);
+console.log(inconnu ? inconnu.nom : <span class="s">&quot;Aucun&quot;</span>);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-7">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-7" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">3
+[ 'Rami', 'Chakib', 'Mounir' ]
+{ nom: 'Chakib', age: 45, salaire: 9500, actif: true }
+Aucun</pre>
+<h4>5. Explication pédagogique</h4><p><code>find</code> s'arrête au premier élément qui satisfait la condition. Quand rien ne correspond, il renvoie <code>undefined</code>, d'où le ternaire. Lire <code>inconnu.nom</code> directement provoquerait une <code>TypeError</code>.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Utiliser <code>find</code> quand on veut tous les éléments qui correspondent.</li><li>Lire une propriété du résultat de <code>find</code> sans vérifier qu'il existe.</li><li>Écrire <code>filter(e =&gt; e.salaire = 5000)</code> (affectation) au lieu d'une comparaison.</li></ul>
+<p class="back"><a href="#ex-7" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-8"><summary><span class="corr-n">8</span>Calculer avec reduce</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Quatre agrégations : une somme pondérée, un comptage, un maximum et une somme conditionnelle.</p>
+<h4>2. Raisonnement</h4><p>Pour les sommes, l'accumulateur est un nombre qui part de 0. Pour le maximum, on le fait partir du premier élément. Pour la somme conditionnelle, on filtre avant de réduire.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-8"><code><span class="k">const</span> panier = [
+  { nom: <span class="s">&quot;Cahier&quot;</span>, prix: <span class="n">12</span>, qte: <span class="n">5</span>, categorie: <span class="s">&quot;papeterie&quot;</span> },
+  { nom: <span class="s">&quot;Stylo&quot;</span>, prix: <span class="n">3</span>, qte: <span class="n">10</span>, categorie: <span class="s">&quot;papeterie&quot;</span> },
+  { nom: <span class="s">&quot;Clé USB&quot;</span>, prix: <span class="n">70</span>, qte: <span class="n">2</span>, categorie: <span class="s">&quot;informatique&quot;</span> },
+  { nom: <span class="s">&quot;Souris&quot;</span>, prix: <span class="n">80</span>, qte: <span class="n">1</span>, categorie: <span class="s">&quot;informatique&quot;</span> }
+];
+
+<span class="k">const</span> total = panier.reduce((acc, l) =&gt; acc + l.prix * l.qte, <span class="n">0</span>);
+console.log(total);
+
+<span class="k">const</span> nbArticles = panier.reduce((acc, l) =&gt; acc + l.qte, <span class="n">0</span>);
+console.log(nbArticles);
+
+<span class="k">const</span> plusCher = panier.reduce((max, l) =&gt; (l.prix &gt; max.prix ? l : max), panier[<span class="n">0</span>]);
+console.log(plusCher.nom);
+
+<span class="k">const</span> totalPapeterie = panier
+  .filter(l =&gt; l.categorie === <span class="s">&quot;papeterie&quot;</span>)
+  .reduce((acc, l) =&gt; acc + l.prix * l.qte, <span class="n">0</span>);
+console.log(totalPapeterie);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-8">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-8" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">310
+18
+Souris
+90</pre>
+<h4>5. Explication pédagogique</h4><p>À chaque tour, <code>reduce</code> reçoit le résultat du tour précédent (l'accumulateur) et l'élément courant, et doit renvoyer le nouvel accumulateur. Le résultat final est une valeur unique.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Oublier <code>return</code> ou la valeur initiale.</li><li>Écrire <code>acc + l.prix</code> en oubliant la quantité.</li><li>Utiliser <code>reduce</code> pour une simple extraction que <code>map</code> ou <code>find</code> feraient mieux.</li></ul>
+<p class="back"><a href="#ex-8" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-9"><summary><span class="corr-n">9</span>Chaîner filter, map et reduce</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Plusieurs résultats dérivent d'une même sélection : les notes de POO.</p>
+<h4>2. Raisonnement</h4><p>Un premier <code>filter</code> crée <code>poo</code>. Ensuite on enchaîne : <code>filter</code> puis <code>map</code> (admis), <code>reduce</code> puis division (moyenne), <code>map</code> (lignes de texte).</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-9"><code><span class="k">const</span> notes = [
+  { etudiant: <span class="s">&quot;Rami&quot;</span>, module: <span class="s">&quot;Algo&quot;</span>, note: <span class="n">15</span> },
+  { etudiant: <span class="s">&quot;Rami&quot;</span>, module: <span class="s">&quot;POO&quot;</span>, note: <span class="n">17</span> },
+  { etudiant: <span class="s">&quot;Karimi&quot;</span>, module: <span class="s">&quot;Algo&quot;</span>, note: <span class="n">11</span> },
+  { etudiant: <span class="s">&quot;Karimi&quot;</span>, module: <span class="s">&quot;POO&quot;</span>, note: <span class="n">9</span> },
+  { etudiant: <span class="s">&quot;Chaouki&quot;</span>, module: <span class="s">&quot;POO&quot;</span>, note: <span class="n">14</span> },
+  { etudiant: <span class="s">&quot;Chaouki&quot;</span>, module: <span class="s">&quot;Algo&quot;</span>, note: <span class="n">16</span> }
+];
+
+<span class="k">const</span> poo = notes.filter(n =&gt; n.module === <span class="s">&quot;POO&quot;</span>);
+
+<span class="k">const</span> admis = poo.filter(n =&gt; n.note &gt;= <span class="n">10</span>).map(n =&gt; n.etudiant);
+console.log(admis);
+
+<span class="k">const</span> moyennePoo = poo.reduce((somme, n) =&gt; somme + n.note, <span class="n">0</span>) / poo.length;
+console.log(moyennePoo.toFixed(<span class="n">2</span>));
+
+<span class="k">const</span> lignes = poo.map(n =&gt; <span class="s">`${n.etudiant} : ${n.note}/20`</span>);
+console.log(lignes);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-9">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-9" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">[ 'Rami', 'Chaouki' ]
+13.33
+[ 'Rami : 17/20', 'Karimi : 9/20', 'Chaouki : 14/20' ]</pre>
+<h4>5. Explication pédagogique</h4><p>Chaque méthode renvoie un nouveau tableau, ce qui permet de les enchaîner avec un point. Ranger le résultat intermédiaire dans une variable rend le code plus lisible et évite de filtrer plusieurs fois.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Diviser par <code>notes.length</code> au lieu de <code>poo.length</code>.</li><li>Oublier que <code>toFixed</code> retourne une chaîne.</li><li>Appeler <code>reduce</code> sur une liste vide sans valeur initiale.</li></ul>
+<p class="back"><a href="#ex-9" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-10"><summary><span class="corr-n">10</span>Fonctions fléchées et spread</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Trois écritures à convertir ou à créer, plus une prédiction de sortie et une question de cours.</p>
+<h4>2. Raisonnement</h4><p><code>(a, b) =&gt; a + b</code> est équivalent à la fonction classique. <code>Math.max</code> attend des arguments séparés : on lui passe donc le tableau reconstitué par le rest, puis étalé par le spread.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-10"><code><span class="k">const</span> somme = (a, b) =&gt; a + b;
+<span class="k">const</span> produit = (a, b, c) =&gt; a * b * c;
+<span class="k">const</span> nombres = [<span class="n">2</span>, <span class="n">3</span>, <span class="n">4</span>];
+
+console.log(somme(<span class="n">3</span>, <span class="n">4</span>));
+console.log(produit(...nombres));
+
+<span class="k">const</span> maximum = (...nums) =&gt; Math.max(...nums);
+console.log(maximum(<span class="n">8</span>, <span class="n">3</span>, <span class="n">21</span>, <span class="n">5</span>));
+
+<span class="k">const</span> base = [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>];
+<span class="k">const</span> a = [...base, <span class="n">4</span>];
+<span class="k">const</span> b = [<span class="n">0</span>, ...base];
+console.log(a, b, base);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-10">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-10" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">7
+24
+21
+[ 1, 2, 3, 4 ] [ 0, 1, 2, 3 ] [ 1, 2, 3 ]</pre>
+<h4>5. Explication pédagogique</h4><p><code>base</code> n'est pas modifié : le spread fabrique de nouveaux tableaux. Dernière question : une fonction fléchée ne peut pas être utilisée comme constructeur (le cours le précise), donc <code>new Pers(&quot;a&quot;)</code> lève une <code>TypeError</code>. De plus, elle n'a pas son propre <code>this</code>.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Écrire <code>somme = (a, b) =&gt; { a + b }</code> : sans <code>return</code>, le résultat est <code>undefined</code>.</li><li>Appeler <code>Math.max(nombres)</code> avec un tableau : le résultat est <code>NaN</code>.</li><li>Confondre rest et spread.</li></ul>
+<p class="back"><a href="#ex-10" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-11"><summary><span class="corr-n">11</span>Héritage de classe</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Deux classes liées par <code>extends</code>, avec une méthode redéfinie et une méthode héritée sans modification.</p>
+<h4>2. Raisonnement</h4><p><code>Manager</code> n'a pas besoin de réécrire <code>annuel()</code> : elle est héritée. Pour <code>info()</code>, on part de la version du parent puis on ajoute l'équipe.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-11"><code><span class="k">class</span> Employe {
+  constructor(nom, salaire) {
+    <span class="k">this</span>.nom = nom;
+    <span class="k">this</span>.salaire = salaire;
+  }
+  info() {
+    <span class="k">return</span> <span class="s">`Employé ${this.nom} : ${this.salaire} DH`</span>;
+  }
+  annuel() {
+    <span class="k">return</span> <span class="k">this</span>.salaire * <span class="n">12</span>;
+  }
+}
+
+<span class="k">class</span> Manager <span class="k">extends</span> Employe {
+  constructor(nom, salaire, equipe) {
+    <span class="k">super</span>(nom, salaire);
+    <span class="k">this</span>.equipe = equipe;
+  }
+  info() {
+    <span class="k">return</span> <span class="s">`${super.info()} | équipe : ${this.equipe}`</span>;
+  }
+}
+
+<span class="k">const</span> e1 = <span class="k">new</span> Employe(<span class="s">&quot;Rami&quot;</span>, <span class="n">6000</span>);
+<span class="k">const</span> m1 = <span class="k">new</span> Manager(<span class="s">&quot;Salma&quot;</span>, <span class="n">12000</span>, <span class="s">&quot;Dev web&quot;</span>);
+console.log(e1.info());
+console.log(m1.info());
+console.log(m1.annuel());
+console.log(m1 <span class="k">instanceof</span> Employe);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-11">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-11" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">Employé Rami : 6000 DH
+Employé Salma : 12000 DH | équipe : Dev web
+144000
+true</pre>
+<h4>5. Explication pédagogique</h4><p><code>super(nom, salaire)</code> initialise la partie héritée de l'objet. Sans cet appel, JavaScript lève une <code>ReferenceError</code> dès qu'on utilise <code>this</code> dans le constructeur de <code>Manager</code>. <code>m1 instanceof Employe</code> vaut <code>true</code> : un manager est aussi un employé.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Oublier <code>super(...)</code> ou l'écrire après <code>this.equipe = equipe</code>.</li><li>Dupliquer le code du parent au lieu d'appeler <code>super.info()</code>.</li><li>Oublier le mot-clé <code>extends</code>.</li></ul>
+<p class="back"><a href="#ex-11" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-12"><summary><span class="corr-n">12</span>Modules ES6</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Trois éléments à exporter de types différents, un import combiné et une page HTML qui lance le tout.</p>
+<h4>2. Raisonnement</h4><p><code>Panier</code> est l'élément principal du fichier, d'où l'export par défaut. <code>TVA</code> et <code>ttc</code> sont des utilitaires, exportés par nom.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>Panier.js</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-12"><code><span class="k">export</span> <span class="k">const</span> TVA = <span class="n">0.2</span>;
+
+<span class="k">export</span> <span class="k">function</span> ttc(prix) {
+  <span class="k">return</span> Math.round(prix * (<span class="n">1</span> + TVA) * <span class="n">100</span>) / <span class="n">100</span>;
+}
+
+<span class="k">export</span> <span class="k">default</span> <span class="k">class</span> Panier {
+  constructor() {
+    <span class="k">this</span>.articles = [];
+  }
+  ajouter(nom, prix) {
+    <span class="k">this</span>.articles.push({ nom, prix });
+  }
+  total() {
+    <span class="k">return</span> <span class="k">this</span>.articles.reduce((somme, a) =&gt; somme + a.prix, <span class="n">0</span>);
+  }
+}</code></pre></div><div class="code"><div class="code-top"><span>Index.js</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code><span class="k">import</span> Panier, { TVA, ttc <span class="k">as</span> prixTTC } <span class="k">from</span> <span class="s">&quot;./Panier.js&quot;</span>;
+
+<span class="k">const</span> p = <span class="k">new</span> Panier();
+p.ajouter(<span class="s">&quot;Livre&quot;</span>, <span class="n">50</span>);
+p.ajouter(<span class="s">&quot;Cahier&quot;</span>, <span class="n">10</span>);
+
+console.log(p.total());
+console.log(prixTTC(p.total()));
+console.log(<span class="s">`TVA : ${TVA * 100}%`</span>);</code></pre></div><div class="code"><div class="code-top"><span>index.html</span><button type="button" class="mini" data-copy>Copier</button></div><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;fr&quot;&gt;
+&lt;head&gt;&lt;meta charset=&quot;UTF-8&quot;&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;script src=&quot;Index.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+<h4>4. Résultat attendu</h4><pre class="out static">60
+72
+TVA : 20%</pre>
+<h4>5. Explication pédagogique</h4><p>Le fichier <code>Panier.js</code> expose une API : ce qui n'est pas exporté reste privé au module. <code>import { Panier }</code> échoue parce que <code>Panier</code> n'est pas un export nommé : le module ne fournit pas de nom <code>Panier</code>, seulement un export par défaut.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Mettre des accolades autour d'un import par défaut, ou les oublier pour un import nommé.</li><li>Oublier <code>type=&quot;module&quot;</code> dans la balise <code>&lt;script&gt;</code>.</li><li>Oublier l'extension <code>.js</code> dans le chemin relatif du navigateur.</li><li>Ouvrir <code>index.html</code> directement depuis le disque : les modules exigent un petit serveur local (l'extension Live Server de VS Code convient).</li></ul>
+<p class="back"><a href="#ex-12" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-13"><summary><span class="corr-n">13</span>Fermetures et compteurs</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Un état doit vivre entre plusieurs appels tout en restant inaccessible de l'extérieur.</p>
+<h4>2. Raisonnement</h4><p>Une variable locale <code>count</code> dans <code>creerCompteur</code>, plus des fonctions qui la lisent et la modifient : c'est une fermeture. On renvoie ces fonctions dans un objet.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-13"><code><span class="k">function</span> creerCompteur(debut = <span class="n">0</span>, pas = <span class="n">1</span>) {
+  <span class="k">let</span> count = debut;
+  <span class="k">return</span> {
+    incrementer() {
+      count += pas;
+      <span class="k">return</span> count;
+    },
+    valeur() {
+      <span class="k">return</span> count;
+    },
+    reset() {
+      count = debut;
+    }
+  };
+}
+
+<span class="k">const</span> a = creerCompteur();
+<span class="k">const</span> b = creerCompteur(<span class="n">100</span>, <span class="n">10</span>);
+
+a.incrementer();
+a.incrementer();
+b.incrementer();
+console.log(a.valeur(), b.valeur());
+console.log(a.count);
+
+a.reset();
+console.log(a.valeur());</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-13">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-13" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">2 110
+undefined
+0</pre>
+<h4>5. Explication pédagogique</h4><p><code>a.count</code> vaut <code>undefined</code> : la variable est masquée, seules les méthodes y accèdent. C'est le masquage des données décrit dans le cours. <code>a</code> et <code>b</code> ont chacun leur propre <code>count</code>, car chaque appel de <code>creerCompteur</code> crée un nouvel espace de variables.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Déclarer <code>count</code> en dehors de la fonction : tous les compteurs partageraient la même valeur.</li><li>Écrire <code>return count++</code> : on renvoie l'ancienne valeur.</li><li>Oublier les parenthèses lors de l'appel : <code>a.valeur</code> est une fonction, pas un nombre.</li></ul>
+<p class="back"><a href="#ex-13" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-14"><summary><span class="corr-n">14</span>Fonctions pures sur les tableaux</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Trois opérations sur une liste, avec la contrainte forte de ne pas modifier l'entrée.</p>
+<h4>2. Raisonnement</h4><p>Une fonction est pure si elle donne toujours le même résultat pour les mêmes arguments et ne modifie rien en dehors d'elle. On construit donc à chaque fois un nouveau tableau.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-14"><code><span class="k">const</span> inscriptions = [
+  { id: <span class="n">10</span>, nom: <span class="s">&quot;Rami&quot;</span>, filiere: <span class="s">&quot;DEV&quot;</span> },
+  { id: <span class="n">11</span>, nom: <span class="s">&quot;Kamali&quot;</span>, filiere: <span class="s">&quot;DEV&quot;</span> },
+  { id: <span class="n">12</span>, nom: <span class="s">&quot;Fahmi&quot;</span>, filiere: <span class="s">&quot;DEV&quot;</span> }
+];
+
+<span class="k">const</span> ajouter = (liste, ins) =&gt; [...liste, ins];
+<span class="k">const</span> supprimer = (liste, id) =&gt; liste.filter(i =&gt; i.id !== id);
+<span class="k">const</span> inserer = (liste, index, ins) =&gt; [
+  ...liste.slice(<span class="n">0</span>, index),
+  ins,
+  ...liste.slice(index)
+];
+
+<span class="k">const</span> ids = liste =&gt; liste.map(i =&gt; i.id);
+
+<span class="k">const</span> l1 = ajouter(inscriptions, { id: <span class="n">13</span>, nom: <span class="s">&quot;Chaouki&quot;</span>, filiere: <span class="s">&quot;DEV&quot;</span> });
+<span class="k">const</span> l2 = supprimer(l1, <span class="n">11</span>);
+<span class="k">const</span> l3 = inserer(l2, <span class="n">1</span>, { id: <span class="n">20</span>, nom: <span class="s">&quot;Salma&quot;</span>, filiere: <span class="s">&quot;DEV&quot;</span> });
+
+console.log(ids(inscriptions));
+console.log(ids(l1));
+console.log(ids(l2));
+console.log(ids(l3));</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-14">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-14" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">[ 10, 11, 12 ]
+[ 10, 11, 12, 13 ]
+[ 10, 12, 13 ]
+[ 10, 20, 12, 13 ]</pre>
+<h4>5. Explication pédagogique</h4><p>Chaque étape part de la liste précédente et en produit une nouvelle. La liste d'origine reste intacte, ce qui rend le résultat prévisible. C'est la pratique attendue pour la gestion d'état en React.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Utiliser <code>push</code> ou <code>splice</code> dans la fonction : l'original est modifié.</li><li>Utiliser un tableau global à l'intérieur de la fonction au lieu de le recevoir en paramètre.</li><li>Oublier le <code>...</code> devant <code>slice(...)</code> : on insérerait des tableaux dans le tableau.</li></ul>
+<p class="back"><a href="#ex-14" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-15"><summary><span class="corr-n">15</span>Modifier sans muter</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Deux mises à jour : un élément dans un tableau et une propriété ajoutée à un objet, sans muter l'entrée.</p>
+<h4>2. Raisonnement</h4><p>On remplace uniquement l'élément ciblé par une copie modifiée, grâce au spread d'objet. Pour l'objet, on fabrique un nouvel objet qui reprend les anciennes propriétés puis ajoute la nouvelle.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-15"><code><span class="k">const</span> notes = [
+  { id: <span class="n">10</span>, module: <span class="s">&quot;Algorithme&quot;</span>, note: <span class="n">15</span> },
+  { id: <span class="n">10</span>, module: <span class="s">&quot;POO&quot;</span>, note: <span class="n">17</span> },
+  { id: <span class="n">11</span>, module: <span class="s">&quot;Algorithme&quot;</span>, note: <span class="n">16</span> },
+  { id: <span class="n">11</span>, module: <span class="s">&quot;POO&quot;</span>, note: <span class="n">14</span> }
+];
+<span class="k">const</span> personne = { id: <span class="n">10</span>, nom: <span class="s">&quot;Rami&quot;</span> };
+
+<span class="k">const</span> modifierNote = (liste, id, module, note) =&gt;
+  liste.map(n =&gt; (n.id === id &amp;&amp; n.module === module ? { ...n, note } : n));
+
+<span class="k">const</span> texte = liste =&gt; liste.map(n =&gt; <span class="s">`${n.id}-${n.module}-${n.note}`</span>);
+
+console.log(texte(modifierNote(notes, <span class="n">10</span>, <span class="s">&quot;POO&quot;</span>, <span class="n">18</span>)));
+console.log(texte(notes));
+
+<span class="k">const</span> avecAge = (p, age) =&gt; ({ ...p, age });
+<span class="k">const</span> avecAge2 = (p, age) =&gt; Object.assign({}, p, { age });
+
+console.log(avecAge(personne, <span class="n">33</span>));
+console.log(avecAge2(personne, <span class="n">34</span>));
+console.log(personne);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-15">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-15" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">[ '10-Algorithme-15', '10-POO-18', '11-Algorithme-16', '11-POO-14' ]
+[ '10-Algorithme-15', '10-POO-17', '11-Algorithme-16', '11-POO-14' ]
+{ id: 10, nom: 'Rami', age: 33 }
+{ id: 10, nom: 'Rami', age: 34 }
+{ id: 10, nom: 'Rami' }</pre>
+<h4>5. Explication pédagogique</h4><p><code>{ ...n, note }</code> copie toutes les propriétés de <code>n</code> puis écrase <code>note</code> : l'ancien objet n'est pas touché. <code>Object.assign({}, ...)</code> donne le même résultat : le premier argument <code>{}</code> est la cible, un objet neuf, ce qui évite de modifier <code>personne</code>.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Écrire <code>n.note = note</code> dans le <code>map</code> : on modifie l'original.</li><li>Écrire <code>Object.assign(personne, { age })</code> : la cible est l'objet d'origine, qui est modifié.</li><li>Oublier les parenthèses autour de l'objet renvoyé par la fonction fléchée.</li></ul>
+<p class="back"><a href="#ex-15" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-16"><summary><span class="corr-n">16</span>Récursivité</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Trois fonctions où le problème se réduit à un problème plus petit du même type.</p>
+<h4>2. Raisonnement</h4><p><code>n! = n × (n-1)!</code>, <code>somme([a, ...r]) = a + somme(r)</code>, <code>x^n = x × x^(n-1)</code>. Chacune a un cas d'arrêt : <code>n === 0</code> ou tableau vide.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-16"><code><span class="k">function</span> fact(n) {
+  <span class="k">return</span> n === <span class="n">0</span> ? <span class="n">1</span> : n * fact(n - <span class="n">1</span>);
+}
+
+<span class="k">const</span> somme = ([premier, ...reste]) =&gt;
+  premier === <span class="k">undefined</span> ? <span class="n">0</span> : premier + somme(reste);
+
+<span class="k">const</span> puissance = (x, n) =&gt; (n === <span class="n">0</span> ? <span class="n">1</span> : x * puissance(x, n - <span class="n">1</span>));
+
+console.log(fact(<span class="n">5</span>));
+console.log(somme([<span class="n">4</span>, <span class="n">8</span>, <span class="n">15</span>, <span class="n">16</span>]));
+console.log(puissance(<span class="n">2</span>, <span class="n">10</span>));</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-16">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-16" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">120
+43
+1024</pre>
+<h4>5. Explication pédagogique</h4><p>Déroulé de <code>fact(3)</code> : <code>3 * fact(2)</code> devient <code>3 * (2 * fact(1))</code>, puis <code>3 * (2 * (1 * fact(0)))</code>, soit <code>3 * 2 * 1 * 1 = 6</code>. Pour <code>somme</code>, quand le tableau est vide, <code>premier</code> vaut <code>undefined</code> : c'est le cas de base qui renvoie 0.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Oublier le cas de base.</li><li>Appeler la fonction avec le même argument (<code>fact(n)</code> au lieu de <code>fact(n - 1)</code>).</li><li>Tester <code>if (premier)</code> : un élément valant 0 serait pris pour le cas de base.</li></ul>
+<p class="back"><a href="#ex-16" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-17"><summary><span class="corr-n">17</span>Prédire et corriger</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Deux fonctions modifient une variable extérieure : ce sont des effets de bord.</p>
+<h4>2. Raisonnement</h4><p><code>ajouter</code> modifie <code>panier</code> puis le renvoie, donc <code>copie</code> et <code>panier</code> sont le même tableau : 3 et <code>true</code>. <code>addToTotal</code> est appelée deux fois et laisse <code>total</code> à 10. Les versions pures reçoivent tout en paramètre et renvoient une nouvelle valeur.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-17"><code><span class="c">// 1) Code impur (tel quel)</span>
+<span class="k">let</span> panier = [<span class="s">&quot;pomme&quot;</span>, <span class="s">&quot;poire&quot;</span>];
+<span class="k">function</span> ajouter(fruit) {
+  panier.push(fruit);
+  <span class="k">return</span> panier;
+}
+<span class="k">const</span> copie = ajouter(<span class="s">&quot;kiwi&quot;</span>);
+console.log(panier.length, copie === panier); <span class="c">// 3 true</span>
+
+<span class="k">let</span> total = <span class="n">0</span>;
+<span class="k">function</span> addToTotal(x) {
+  total += x;
+  <span class="k">return</span> total;
+}
+addToTotal(<span class="n">5</span>);
+addToTotal(<span class="n">5</span>);
+console.log(total); <span class="c">// 10</span>
+
+<span class="c">// 2) Versions pures</span>
+<span class="k">const</span> panier2 = [<span class="s">&quot;pomme&quot;</span>, <span class="s">&quot;poire&quot;</span>];
+<span class="k">const</span> ajouterPur = (liste, fruit) =&gt; [...liste, fruit];
+<span class="k">const</span> nouveau = ajouterPur(panier2, <span class="s">&quot;kiwi&quot;</span>);
+console.log(panier2.length, nouveau.length, nouveau === panier2); <span class="c">// 2 3 false</span>
+
+<span class="k">const</span> addPur = (t, x) =&gt; t + x;
+console.log(addPur(addPur(<span class="n">0</span>, <span class="n">5</span>), <span class="n">5</span>)); <span class="c">// 10</span></code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-17">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-17" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">3 true
+10
+2 3 false
+10</pre>
+<h4>5. Explication pédagogique</h4><p>Les versions impures modifient des variables extérieures : le même appel ne donne pas le même résultat selon l'état du programme. Les versions pures sont prévisibles, faciles à tester et réutilisables, d'où leur importance avec React et Redux.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Croire que <code>copie</code> est un tableau distinct.</li><li>Penser qu'une fonction qui renvoie une valeur est forcément pure.</li><li>Remplacer <code>push</code> par <code>concat</code> mais continuer à écrire dans une variable globale.</li></ul>
+<p class="back"><a href="#ex-17" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-18"><summary><span class="corr-n">18</span>Gestion de stock</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Un modèle objet, deux calculs d'agrégation, une sélection et une mise à jour immuable.</p>
+<h4>2. Raisonnement</h4><p><code>valeurStock</code> = <code>reduce</code> de <code>valeur()</code>. <code>enRupture</code> = <code>filter</code> puis <code>map</code>. <code>vendre</code> = <code>map</code> avec un ternaire : l'article concerné et suffisamment approvisionné est remplacé par un nouvel <code>Article</code>.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-18"><code><span class="k">class</span> Article {
+  constructor(nom, prix, stock) {
+    <span class="k">this</span>.nom = nom;
+    <span class="k">this</span>.prix = prix;
+    <span class="k">this</span>.stock = stock;
+  }
+  valeur() {
+    <span class="k">return</span> <span class="k">this</span>.prix * <span class="k">this</span>.stock;
+  }
+}
+
+<span class="k">const</span> stock = [
+  <span class="k">new</span> Article(<span class="s">&quot;Clavier&quot;</span>, <span class="n">150</span>, <span class="n">4</span>),
+  <span class="k">new</span> Article(<span class="s">&quot;Souris&quot;</span>, <span class="n">80</span>, <span class="n">0</span>),
+  <span class="k">new</span> Article(<span class="s">&quot;Écran&quot;</span>, <span class="n">1200</span>, <span class="n">2</span>)
+];
+
+<span class="k">const</span> valeurStock = articles =&gt; articles.reduce((s, a) =&gt; s + a.valeur(), <span class="n">0</span>);
+<span class="k">const</span> enRupture = articles =&gt; articles.filter(a =&gt; a.stock === <span class="n">0</span>).map(a =&gt; a.nom);
+<span class="k">const</span> vendre = (articles, nom, qte) =&gt;
+  articles.map(a =&gt;
+    a.nom === nom &amp;&amp; a.stock &gt;= qte ? <span class="k">new</span> Article(a.nom, a.prix, a.stock - qte) : a
+  );
+
+<span class="k">const</span> apres = vendre(stock, <span class="s">&quot;Écran&quot;</span>, <span class="n">1</span>);
+console.log(valeurStock(stock));
+console.log(enRupture(stock));
+console.log(valeurStock(apres));
+console.log(stock[<span class="n">2</span>].stock, apres[<span class="n">2</span>].stock);
+console.log(vendre(stock, <span class="s">&quot;Souris&quot;</span>, <span class="n">1</span>)[<span class="n">1</span>].stock);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-18">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-18" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">3000
+[ 'Souris' ]
+1800
+2 1
+0</pre>
+<h4>5. Explication pédagogique</h4><p>Le stock d'origine n'est jamais modifié : <code>stock[2].stock</code> vaut toujours 2 alors que <code>apres[2].stock</code> vaut 1. La vente de la souris est refusée car son stock (0) est inférieur à 1 : la liste reste inchangée.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Écrire <code>a.stock -= qte</code> dans le <code>map</code> : on modifie l'article d'origine.</li><li>Oublier de tester <code>a.stock &gt;= qte</code> : le stock deviendrait négatif.</li><li>Utiliser <code>{ ...a, stock: ... }</code> sur une instance : on obtient un objet simple, sans la méthode <code>valeur()</code>.</li></ul>
+<p class="back"><a href="#ex-18" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-19"><summary><span class="corr-n">19</span>Gérer un état avec un réducteur</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Une seule fonction, quatre cas, et une contrainte globale : aucun effet de bord.</p>
+<h4>2. Raisonnement</h4><p><code>AJOUTER</code> : spread. <code>BASCULER</code> : <code>map</code> avec copie de l'élément concerné. <code>SUPPRIMER</code> : <code>filter</code>. Le cas par défaut renvoie l'état tel quel.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-19"><code><span class="k">const</span> reducteur = (taches, action) =&gt; {
+  <span class="k">switch</span> (action.type) {
+    <span class="k">case</span> <span class="s">&quot;AJOUTER&quot;</span>:
+      <span class="k">return</span> [...taches, { id: action.id, titre: action.titre, faite: <span class="k">false</span> }];
+    <span class="k">case</span> <span class="s">&quot;BASCULER&quot;</span>:
+      <span class="k">return</span> taches.map(t =&gt; (t.id === action.id ? { ...t, faite: !t.faite } : t));
+    <span class="k">case</span> <span class="s">&quot;SUPPRIMER&quot;</span>:
+      <span class="k">return</span> taches.filter(t =&gt; t.id !== action.id);
+    <span class="k">default</span>:
+      <span class="k">return</span> taches;
+  }
+};
+
+<span class="k">const</span> etat0 = [];
+<span class="k">const</span> etat1 = reducteur(etat0, { type: <span class="s">&quot;AJOUTER&quot;</span>, id: <span class="n">1</span>, titre: <span class="s">&quot;Réviser ES6&quot;</span> });
+<span class="k">const</span> etat2 = reducteur(etat1, { type: <span class="s">&quot;AJOUTER&quot;</span>, id: <span class="n">2</span>, titre: <span class="s">&quot;Faire les exercices&quot;</span> });
+<span class="k">const</span> etat3 = reducteur(etat2, { type: <span class="s">&quot;BASCULER&quot;</span>, id: <span class="n">1</span> });
+<span class="k">const</span> etat4 = reducteur(etat3, { type: <span class="s">&quot;SUPPRIMER&quot;</span>, id: <span class="n">2</span> });
+
+console.log(etat0.length);
+console.log(JSON.stringify(etat3));
+console.log(JSON.stringify(etat4));
+console.log(etat0.length, etat2[<span class="n">0</span>].faite);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-19">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-19" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">0
+[{&quot;id&quot;:1,&quot;titre&quot;:&quot;Réviser ES6&quot;,&quot;faite&quot;:true},{&quot;id&quot;:2,&quot;titre&quot;:&quot;Faire les exercices&quot;,&quot;faite&quot;:false}]
+[{&quot;id&quot;:1,&quot;titre&quot;:&quot;Réviser ES6&quot;,&quot;faite&quot;:true}]
+0 false</pre>
+<h4>5. Explication pédagogique</h4><p>Chaque action produit un nouvel état et les anciens restent intacts : <code>etat2[0].faite</code> vaut toujours <code>false</code>, alors que la tâche est cochée dans <code>etat3</code>. Ce fonctionnement permet à React de détecter qu'un état a changé en comparant simplement les références.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Écrire <code>t.faite = !t.faite</code> dans le <code>map</code> : on modifie l'état précédent.</li><li>Oublier le cas <code>default</code>.</li><li>Oublier le <code>return</code> dans un <code>case</code>.</li></ul>
+<p class="back"><a href="#ex-19" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-20"><summary><span class="corr-n">20</span>Chronomètre : fermeture et fonction pure</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Il faut séparer le calcul (pur, testable) de l'état (privé, géré par la fermeture).</p>
+<h4>2. Raisonnement</h4><p><code>suivant</code> fait le calcul. <code>creerChrono</code> garde <code>courant</code> dans sa portée et renvoie une fonction qui appelle <code>suivant(courant)</code> puis met <code>courant</code> à jour.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-20"><code><span class="k">const</span> suivant = ({ heure, minute, seconde }) =&gt; {
+  <span class="k">let</span> h = heure;
+  <span class="k">let</span> m = minute;
+  <span class="k">let</span> s = seconde + <span class="n">1</span>;
+  <span class="k">if</span> (s &gt;= <span class="n">60</span>) {
+    s = <span class="n">0</span>;
+    m += <span class="n">1</span>;
+  }
+  <span class="k">if</span> (m &gt;= <span class="n">60</span>) {
+    m = <span class="n">0</span>;
+    h += <span class="n">1</span>;
+  }
+  <span class="k">if</span> (h &gt;= <span class="n">24</span>) {
+    h = <span class="n">0</span>;
+  }
+  <span class="k">return</span> { heure: h, minute: m, seconde: s };
+};
+
+<span class="k">const</span> format = ({ heure, minute, seconde }) =&gt;
+  [heure, minute, seconde].map(n =&gt; String(n).padStart(<span class="n">2</span>, <span class="s">&quot;0&quot;</span>)).join(<span class="s">&quot;:&quot;</span>);
+
+<span class="k">function</span> creerChrono(initial) {
+  <span class="k">let</span> courant = initial;
+  <span class="k">return</span> () =&gt; {
+    courant = suivant(courant);
+    <span class="k">return</span> courant;
+  };
+}
+
+<span class="k">const</span> tick = creerChrono({ heure: <span class="n">10</span>, minute: <span class="n">59</span>, seconde: <span class="n">58</span> });
+console.log(format(tick()));
+console.log(format(tick()));
+console.log(format(tick()));
+
+<span class="k">const</span> minuit = creerChrono({ heure: <span class="n">23</span>, minute: <span class="n">59</span>, seconde: <span class="n">59</span> });
+console.log(format(minuit()));</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-20">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-20" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">10:59:59
+11:00:00
+11:00:01
+00:00:00</pre>
+<h4>5. Explication pédagogique</h4><p>Dans un navigateur, on écrirait <code>setInterval(tick, 1000)</code> puis on afficherait <code>format(tick())</code> dans le DOM à chaque appel : <code>tick</code> est passée en paramètre, ce qui est possible parce que les fonctions sont des objets de première classe. Le comportement de <code>suivant</code> ne dépend que de son argument : elle est pure.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Modifier directement <code>temps.seconde++</code> : l'objet reçu est modifié.</li><li>Oublier le retour à 0 de la minute ou de l'heure.</li><li>Stocker <code>courant</code> en variable globale : deux chronos se mélangeraient.</li></ul>
+<p class="back"><a href="#ex-20" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+<details class="corr" id="corr-21"><summary><span class="corr-n">21</span>Dossier complet : résultats d'une promotion</summary><div class="corr-body">
+<h4>1. Analyse</h4><p>Un énoncé complet qui mobilise : classe, valeurs par défaut, méthodes de tableaux, ternaires, déstructuration et immutabilité.</p>
+<h4>2. Raisonnement</h4><p>On avance par petites fonctions, chacune testable seule : <code>moyenne</code> d'abord, puis <code>mention</code>, puis <code>classement</code>, qui sert de base à <code>statistiques</code>. <code>ajouterNote</code> crée un nouvel <code>Etudiant</code> avec <code>[...e.notes, note]</code>.</p>
+<h4>3. Solution complète</h4><div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-21"><code><span class="k">class</span> Etudiant {
+  constructor(nom, notes = []) {
+    <span class="k">this</span>.nom = nom;
+    <span class="k">this</span>.notes = notes;
+  }
+  moyenne() {
+    <span class="k">return</span> <span class="k">this</span>.notes.length === <span class="n">0</span>
+      ? <span class="n">0</span>
+      : <span class="k">this</span>.notes.reduce((s, n) =&gt; s + n, <span class="n">0</span>) / <span class="k">this</span>.notes.length;
+  }
+}
+
+<span class="k">const</span> mention = m =&gt;
+  m &gt;= <span class="n">16</span> ? <span class="s">&quot;Très bien&quot;</span> : m &gt;= <span class="n">14</span> ? <span class="s">&quot;Bien&quot;</span> : m &gt;= <span class="n">12</span> ? <span class="s">&quot;Assez bien&quot;</span> : m &gt;= <span class="n">10</span> ? <span class="s">&quot;Passable&quot;</span> : <span class="s">&quot;Ajourné&quot;</span>;
+
+<span class="k">const</span> classement = etudiants =&gt;
+  etudiants
+    .map(e =&gt; ({ nom: e.nom, moyenne: e.moyenne() }))
+    .sort((a, b) =&gt; b.moyenne - a.moyenne);
+
+<span class="k">const</span> statistiques = etudiants =&gt; {
+  <span class="k">const</span> [premier] = classement(etudiants);
+  <span class="k">const</span> total = etudiants.reduce((s, e) =&gt; s + e.moyenne(), <span class="n">0</span>);
+  <span class="k">return</span> {
+    meilleur: premier.nom,
+    moyenneClasse: total / etudiants.length,
+    admis: etudiants.filter(e =&gt; e.moyenne() &gt;= <span class="n">10</span>).length
+  };
+};
+
+<span class="k">const</span> ajouterNote = (e, note) =&gt; <span class="k">new</span> Etudiant(e.nom, [...e.notes, note]);
+
+<span class="k">const</span> promo = [
+  <span class="k">new</span> Etudiant(<span class="s">&quot;Rami&quot;</span>, [<span class="n">15</span>, <span class="n">17</span>, <span class="n">16</span>]),
+  <span class="k">new</span> Etudiant(<span class="s">&quot;Karimi&quot;</span>, [<span class="n">11</span>, <span class="n">9</span>, <span class="n">10</span>]),
+  <span class="k">new</span> Etudiant(<span class="s">&quot;Chaouki&quot;</span>, [<span class="n">14</span>, <span class="n">16</span>, <span class="n">12</span>]),
+  <span class="k">new</span> Etudiant(<span class="s">&quot;Fahmi&quot;</span>, [<span class="n">8</span>, <span class="n">9</span>, <span class="n">7</span>])
+];
+
+classement(promo).forEach(c =&gt; console.log(<span class="s">`${c.nom} : ${c.moyenne} (${mention(c.moyenne)})`</span>));
+console.log(statistiques(promo));
+
+<span class="k">const</span> fahmi2 = ajouterNote(promo[<span class="n">3</span>], <span class="n">20</span>);
+console.log(fahmi2.moyenne(), mention(fahmi2.moyenne()));
+console.log(promo[<span class="n">3</span>].notes.length);</code></pre></div><div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-21">Exécuter ce corrigé</button></div><pre class="out" id="out-sol-21" aria-live="polite" hidden></pre>
+<h4>4. Résultat attendu</h4><pre class="out static">Rami : 16 (Très bien)
+Chaouki : 14 (Bien)
+Karimi : 10 (Passable)
+Fahmi : 8 (Ajourné)
+{ meilleur: 'Rami', moyenneClasse: 12, admis: 3 }
+11 Passable
+3</pre>
+<h4>5. Explication pédagogique</h4><p>Le <code>sort</code> s'applique au tableau créé par <code>map</code>, pas à <code>promo</code> : la liste d'origine garde son ordre. <code>ajouterNote</code> renvoie un nouvel objet et laisse l'étudiant d'origine intact (3 notes). Les ternaires chaînés se lisent de haut en bas : le premier test vrai l'emporte, donc l'ordre des seuils compte.</p>
+<h5>Erreurs fréquentes</h5><ul><li>Écrire <code>etudiants.sort(...)</code> directement : la liste d'origine est triée.</li><li>Inverser l'ordre des tests dans <code>mention</code> : tout le monde obtiendrait « Passable ».</li><li>Diviser par zéro dans <code>moyenne</code> pour un étudiant sans notes.</li></ul>
+<p class="back"><a href="#ex-21" data-open="">Retour à l'énoncé</a></p>
+</div></details>
+</section>
+
+<section id="controle">
+<h2>Partie C — Contrôle blanc : la médiathèque</h2>
+<p class="sec-sub">Mini-contrôle blanc de niveau 5, dans les conditions d'une évaluation.</p>
+<div class="mc-meta"><span>Durée indicative : 1 h 30</span><span>Barème : 20 points</span><span>Documents : aucun</span></div>
+<h3 class="sub" style="margin-top:22px">Consignes</h3>
+<ul><li>Aucun document autorisé, aucune aide en ligne. Tu peux utiliser la zone de code ci-dessous pour tester tes réponses, comme la console d'un navigateur.</li><li>Réponds dans l'ordre. Les parties sont indépendantes : tu peux sauter une question et y revenir.</li><li>Écris du JavaScript ES6 : <code>const</code>/<code>let</code>, fonctions fléchées, template literals.</li><li>Les fonctions demandées dans les parties 5 et 6 doivent être <strong>pures</strong> quand c'est précisé : aucune modification des données reçues.</li><li>Le barème est donné entre parenthèses. Un code qui ne s'exécute pas rapporte moins qu'un code simple qui fonctionne.</li></ul>
+<div class="table-wrap" style="max-width:520px"><table><thead><tr><th>Partie</th><th class="num">Points</th></tr></thead><tbody>
+<tr><td>Partie 1 — Questions de cours</td><td class="num">3</td></tr><tr><td>Partie 2 — Classes et héritage</td><td class="num">3</td></tr><tr><td>Partie 3 — Méthodes de tableaux</td><td class="num">5</td></tr><tr><td>Partie 4 — Déstructuration, spread, ternaire</td><td class="num">3</td></tr><tr><td>Partie 5 — Fonctions pures</td><td class="num">3</td></tr><tr><td>Partie 6 — Fermeture</td><td class="num">3</td></tr>
+<tr><td><strong>Total</strong></td><td class="num"><strong>20</strong></td></tr></tbody></table></div>
+<div class="timer" role="group" aria-label="Chronomètre du contrôle"><span class="clock" id="clock" role="timer">90:00</span><button type="button" class="btn" id="t-start">Démarrer</button><button type="button" class="btn ghost" id="t-pause">Pause</button><button type="button" class="btn ghost" id="t-reset">Remettre à zéro</button></div>
+<div class="mc-enonce"><h3 class="sub">Énoncé</h3><p>Une médiathèque gère son catalogue avec le tableau <code>catalogue</code> donné dans la zone de code. Chaque élément possède un <code>id</code>, un <code>titre</code>, un <code>type</code> (<code>&quot;livre&quot;</code> ou <code>&quot;dvd&quot;</code>), un <code>prix</code> et un booléen <code>disponible</code>.</p><h4 class="sub">Partie 1 : Questions de cours (3 points)</h4><ul><li>(1 pt) Quelle différence y a-t-il entre le front-end et le back-end ? Donne un exemple pour chacun.</li><li>(1 pt) Qu'est-ce que le Virtual DOM ? Comment s'appelle le processus qui le synchronise avec le vrai DOM ?</li><li>(1 pt) Donne deux avantages d'un framework et cite un framework front-end applicatif.</li></ul><h4 class="sub">Partie 2 : Classes et héritage (3 points)</h4><ul><li>(1 pt) Écrire la classe <code>Ressource</code> (propriétés <code>id</code>, <code>titre</code>, <code>prix</code>) avec une méthode <code>description()</code> qui renvoie, par exemple, <code>&quot;[1] Algorithmique - 120 DH&quot;</code>.</li><li>(1,5 pt) Écrire la classe <code>Livre</code>, qui hérite de <code>Ressource</code>, ajoute la propriété <code>auteur</code> et redéfinit <code>description()</code> pour ajouter <code>&quot; (auteur : M. Alami)&quot;</code> en réutilisant la méthode du parent.</li><li>(0,5 pt) Créer le livre <code>(1, &quot;Algorithmique&quot;, 120, &quot;M. Alami&quot;)</code> et afficher sa description.</li></ul><h4 class="sub">Partie 3 : Méthodes de tableaux (5 points)</h4><ul><li>(1 pt) Obtenir le tableau des titres des ressources disponibles.</li><li>(1 pt) Calculer, avec <code>reduce</code>, la valeur totale du catalogue (somme des prix).</li><li>(1 pt) Trouver la première ressource de type <code>&quot;dvd&quot;</code> et afficher son titre, ou <code>&quot;Aucun&quot;</code> s'il n'y en a pas.</li><li>(2 pts) En une seule instruction chaînée, obtenir les titres des livres disponibles qui coûtent moins de 160 DH.</li></ul><h4 class="sub">Partie 4 : Déstructuration, spread, ternaire (3 points)</h4><ul><li>(1 pt) Écrire <code>afficher({ titre, prix, disponible })</code> qui renvoie <code>&quot;Algorithmique (120 DH) : Disponible&quot;</code> ou <code>&quot;... : Emprunté&quot;</code> selon le cas. Le paramètre doit être déstructuré et le choix fait avec un ternaire.</li><li>(1 pt) Avec <code>const [premier, ...autres] = catalogue</code>, afficher le titre du premier et le nombre d'éléments restants.</li><li>(1 pt) Créer <code>catalogue2</code>, copie du catalogue à laquelle on ajoute <code>{ id: 6, titre: &quot;Node.js&quot;, type: &quot;livre&quot;, prix: 130, disponible: true }</code>, sans modifier <code>catalogue</code>. Afficher les deux longueurs.</li></ul><h4 class="sub">Partie 5 : Fonctions pures (3 points)</h4><ul><li>(1,5 pt) Écrire <code>emprunter(liste, id)</code>, <strong>pure</strong>, qui renvoie une copie de la liste où la ressource portant cet <code>id</code> a <code>disponible</code> à <code>false</code>.</li><li>(1 pt) Écrire <code>retirer(liste, id)</code>, <strong>pure</strong>, qui renvoie la liste sans la ressource d'<code>id</code> donné.</li><li>(0,5 pt) Prouver que <code>emprunter</code> est pure en affichant <code>catalogue[0].disponible</code> puis <code>emprunter(catalogue, 1)[0].disponible</code>.</li></ul><h4 class="sub">Partie 6 : Fermeture (3 points)</h4><ul><li>(2 pts) Écrire <code>creerCompteurEmprunts()</code> qui renvoie un objet avec les méthodes <code>enregistrer()</code> (ajoute un emprunt et renvoie le total) et <code>total()</code>. Le total ne doit pas être accessible directement.</li><li>(1 pt) Créer deux compteurs, enregistrer 2 emprunts sur le premier et 1 sur le second, puis afficher leurs totaux. Expliquer en une phrase pourquoi ils sont indépendants.</li></ul></div>
+<div class="lab"><div class="lab-bar"><label for="ta-mc">Zone de code du contrôle</label><span class="spacer"></span><button type="button" class="btn" data-run="ta-mc">Exécuter</button><button type="button" class="btn ghost" data-reset="ta-mc">Réinitialiser</button></div><textarea id="ta-mc" spellcheck="false" autocomplete="off" autocapitalize="off" rows="22" data-default="const catalogue = [
+  { id: 1, titre: &quot;Algorithmique&quot;, type: &quot;livre&quot;, prix: 120, disponible: true },
+  { id: 2, titre: &quot;JavaScript moderne&quot;, type: &quot;livre&quot;, prix: 180, disponible: false },
+  { id: 3, titre: &quot;Introduction à React&quot;, type: &quot;dvd&quot;, prix: 90, disponible: true },
+  { id: 4, titre: &quot;Bases de données&quot;, type: &quot;livre&quot;, prix: 150, disponible: true },
+  { id: 5, titre: &quot;UX et interfaces&quot;, type: &quot;dvd&quot;, prix: 60, disponible: false }
+];
+
+// Vos réponses ici">const catalogue = [
+  { id: 1, titre: &quot;Algorithmique&quot;, type: &quot;livre&quot;, prix: 120, disponible: true },
+  { id: 2, titre: &quot;JavaScript moderne&quot;, type: &quot;livre&quot;, prix: 180, disponible: false },
+  { id: 3, titre: &quot;Introduction à React&quot;, type: &quot;dvd&quot;, prix: 90, disponible: true },
+  { id: 4, titre: &quot;Bases de données&quot;, type: &quot;livre&quot;, prix: 150, disponible: true },
+  { id: 5, titre: &quot;UX et interfaces&quot;, type: &quot;dvd&quot;, prix: 60, disponible: false }
+];
+
+// Vos réponses ici</textarea><pre class="out" id="out-ta-mc" aria-live="polite" hidden></pre></div>
+<div class="gate"><p><strong>Correction du contrôle.</strong> Elle est dans une section séparée, masquée tant que tu n'as pas terminé.</p><button type="button" class="btn ghost" id="btn-corr" aria-expanded="false" aria-controls="corr-controle">Afficher la correction</button></div>
+<div class="corr-mc" id="corr-controle" hidden>
+<h3 style="margin-top:14px">Correction du contrôle blanc</h3>
+<h4 class="sub">Partie 1 : Questions de cours (3 points)</h4><ul><li>(1 pt) Le front-end regroupe ce que l'utilisateur voit et manipule (HTML, CSS, JavaScript : boutons, menus, pages). Le back-end est la partie serveur : serveur, application et base de données qui fournissent et stockent les données. Exemple : le panier affiché est du front-end, l'enregistrement de la commande est du back-end. <strong>0,5 pt par moitié correctement définie et illustrée.</strong></li><li>(1 pt) Le Virtual DOM est une représentation idéale de l'interface gardée en mémoire. React la compare à la version précédente puis la synchronise avec le vrai DOM, processus appelé <strong>réconciliation</strong>. <strong>0,5 pt pour la définition, 0,5 pt pour le mot « réconciliation ».</strong></li><li>(1 pt) Deux avantages au choix : concentration sur la partie métier, séparation des couches techniques (équipe, maintenance), maintenance assurée par l'organisme fondateur, développement plus rapide. Framework applicatif : React, Angular ou Vue.js. <strong>0,25 pt par avantage, 0,5 pt pour le framework.</strong></li></ul><h4 class="sub">Partie 2 : Classes et héritage (3 points)</h4><ul><li>Classe <code>Ressource</code> : constructeur avec les trois propriétés mémorisées via <code>this</code> (0,5 pt) et méthode <code>description()</code> correcte avec template literal (0,5 pt).</li><li>Classe <code>Livre</code> : <code>extends Ressource</code> (0,5 pt), <code>super(id, titre, prix)</code> avant <code>this.auteur</code> (0,5 pt), <code>super.description()</code> réutilisé dans la méthode redéfinie (0,5 pt).</li><li>Instanciation avec <code>new</code> et affichage (0,5 pt).</li><li>Erreurs fréquentes : oublier <code>super(...)</code>, oublier <code>this.</code> devant les propriétés, dupliquer le code du parent au lieu d'appeler <code>super.description()</code>.</li></ul><h4 class="sub">Partie 3 : Méthodes de tableaux (5 points)</h4><ul><li>Titres des ressources disponibles : <code>filter</code> puis <code>map</code> (1 pt). Résultat : <code>[ 'Algorithmique', 'Introduction à React', 'Bases de données' ]</code>.</li><li>Valeur totale : <code>reduce</code> avec valeur initiale 0 (1 pt). Résultat : 600.</li><li>Premier DVD : <code>find</code> puis ternaire pour gérer <code>undefined</code> (1 pt). Résultat : <code>Introduction à React</code>.</li><li>Livres disponibles de moins de 160 DH : trois conditions dans un seul <code>filter</code>, suivi de <code>map</code> (2 pts : 1 pt pour les conditions, 1 pt pour le <code>map</code> et le chaînage). Résultat : <code>[ 'Algorithmique', 'Bases de données' ]</code>. Le livre à 180 DH est exclu par le prix et son indisponibilité.</li></ul><h4 class="sub">Partie 4 : Déstructuration, spread, ternaire (3 points)</h4><ul><li><code>afficher</code> : paramètre déstructuré (0,5 pt) et ternaire dans le template literal (0,5 pt).</li><li><code>[premier, ...autres]</code> : <code>premier.titre</code> vaut <code>Algorithmique</code> et <code>autres.length</code> vaut 4 (1 pt).</li><li><code>catalogue2</code> : copie avec spread (0,5 pt) et vérification des longueurs 5 et 6 (0,5 pt). Le tableau d'origine n'est pas modifié.</li></ul><h4 class="sub">Partie 5 : Fonctions pures (3 points)</h4><ul><li><code>emprunter</code> : <code>map</code> avec copie <code>{ ...r, disponible: false }</code> pour la ressource concernée, les autres inchangées (1,5 pt). Sans copie de l'objet (<code>r.disponible = false</code>), la fonction n'est pas pure : 0 pt pour cette question.</li><li><code>retirer</code> : <code>filter</code> avec <code>r.id !== id</code> (1 pt).</li><li>Preuve : <code>catalogue[0].disponible</code> reste <code>true</code> alors que <code>emprunter(catalogue, 1)[0].disponible</code> vaut <code>false</code> (0,5 pt).</li></ul><h4 class="sub">Partie 6 : Fermeture (3 points)</h4><ul><li><code>creerCompteurEmprunts</code> : variable locale <code>nb</code> déclarée dans la fonction (0,5 pt), <code>enregistrer()</code> qui incrémente et renvoie (1 pt), <code>total()</code> qui renvoie la valeur (0,5 pt). La variable <code>nb</code> n'est pas une propriété de l'objet renvoyé : elle n'est donc pas accessible directement.</li><li>Deux compteurs : totaux 2 et 1 (0,5 pt). Explication (0,5 pt) : chaque appel de <code>creerCompteurEmprunts</code> crée un nouvel environnement avec sa propre variable <code>nb</code>.</li></ul>
+<h3>Code complet de la correction</h3>
+<div class="code"><div class="code-top"><span>JavaScript</span><button type="button" class="mini" data-copy>Copier</button></div><pre id="sol-mc"><code><span class="k">const</span> catalogue = [
+  { id: <span class="n">1</span>, titre: <span class="s">&quot;Algorithmique&quot;</span>, type: <span class="s">&quot;livre&quot;</span>, prix: <span class="n">120</span>, disponible: <span class="k">true</span> },
+  { id: <span class="n">2</span>, titre: <span class="s">&quot;JavaScript moderne&quot;</span>, type: <span class="s">&quot;livre&quot;</span>, prix: <span class="n">180</span>, disponible: <span class="k">false</span> },
+  { id: <span class="n">3</span>, titre: <span class="s">&quot;Introduction à React&quot;</span>, type: <span class="s">&quot;dvd&quot;</span>, prix: <span class="n">90</span>, disponible: <span class="k">true</span> },
+  { id: <span class="n">4</span>, titre: <span class="s">&quot;Bases de données&quot;</span>, type: <span class="s">&quot;livre&quot;</span>, prix: <span class="n">150</span>, disponible: <span class="k">true</span> },
+  { id: <span class="n">5</span>, titre: <span class="s">&quot;UX et interfaces&quot;</span>, type: <span class="s">&quot;dvd&quot;</span>, prix: <span class="n">60</span>, disponible: <span class="k">false</span> }
+];
+
+<span class="c">// Partie 2</span>
+<span class="k">class</span> Ressource {
+  constructor(id, titre, prix) {
+    <span class="k">this</span>.id = id;
+    <span class="k">this</span>.titre = titre;
+    <span class="k">this</span>.prix = prix;
+  }
+  description() {
+    <span class="k">return</span> <span class="s">`[${this.id}] ${this.titre} - ${this.prix} DH`</span>;
+  }
+}
+<span class="k">class</span> Livre <span class="k">extends</span> Ressource {
+  constructor(id, titre, prix, auteur) {
+    <span class="k">super</span>(id, titre, prix);
+    <span class="k">this</span>.auteur = auteur;
+  }
+  description() {
+    <span class="k">return</span> <span class="s">`${super.description()} (auteur : ${this.auteur})`</span>;
+  }
+}
+<span class="k">const</span> l1 = <span class="k">new</span> Livre(<span class="n">1</span>, <span class="s">&quot;Algorithmique&quot;</span>, <span class="n">120</span>, <span class="s">&quot;M. Alami&quot;</span>);
+console.log(l1.description());
+
+<span class="c">// Partie 3</span>
+<span class="k">const</span> disponibles = catalogue.filter(r =&gt; r.disponible).map(r =&gt; r.titre);
+console.log(disponibles);
+<span class="k">const</span> valeurTotale = catalogue.reduce((s, r) =&gt; s + r.prix, <span class="n">0</span>);
+console.log(valeurTotale);
+<span class="k">const</span> premierDvd = catalogue.find(r =&gt; r.type === <span class="s">&quot;dvd&quot;</span>);
+console.log(premierDvd ? premierDvd.titre : <span class="s">&quot;Aucun&quot;</span>);
+<span class="k">const</span> livresAbordables = catalogue
+  .filter(r =&gt; r.type === <span class="s">&quot;livre&quot;</span> &amp;&amp; r.disponible &amp;&amp; r.prix &lt; <span class="n">160</span>)
+  .map(r =&gt; r.titre);
+console.log(livresAbordables);
+
+<span class="c">// Partie 4</span>
+<span class="k">const</span> afficher = ({ titre, prix, disponible }) =&gt;
+  <span class="s">`${titre} (${prix} DH) : ${disponible ? &quot;Disponible&quot; : &quot;Emprunté&quot;}`</span>;
+console.log(afficher(catalogue[<span class="n">0</span>]));
+console.log(afficher(catalogue[<span class="n">1</span>]));
+<span class="k">const</span> [premier, ...autres] = catalogue;
+console.log(premier.titre, autres.length);
+<span class="k">const</span> catalogue2 = [
+  ...catalogue,
+  { id: <span class="n">6</span>, titre: <span class="s">&quot;Node.js&quot;</span>, type: <span class="s">&quot;livre&quot;</span>, prix: <span class="n">130</span>, disponible: <span class="k">true</span> }
+];
+console.log(catalogue.length, catalogue2.length);
+
+<span class="c">// Partie 5</span>
+<span class="k">const</span> emprunter = (liste, id) =&gt;
+  liste.map(r =&gt; (r.id === id ? { ...r, disponible: <span class="k">false</span> } : r));
+<span class="k">const</span> retirer = (liste, id) =&gt; liste.filter(r =&gt; r.id !== id);
+console.log(catalogue[<span class="n">0</span>].disponible, emprunter(catalogue, <span class="n">1</span>)[<span class="n">0</span>].disponible);
+console.log(retirer(catalogue, <span class="n">5</span>).length);
+
+<span class="c">// Partie 6</span>
+<span class="k">function</span> creerCompteurEmprunts() {
+  <span class="k">let</span> nb = <span class="n">0</span>;
+  <span class="k">return</span> {
+    enregistrer() {
+      nb += <span class="n">1</span>;
+      <span class="k">return</span> nb;
+    },
+    total() {
+      <span class="k">return</span> nb;
+    }
+  };
+}
+<span class="k">const</span> c1 = creerCompteurEmprunts();
+<span class="k">const</span> c2 = creerCompteurEmprunts();
+c1.enregistrer();
+c1.enregistrer();
+c2.enregistrer();
+console.log(c1.total(), c2.total());</code></pre></div>
+<div class="lab-bar flat"><button type="button" class="btn" data-run-sol="sol-mc">Exécuter la correction</button></div><pre class="out" id="out-sol-mc" aria-live="polite" hidden></pre>
+<h3>Résultat attendu</h3><pre class="out static">[1] Algorithmique - 120 DH (auteur : M. Alami)
+[ 'Algorithmique', 'Introduction à React', 'Bases de données' ]
+600
+Introduction à React
+[ 'Algorithmique', 'Bases de données' ]
+Algorithmique (120 DH) : Disponible
+JavaScript moderne (180 DH) : Emprunté
+Algorithmique 4
+5 6
+true false
+4
+2 1</pre>
+</div>
+</section>
+
+<section id="sources">
+<h2>Sources consultées</h2>
+<p class="sec-sub">Ces ressources ont servi à calibrer les notions et les types d'exercices. Les énoncés de cette banque sont originaux.</p>
+<ul class="src"><li><a href="https://github.com/MadhavBahl/dailyjs" target="_blank" rel="noopener noreferrer">MadhavBahl/dailyjs</a><span>Série de leçons ES6 : helpers map, filter, find, reduce, classes, héritage, déstructuration.</span></li><li><a href="https://github.com/josh-hardman/learn-es6" target="_blank" rel="noopener noreferrer">josh-hardman/learn-es6</a><span>Plan d'un cours ES6 : array helpers, template literals, déstructuration, modules.</span></li><li><a href="https://github.com/mfallon/udemy-es6" target="_blank" rel="noopener noreferrer">mfallon/udemy-es6</a><span>Plan d'un cours avec exercices sur map, filter, reduce et la déstructuration.</span></li><li><a href="https://github.com/devmahmud/JavaScript-From-Fundamentals-to-Functional-JS" target="_blank" rel="noopener noreferrer">devmahmud/JavaScript-From-Fundamentals-to-Functional-JS</a><span>Exercices de JavaScript fonctionnel : map, filter, reduce, fonctions fléchées.</span></li><li><a href="https://tfrommen.de/javascript-30-day-4-array-cardio-1/" target="_blank" rel="noopener noreferrer">JavaScript 30, jour 4 (tfrommen.de)</a><span>Exemples d'utilisation de filter, map et reduce avec déstructuration.</span></li><li><a href="https://gist.github.com/magalhini/b70a42452d0757a86c42c2c8ac33587c" target="_blank" rel="noopener noreferrer">Immutable changes to Objects and Arrays in JavaScript</a><span>Ajouter, supprimer et modifier sans muter, avec spread et Object.assign.</span></li><li><a href="https://codesignal.com/learn/courses/functional-programming-patterns-in-javascript/lessons/immutability-and-pure-functions" target="_blank" rel="noopener noreferrer">Immutability and Pure Functions (CodeSignal)</a><span>Définition des fonctions pures et mises à jour immuables.</span></li><li><a href="https://cursos.ceslava.com/en/curso/javascript/leccion/javascript-spread-rest-medio" target="_blank" rel="noopener noreferrer">Spread and rest (cursos.ceslava.com)</a><span>Défis sur spread et rest, copies superficielles.</span></li><li><a href="https://frontendmasters.com/courses/functional-first-steps-v2/immutable-array-operations-exercise" target="_blank" rel="noopener noreferrer">Immutable Array Operations Exercise (Frontend Masters)</a><span>Réécrire push et pop de façon immuable.</span></li><li><a href="https://www.freecodecamp.org/news/write-safer-and-cleaner-code-by-leveraging-the-power-of-immutability-7862df04b7b6/" target="_blank" rel="noopener noreferrer">Write safer and cleaner code with immutability (freeCodeCamp)</a><span>Tableaux immuables et fonctions pures.</span></li><li><a href="https://www.pluralsight.com/resources/blog/guides/enforcing-immutability-with-es2015" target="_blank" rel="noopener noreferrer">Enforcing Immutability with ES2015 (Pluralsight)</a><span>Ajouter et retirer des éléments avec le spread, lien avec Redux.</span></li><li><a href="https://codingnomads.com/functional-programming-immutability-javascript" target="_blank" rel="noopener noreferrer">Functional Programming and Immutability (CodingNomads)</a><span>Un objet const reste modifiable ; conventions d'immutabilité.</span></li><li><a href="https://github.com/pablo-sch/keepcoding-01-javascript-basics" target="_blank" rel="noopener noreferrer">keepcoding-01-javascript-basics</a><span>Exercices d'introduction : map et filter sans boucle, fermetures, modules ES.</span></li><li><a href="https://codemia.io/knowledge-hub/path/what_is_export_default_in_javascript" target="_blank" rel="noopener noreferrer">What is export default in JavaScript? (Codemia)</a><span>Export par défaut et exports nommés, erreurs d'import fréquentes.</span></li><li><a href="https://www.educative.io/courses/javascript-fundamentals-before-learning-react/np/named-default-exports" target="_blank" rel="noopener noreferrer">Named &amp; Default Exports (Educative)</a><span>Modules ES6 avant d'apprendre React.</span></li></ul>
+<p class="note">Aucun ancien contrôle OFPPT ni sujet d'EFM n'a été trouvé en ligne lors des recherches. Le niveau du contrôle blanc est donc déduit du cours (notions, exemples et exercices du PDF) et ne reproduit pas de sujet officiel. Compare-le avec les consignes de ton formateur.</p>
+</section>
+<footer>Cours : « C12 : Développer en Front-end, S1 : Comprendre les concepts de base du web front-end », OFPPT – DRIF.</footer>
+</div>
+<script>
+function fmt(v, top) {
+  if (typeof v === "string") return top ? v : "'" + v.replace(/'/g, "\\'") + "'";
+  if (v === null) return "null";
+  if (v === undefined) return "undefined";
+  if (typeof v === "function") return "[Function" + (v.name ? ": " + v.name : " (anonymous)") + "]";
+  if (Array.isArray(v)) return v.length ? "[ " + v.map(function (x) { return fmt(x, false); }).join(", ") + " ]" : "[]";
+  if (typeof v === "object") {
+    var ks = Object.keys(v);
+    var name = v.constructor && v.constructor !== Object && v.constructor.name ? v.constructor.name + " " : "";
+    return ks.length ? name + "{ " + ks.map(function (k) { return k + ": " + fmt(v[k], false); }).join(", ") + " }" : name + "{}";
+  }
+  return String(v);
+}
+function runCode(code) {
+  var lines = [];
+  var push = function () { lines.push(Array.prototype.slice.call(arguments).map(function (x) { return fmt(x, true); }).join(" ")); };
+  var con = { log: push, info: push, warn: push, error: push };
+  try {
+    new Function("console", code)(con);
+    return { lines: lines, error: null };
+  } catch (e) {
+    return { lines: lines, error: (e && e.name ? e.name + " : " + e.message : String(e)) };
+  }
+}
+
+(function(){
+  var KEY="ofppt-es6-n5-statuts", TOTAL=21;
+  var state={};
+  try{state=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){state={}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+  function refresh(){
+    var done=0,rev=0;
+    for(var n=1;n<=TOTAL;n++){
+      var s=state[n]||"todo";
+      var t=document.querySelector('[data-tile="'+n+'"]');
+      if(t){t.classList.toggle("is-done",s==="done");t.classList.toggle("is-review",s==="review");}
+      if(s==="done")done++; if(s==="review")rev++;
+    }
+    var c=document.getElementById("count");
+    if(c)c.innerHTML="<strong>"+done+"</strong> / "+TOTAL+" terminés · "+rev+" à revoir";
+    var b=document.getElementById("barfill"); if(b)b.style.width=(100*done/TOTAL)+"%";
+  }
+  document.querySelectorAll(".ex").forEach(function(ex){
+    var n=ex.getAttribute("data-n");
+    var v=state[n]||"todo";
+    var r=ex.querySelector('input[value="'+v+'"]'); if(r)r.checked=true;
+    ex.querySelectorAll('input[type=radio]').forEach(function(inp){
+      inp.addEventListener("change",function(){state[n]=inp.value;save();refresh();});
+    });
+  });
+  refresh();
+
+  function show(out,res){
+    out.hidden=false;
+    var txt=res.lines.join("\n");
+    if(res.error){txt+=(txt?"\n":"")+res.error;}
+    out.textContent=txt||"(aucun affichage : utilise console.log)";
+    out.classList.toggle("err",!!res.error);
+  }
+  function exec(code,out){
+    try{show(out,runCode(code));}
+    catch(e){out.hidden=false;out.classList.add("err");out.textContent="L'exécution est bloquée dans cet aperçu. Colle le code dans la console de ton navigateur (F12).";}
+  }
+  document.addEventListener("click",function(ev){
+    var t=ev.target.closest("button,a"); if(!t)return;
+    var id;
+    if((id=t.getAttribute("data-run"))){exec(document.getElementById(id).value,document.getElementById("out-"+id));return;}
+    if((id=t.getAttribute("data-run-sol"))){exec(document.getElementById(id).textContent,document.getElementById("out-"+id));return;}
+    if((id=t.getAttribute("data-reset"))){var ta=document.getElementById(id);ta.value=ta.getAttribute("data-default");var o=document.getElementById("out-"+id);o.hidden=true;return;}
+    if(t.hasAttribute("data-copy")){
+      var pre=t.closest(".code").querySelector("pre"),txt=pre.textContent;
+      var ok=function(){var old=t.textContent;t.textContent="Copié";setTimeout(function(){t.textContent=old;},1400);};
+      var fb=function(){var r=document.createRange();r.selectNodeContents(pre);var s=window.getSelection();s.removeAllRanges();s.addRange(r);t.textContent="Sélectionné";setTimeout(function(){t.textContent="Copier";},1400);};
+      try{navigator.clipboard.writeText(txt).then(ok,fb);}catch(e){fb();}
+      return;
+    }
+    if(t.tagName==="A"&&t.hasAttribute("data-open")){
+      ev.preventDefault();
+      var target=t.getAttribute("data-open");
+      var href=t.getAttribute("href").slice(1);
+      if(target){var d=document.getElementById(target);if(d)d.open=true;}
+      var el=document.getElementById(href); if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+      return;
+    }
+    if(t.tagName==="A"&&t.getAttribute("href")&&t.getAttribute("href").charAt(0)==="#"&&t.classList.contains("tile")){
+      ev.preventDefault();
+      var e2=document.getElementById(t.getAttribute("href").slice(1)); if(e2)e2.scrollIntoView({behavior:"smooth",block:"start"});
+    }
+  });
+  var all=document.getElementById("toggle-all");
+  if(all)all.addEventListener("click",function(){
+    var ds=document.querySelectorAll(".corr"),anyOpen=false;
+    ds.forEach(function(d){if(d.open)anyOpen=true;});
+    ds.forEach(function(d){d.open=!anyOpen;});
+    all.textContent=anyOpen?"Tout déplier":"Tout replier";
+  });
+  /* indentation par Tab dans les zones de code */
+  document.querySelectorAll("textarea").forEach(function(ta){
+    ta.addEventListener("keydown",function(e){
+      if(e.key==="Tab"&&!e.shiftKey){e.preventDefault();var s=ta.selectionStart;ta.setRangeText("  ",s,ta.selectionEnd,"end");}
+    });
+  });
+  /* chronomètre du contrôle */
+  var clock=document.getElementById("clock"),left=90*60,iv=null;
+  function draw(){var m=Math.floor(left/60),s=left%60;clock.textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;clock.classList.toggle("low",left<=600);}
+  draw();
+  var bs=document.getElementById("t-start"),bp=document.getElementById("t-pause"),br=document.getElementById("t-reset");
+  bs.addEventListener("click",function(){if(iv)return;iv=setInterval(function(){left--;draw();if(left<=0){clearInterval(iv);iv=null;left=0;draw();}},1000);});
+  bp.addEventListener("click",function(){clearInterval(iv);iv=null;});
+  br.addEventListener("click",function(){clearInterval(iv);iv=null;left=90*60;draw();});
+  /* correction du contrôle */
+  var g=document.getElementById("btn-corr"),cm=document.getElementById("corr-controle");
+  g.addEventListener("click",function(){
+    cm.hidden=!cm.hidden;
+    g.textContent=cm.hidden?"Afficher la correction":"Masquer la correction";
+    g.setAttribute("aria-expanded",String(!cm.hidden));
+    if(!cm.hidden)cm.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+  /* ouverture directe d'un corrigé depuis le lien #corr-N */
+  var h=location.hash.replace("#","");
+  if(/^corr-\d+$/.test(h)){var dd=document.getElementById(h);if(dd)dd.open=true;}
+})();
+</script>
+
+</body></html>

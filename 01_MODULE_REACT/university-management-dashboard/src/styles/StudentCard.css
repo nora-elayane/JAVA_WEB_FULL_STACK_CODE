@@ -1,0 +1,77 @@
+.card-student {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.4rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-top: 4px solid #336ffb;
+  border-radius: 0.75rem;
+  padding: 1.25rem 1rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card-student:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(51, 111, 251, 0.2);
+}
+
+.card-student h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1e293b;
+}
+
+.card-student p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.card-student h5 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #336ffb;
+}
+
+.card-student.inactif {
+  opacity: 0.6;
+  filter: grayscale(0.8);
+  border-top-color: #94a3b8;
+}
+
+.card-student.inactif h5 {
+  color: #94a3b8;
+}
+
+.card-student p:last-child {
+  margin-top: 0.25rem;
+  padding: 0.25rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.card-student p.Excellent {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+.card-student p.Bien {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+.card-student p.Passable {
+  background-color: #fef9c3;
+  color: #a16207;
+}
+.card-student p.Insuffisant {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}

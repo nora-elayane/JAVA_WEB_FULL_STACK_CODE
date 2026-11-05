@@ -1,0 +1,28 @@
+1-Qu'est-ce qu'un site web statique ? Donne une limite par rapport à une application moderne.
+-Un site we statique est un site web qui constitue de seulement des fichiers html css js et l'utulisateur ne peux faire aucun changemant et le contenue est le meme pour tous les utulisateurs .
+
+2-Dans une boutique en ligne, classe ces éléments en front-end ou back-end : le panier affiché à l'écran, l'enregistrement de la commande, la base de données, le bouton « Payer ».
+
+front-end :  le panier affiché à l'écran , le bouton « Payer »
+back-end  : l'enregistrement de la commande , a base de données
+
+3-Associe Node.js, Angular, Bootstrap, Laravel, React et Vue.js à : framework back-end, framework front-end applicatif, framework front-end de présentation.
+
+framework back-end : Node.js , Laravel , 
+
+framework front-end applicatif : Angular , React , Vue.js
+
+framework front-end de présentation : Bootstrap 
+
+4-Cite deux avantages d'un framework, puis une situation où l'on peut s'en passer.
+
+-accelerer audeveloppement .
+-reutilisation . 
+si on a une simple page ou simple site web on peut utiliser pas un framework . 
+
+5-Explique en une phrase le rôle du Virtual DOM dans React et donne le nom du processus de synchronisation avec le vrai DOM.
+
+le virtual dom permet de changer le contenu de la page sans refrecher 
+
+6-Pourquoi une bonne maîtrise de JavaScript ES6 est-elle demandée avant d'apprendre React ?
+parce que ils sont important dans le jsx 

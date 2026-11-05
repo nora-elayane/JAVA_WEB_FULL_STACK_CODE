@@ -1,0 +1,42 @@
+export const students = [
+  {
+    id: 1,
+    nom: "Sara",
+    filiere: "Java",
+    notes: [16, 14, 18],
+    absences: 2,
+    actif: true,
+  },
+  {
+    id: 2,
+    nom: "Youssef",
+    filiere: "React",
+    notes: [8, 11, 9],
+    absences: 7,
+    actif: true,
+  },
+  {
+    id: 3,
+    nom: "Imane",
+    filiere: "Java",
+    notes: [17, 19, 16],
+    absences: 0,
+    actif: true,
+  },
+  {
+    id: 4,
+    nom: "Adam",
+    filiere: "React",
+    notes: [12, 13, 10],
+    absences: 4,
+    actif: false,
+  },
+  {
+    id: 5,
+    nom: "Salma",
+    filiere: "Java",
+    notes: [15, 7, 11],
+    absences: 1,
+    actif: true,
+  },
+];

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //1-
+      const inscriptions = [
+        { id: 1, nom: "Rami", filiere: "DEV", valide: false },
+        { id: 2, nom: "Kamali", filiere: "IA", valide: true },
+        { id: 3, nom: "Fahmi", filiere: "DEV", valide: true },
+        { id: 4, nom: "Chaouki", filiere: "IA", valide: false },
+      ];
+      class Inscription {
+        constructor({ id, nom, filiere, valide }) {
+          this.id = id;
+          this.nom = nom;
+          this.filiere = filiere;
+          this.valide = valide;
+        }
+        resume() {
+          return `Inscription de id : ${this.id} , avec nom : ${this.nom} et filiere : ${this.filiere} elle est ${this.valide ? "valide" : "non validé "}`;
+        }
+      }
+      let ins1 = new Inscription(inscriptions[0]);
+      console.log(ins1.resume());
+
+      //2-
+      let inscValide = inscriptions.filter(function (a) {
+        return a.filiere == "DEV" && a.valide;
+      });
+      console.log(inscValide);
+
+      //3-
+      function pureValider(id) {
+        let ins = inscriptions.find(function (a) {
+          return a.id == id && a.valide;
+        });
+        return [ins];
+      }
+      console.log(pureValider(2));
+
+      //4-
+      let nbValide = inscriptions.filter(function (a) {
+        return a.valide;
+      });
+      console.log(nbValide.length);
+      let nbvalide2 = inscriptions.reduce(function (a, b) {
+        return b.valide ? ++a : a;
+      }, 0);
+      console.log(nbvalide2);
+
+      //5-
+      function recursive(inscriptions, index) {
+        if (index >= inscriptions.length) {
+          return;
+        }
+        console.log(inscriptions[index].nom);
+        recursive(inscriptions, ++index);
+      }
+      recursive(inscriptions, 0);
+    </script>
+  </body>
+</html>

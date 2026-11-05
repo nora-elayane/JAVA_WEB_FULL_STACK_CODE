@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banque d'exercices JSX — Niveau 5</title>
+<style>
+:root{
+  --bg:#f5f7fb; --card:#ffffff; --ink:#1d2433; --muted:#5b6578; --line:#dfe4ee;
+  --primary:#2f5597; --primary-soft:#e8eefb; --ok:#1a8a4a; --ok-soft:#e6f6ec;
+  --warn:#b86e00; --warn-soft:#fff3dc; --bad:#c0392b; --bad-soft:#fdeceb;
+  --code-bg:#f3f5fa; --radius:12px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6;font-size:16px}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace}
+:not(pre)>code{background:var(--code-bg);border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:.88em;color:#1f3d7a}
+a{color:var(--primary)}
+.top{position:sticky;top:0;z-index:20;background:var(--primary);color:#fff;padding:10px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.top h1{font-size:1.05rem;margin:0;font-weight:700}
+.top .sub{font-size:.8rem;opacity:.85}
+.prog{flex:1;min-width:200px;max-width:420px}
+.prog .bar{height:8px;background:rgba(255,255,255,.28);border-radius:99px;overflow:hidden}
+.prog .bar>i{display:block;height:100%;width:0;background:#7ee2a8;transition:width .3s}
+.prog .txt{font-size:.78rem;margin-top:3px;opacity:.95}
+.top button{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:.8rem}
+.top button:hover{background:rgba(255,255,255,.28)}
+.layout{display:flex;gap:24px;max-width:1280px;margin:0 auto;padding:20px}
+#side{width:250px;flex:none;position:sticky;top:76px;align-self:flex-start;max-height:calc(100vh - 96px);overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px}
+#side h3{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 6px 4px}
+#side a{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font-size:.85rem;padding:4px 6px;border-radius:6px}
+#side a:hover{background:var(--primary-soft)}
+.dot{width:10px;height:10px;border-radius:50%;background:#cfd6e4;flex:none}
+.dot.done{background:var(--ok)} .dot.review{background:var(--warn)}
+main{flex:1;min-width:0}
+section{margin-bottom:40px}
+h2.part{font-size:1.5rem;color:var(--primary);border-bottom:3px solid var(--primary);padding-bottom:6px;margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;margin-bottom:18px;box-shadow:0 1px 3px rgba(20,40,90,.05)}
+.card.done{border-left:6px solid var(--ok)} .card.review{border-left:6px solid var(--warn)}
+.ex-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.ex-head h3{margin:0;font-size:1.2rem;color:var(--primary)}
+.stars{color:#e0a100;letter-spacing:2px;font-size:1.05rem;white-space:nowrap}
+.meta{display:grid;grid-template-columns:130px 1fr;gap:4px 12px;margin:12px 0;font-size:.93rem}
+.meta b{color:var(--muted);font-weight:600}
+.chip{display:inline-block;background:var(--primary-soft);color:var(--primary);border-radius:99px;padding:1px 10px;font-size:.8rem;margin:0 4px 4px 0}
+.lbl{font-weight:800;letter-spacing:.04em;font-size:.82rem;color:var(--primary);text-transform:uppercase;margin:18px 0 6px}
+.statut{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
+.statut label{border:1px solid var(--line);border-radius:8px;padding:4px 12px;cursor:pointer;font-size:.9rem;background:#fff;user-select:none}
+.statut input{margin-right:6px}
+.statut label.on.todo{background:#eef1f7;border-color:#b6bfd2}
+.statut label.on.done{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.statut label.on.review{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
+details.tip{border:1px solid var(--line);border-radius:8px;margin:8px 0;background:#fafbfe}
+details.tip>summary{cursor:pointer;padding:7px 12px;font-weight:700;font-size:.9rem;color:var(--primary)}
+details.tip>div{padding:2px 14px 10px}
+details.tip.astuce>summary{color:var(--warn)}
+details.tip.astuce{background:var(--warn-soft);border-color:#f0d9a6}
+.code{margin:10px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--code-bg)}
+.code .bar{display:flex;align-items:center;gap:8px;padding:5px 10px;background:#e9edf6;font-size:.76rem;color:var(--muted)}
+.code .bar .sp{flex:1}
+.code button{border:1px solid #b9c3da;background:#fff;border-radius:6px;padding:2px 10px;font-size:.76rem;cursor:pointer;color:var(--primary)}
+.code button.run{background:var(--primary);color:#fff;border-color:var(--primary)}
+.code pre{margin:0;padding:12px 14px;overflow:auto;font-size:.85rem;line-height:1.5;tab-size:2}
+.code iframe{display:block;width:100%;height:230px;border:0;border-top:1px solid var(--line);background:#fff;resize:vertical}
+.code .hint{font-size:.74rem;color:var(--muted);padding:3px 10px;background:#fff;border-top:1px solid var(--line)}
+.callout{background:var(--primary-soft);border-left:4px solid var(--primary);border-radius:6px;padding:8px 12px;margin:10px 0;font-size:.93rem}
+.callout.warn{background:var(--warn-soft);border-color:var(--warn)}
+.callout.bad{background:var(--bad-soft);border-color:var(--bad)}
+.rendu{background:#fff;border:2px dashed #b9c3da;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:.93rem}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:.9rem;background:#fff}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--primary-soft);color:var(--primary)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.filters button,.btn{border:1px solid var(--line);background:#fff;border-radius:99px;padding:5px 14px;cursor:pointer;font-size:.88rem}
+.filters button.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary);border-radius:8px;padding:7px 16px;font-weight:600}
+.btn.danger{border-color:var(--bad);color:var(--bad);border-radius:8px}
+.corr details.c{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px}
+.corr details.c>summary{cursor:pointer;padding:12px 18px;font-weight:700;color:var(--primary);font-size:1.02rem}
+.corr details.c[open]>summary{border-bottom:1px solid var(--line)}
+.corr .body{padding:6px 20px 16px}
+.corr .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:14px;padding-top:10px;border-top:1px dashed var(--line);font-size:.9rem}
+.timer{font-size:2rem;font-weight:800;font-variant-numeric:tabular-nums;color:var(--primary)}
+.sticky-box{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.score input{width:70px;padding:3px 6px}
+.big{font-size:1.4rem;font-weight:800}
+ol.travail{padding-left:22px;margin:4px 0}
+ol.travail li{margin:3px 0}
+@media (max-width:900px){
+  .layout{flex-direction:column;padding:12px}
+  #side{position:static;width:auto;max-height:none}
+  .meta{grid-template-columns:1fr}
+}
+@media print{.top,#side,.filters{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div><h1>Banque d'exercices JSX — Niveau 5</h1><div class="sub">OFPPT · C12 Développer en Front-end · S4 Le langage JSX</div></div>
+  <div class="prog">
+    <div class="bar"><i id="pbar"></i></div>
+    <div class="txt" id="ptxt">0 / 18 terminés</div>
+  </div>
+  <button id="reset" title="Efface statuts, notes et scores enregistrés dans ce navigateur">Réinitialiser ma progression</button>
+</header>
+
+<div class="layout">
+<nav id="side" aria-label="Sommaire">
+  <h3>Parties</h3>
+  <a href="#intro">Présentation &amp; méthode</a>
+  <a href="#enonces">1 · Énoncés</a>
+  <a href="#corriges">2 · Corrigés détaillés</a>
+  <a href="#controle">3 · Mini-contrôle blanc</a>
+  <a href="#correction-controle">4 · Correction du contrôle</a>
+  <a href="#sources">5 · Sources</a>
+  <h3>Exercices</h3>
+  <div id="side-ex"></div>
+</nav>
+
+<main>
+<section id="intro">
+  <h2 class="part">Niveau 5 — Préparation intensive au contrôle</h2>
+  <div class="card">
+    <p>Cette banque contient <b>18 exercices</b> de difficulté progressive (de ★ à ★★★★★) et un <b>mini-contrôle blanc</b> sur 20 points, tous basés sur ton cours <b>« S4 : Le langage JSX »</b> (OFPPT – DRIF, C12 Développer en Front-end, 16 pages).</p>
+    <div class="lbl">Méthode de travail conseillée</div>
+    <ol class="travail">
+      <li>Lis l'énoncé et cherche <b>seule</b>, sur papier ou dans ton éditeur, sans regarder le corrigé.</li>
+      <li>Si tu bloques, ouvre l'<b>Indice</b>, puis l'<b>Astuce</b>.</li>
+      <li>Une fois ta solution écrite, ouvre le <b>corrigé</b> (Partie 2) et compare. Dans les corrigés, le bouton <b>▶ Exécuter</b> affiche le résultat directement (connexion Internet requise : React et Babel sont chargés depuis unpkg).</li>
+      <li>Mets à jour ton <b>statut</b> : ☐ À faire · ☐ Terminé · ☐ À revoir. Il est sauvegardé dans ton navigateur.</li>
+      <li>Termine par le mini-contrôle en conditions réelles (chronomètre intégré).</li>
+    </ol>
+    <div class="lbl">Notions du cours et exercices qui les travaillent</div>
+    <table>
+      <tr><th>Notion du cours (PDF)</th><th>Exercices</th></tr>
+      <tr><td>JSX vs <code>React.createElement()</code>, Babel, <code>type="text/babel"</code>, <code>ReactDOM.render()</code></td><td>1, 5</td></tr>
+      <tr><td>Attributs <code>id</code>, <code>className</code>, <code>style</code> (double accolades, camelCase)</td><td>2, 3</td></tr>
+      <tr><td>Expressions JavaScript entre accolades</td><td>4, 5</td></tr>
+      <tr><td><code>map()</code>, attribut <code>key</code>, fonctions fléchées ES6</td><td>5, 6</td></tr>
+      <tr><td>Composant fonction, majuscule obligatoire</td><td>7, 13</td></tr>
+      <tr><td><code>props</code>, déstructuration, composition de composants</td><td>8, 9, 10</td></tr>
+      <tr><td>Composant classe (<code>React.Component</code>, <code>this.props</code>, <code>this</code> dans un callback)</td><td>11, 12, 17</td></tr>
+      <tr><td>Un seul parent, <code>React.Fragment</code>, parenthèses après <code>return</code>, commentaires <code>{/* */}</code></td><td>13, 15, 16, 18</td></tr>
+      <tr><td>Expressions conditionnelles <code>? :</code> avec <code>null</code></td><td>14, 16, 17, 18</td></tr>
+    </table>
+    <div class="callout warn"><b>À savoir (informations manquantes ou hors cours) :</b>
+      <ul style="margin:6px 0 0;padding-left:20px">
+        <li>Ton PDF ne contient <b>aucun exercice ni sujet de contrôle</b> : tous les exercices ici sont originaux.</li>
+        <li>Je n'ai trouvé <b>aucun ancien contrôle OFPPT ou EFM</b> sur React exploitable sur le Web. Le niveau du contrôle blanc est donc estimé à partir de ton cours et des ressources pédagogiques listées en Partie 5.</li>
+        <li>Le <b>state</b>, les <b>hooks</b> et les <b>événements</b> sont renvoyés au chapitre suivant dans ton cours : ils sont volontairement <b>absents</b> de cette banque.</li>
+        <li>Le cours utilise <b>React 16</b> et <code>ReactDOM.render()</code>. Dans les versions récentes de React (18 et plus), on utilise <code>ReactDOM.createRoot()</code> : suis la syntaxe de ton cours pour le contrôle.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="enonces">
+  <h2 class="part">Partie 1 — Les énoncés</h2>
+  <div class="filters" id="filters"></div>
+  <div id="enonces-list"></div>
+</section>
+
+<section id="corriges" class="corr">
+  <h2 class="part">Partie 2 — Corrigés détaillés</h2>
+  <div class="callout bad"><b>Stop !</b> Ne regarde un corrigé qu'après avoir écrit ta propre solution : c'est en cherchant seule que tu progresses.</div>
+  <p><button class="btn" id="open-all">Tout ouvrir</button> <button class="btn" id="close-all">Tout fermer</button></p>
+  <div id="corriges-list"></div>
+</section>
+
+<section id="controle">
+  <h2 class="part">Partie 3 — Mini-contrôle blanc</h2>
+  <div id="controle-box"></div>
+</section>
+
+<section id="correction-controle" class="corr">
+  <h2 class="part">Partie 4 — Correction du mini-contrôle (section séparée)</h2>
+  <div class="callout bad">La correction reste cachée tant que tu ne l'as pas demandée. Termine d'abord le contrôle dans le temps imparti.</div>
+  <p><button class="btn primary" id="show-corr">Afficher la correction</button></p>
+  <div id="corr-box" hidden></div>
+</section>
+
+<section id="sources">
+  <h2 class="part">Partie 5 — Sources consultées</h2>
+  <div class="card" id="sources-box"></div>
+</section>
+</main>
+</div>
+
+<script>
+
+/* ============================================================
+   DONNÉES — EXERCICES 1 à 9
+   Convention : [[code]] = code en ligne, **gras**, le reste = HTML
+   ============================================================ */
+const PAGE = (titre, js, css) => `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>${titre}</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin><\/script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin><\/script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"><\/script>${css ? "\n    <style>\n" + css.split("\n").map(l => "      " + l).join("\n") + "\n    </style>" : ""}
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+${js.split("\n").map(l => "      " + l).join("\n")}
+    <\/script>
+  </body>
+</html>`;
+
+const EXERCISES = [];
+
+EXERCISES.push(
+/* ---------------------------------------------------------- 1 */
+{
+  n: 1, titre: "Hello JSX : ma première page React", etoiles: 1,
+  notions: ["JSX", "Babel", "[[type=\"text/babel\"]]", "[[ReactDOM.render()]]"],
+  objectif: "Mettre en place une page minimale capable d'interpréter et d'afficher du JSX.",
+  enonce: [
+    "Tu dois créer un fichier <code>index.html</code> qui affiche un titre de niveau 2 contenant le texte **Bienvenue à l'OFPPT**.",
+    "La page doit utiliser **React 16**, **ReactDOM 16** et **Babel** chargés depuis le CDN <code>unpkg.com</code>. Aucune installation n'est autorisée (pas de Node, pas de npm)."
+  ],
+  travail: [
+    "Écrire le squelette HTML avec les trois balises [[<script src=\"...\">]] nécessaires dans le [[<head>]].",
+    "Ajouter un conteneur [[<div id=\"app\"></div>]] dans le [[<body>]].",
+    "Écrire une balise [[<script>]] contenant le code JSX : stocker le titre dans une variable [[titre]].",
+    "Afficher l'élément dans le conteneur avec [[ReactDOM.render()]].",
+    "Ajouter [[console.log(titre)]] et décrire ce que tu observes dans la console du navigateur."
+  ],
+  indice: "Le navigateur ne comprend pas le JSX. Il faut une balise [[<script>]] avec un attribut particulier pour indiquer à Babel qu'il doit traduire son contenu.",
+  astuce: "Page blanche ? Ouvre la console (F12). Causes fréquentes : attribut [[type=\"text/babel\"]] oublié, ou script placé **avant** le [[<div id=\"app\">]] (le conteneur n'existe pas encore). Dans le PDF, l'URL de ReactDOM est coupée par un retour à la ligne : la bonne adresse est [[react-dom.development.js]].",
+  corrige: {
+    analyse: [
+      "Le JSX n'est **pas** du JavaScript valide : le navigateur ne peut pas l'exécuter tel quel. Il faut donc (1) charger React et ReactDOM, (2) charger Babel qui traduit le JSX, (3) désigner le script à traduire, (4) disposer d'un conteneur DOM où insérer l'élément."
+    ],
+    raisonnement: [
+      { list: [
+        "Trois scripts dans le [[<head>]] : React, ReactDOM, Babel.",
+        "Un [[<div id=\"app\">]] dans le [[<body>]].",
+        "Un [[<script type=\"text/babel\">]] placé **après** le div.",
+        "[[ReactDOM.render(élément, conteneur)]] : 1<sup>er</sup> argument = l'élément React, 2<sup>e</sup> = le nœud DOM."
+      ] }
+    ],
+    solution: [
+      { label: "index.html", lang: "html", run: "page", code: PAGE("Hello JSX",
+`var titre = <h2>Bienvenue à l'OFPPT</h2>;
+console.log(titre);
+ReactDOM.render(titre, document.getElementById("app"));`) }
+    ],
+    resultat: [
+      { rendu: "Dans la page : un titre <b>Bienvenue à l'OFPPT</b>.<br>Dans la console : un **objet** (propriétés [[type: \"h2\"]], [[props]]…) et non du HTML." }
+    ],
+    explication: [
+      { list: [
+        "Babel transforme [[<h2>…</h2>]] en [[React.createElement(\"h2\", null, \"…\")]] : c'est ce que montre le [[console.log]] (un élément React = un objet qui **décrit** l'interface).",
+        "[[ReactDOM.render()]] insère ensuite cet élément dans le DOM réel.",
+        "Babel dans le navigateur ralentit la page : c'est valable en **développement** seulement (en production, on utilise Webpack ou équivalent).",
+        "**Erreurs fréquentes** : oublier [[type=\"text/babel\"]], mauvais [[id]] dans [[getElementById]], mettre un [[;]] ou des guillemets autour du JSX."
+      ] }
+    ]
+  }
+},
+
+/* ---------------------------------------------------------- 2 */
+{
+  n: 2, titre: "Une liste en JSX avec id et className", etoiles: 1,
+  notions: ["JSX multi-lignes", "[[id]]", "[[className]]", "classe CSS"],
+  objectif: "Écrire un élément JSX composé (liste) et lui appliquer une classe CSS.",
+  enonce: [
+    "Dans la page de l'exercice 1, on veut afficher la liste des quatre matières du semestre : **JavaScript, React, PHP, SQL**.",
+    "La liste doit avoir l'identifiant <code>matieres</code> et utiliser la classe CSS <code>bleu</code> définie ainsi :",
+    { lang: "css", code: ".bleu {\n  color: blue;\n}" }
+  ],
+  travail: [
+    "Définir la classe CSS [[.bleu]] dans une balise [[<style>]].",
+    "Créer la variable [[liste]] contenant un [[<ul>]] avec 4 éléments [[<li>]].",
+    "Ajouter l'attribut [[id]] et l'attribut qui applique la classe CSS.",
+    "Afficher la liste dans [[#app]].",
+    "Expliquer pourquoi on n'écrit pas [[class=\"bleu\"]] en JSX."
+  ],
+  indice: "En JSX, un attribut qui correspond à un mot réservé de JavaScript est renommé.",
+  astuce: "Une instruction JSX sur plusieurs lignes doit **commencer** par une balise ouvrante et **se terminer** par la balise fermante correspondante.",
+  corrige: {
+    analyse: ["Il s'agit d'un élément JSX parent ([[ul]]) contenant plusieurs enfants ([[li]]), avec deux attributs : [[id]] (identique à HTML) et [[className]] (spécifique à JSX)."],
+    raisonnement: ["On écrit la liste comme en HTML, dans le script Babel. On remplace [[class]] par [[className]]. On affiche avec [[ReactDOM.render()]]."],
+    solution: [
+      { css: ".bleu{color:blue}", code:
+`var liste = <ul id="matieres" className="bleu">
+              <li>JavaScript</li>
+              <li>React</li>
+              <li>PHP</li>
+              <li>SQL</li>
+            </ul>;
+ReactDOM.render(liste, document.getElementById("app"));`, run: true }
+    ],
+    resultat: [{ rendu: "Une liste à puces de quatre éléments, <b style=\"color:blue\">écrits en bleu</b> : JavaScript, React, PHP, SQL." }],
+    explication: [
+      { list: [
+        "[[class]] est un **mot réservé** de JavaScript (déclaration de classes) ; comme le JSX est du JavaScript, l'attribut HTML [[class]] devient [[className]].",
+        "[[id]] ne change pas : il se passe de transformation.",
+        "**Erreur fréquente** : oublier la balise fermante [[</ul>]] ou mettre le [[;]] avant la fin de l'expression."
+      ] }
+    ]
+  }
+},
+
+/* ---------------------------------------------------------- 3 */
+{
+  n: 3, titre: "L'attribut style en JSX", etoiles: 2,
+  notions: ["[[style={{ }}]]", "camelCase", "objet JavaScript"],
+  objectif: "Appliquer des styles en ligne à un élément JSX avec la syntaxe correcte.",
+  enonce: [
+    "On reprend la liste de l'exercice 2, mais **sans** utiliser de classe CSS. Les styles doivent être définis directement sur le [[<ul>]] :",
+    { list: [
+      "puces carrées ([[list-style-type: square]]) ;",
+      "texte vert foncé ([[color: darkgreen]]) ;",
+      "taille de police 18px ([[font-size]]) ;",
+      "fond bleu très clair ([[background-color: #eef]])."
+    ] }
+  ],
+  travail: [
+    "Réécrire la liste en supprimant [[className]].",
+    "Ajouter l'attribut [[style]] avec les quatre propriétés ci-dessus.",
+    "Expliquer pourquoi il y a **deux** paires d'accolades.",
+    "Dire ce qui se passe si on écrit [[style=\"color:red\"]] comme en HTML."
+  ],
+  indice: "Les propriétés CSS composées avec un tiret s'écrivent autrement en JavaScript : on supprime le tiret et on met une majuscule à la lettre suivante.",
+  astuce: "Les valeurs de l'objet de style sont des **chaînes de caractères** entre guillemets, séparées par des virgules (pas par des points-virgules).",
+  corrige: {
+    analyse: ["En JSX, [[style]] n'accepte pas une chaîne CSS mais un **objet JavaScript** dont les clés sont les propriétés CSS en camelCase."],
+    raisonnement: ["Première paire d'accolades : on entre en JavaScript. Deuxième paire : on écrit l'objet littéral { clé: valeur }."],
+    solution: [
+      { code:
+`var liste = <ul id="matieres" style={{listStyleType:"square", color:"darkgreen", fontSize:"18px", backgroundColor:"#eef"}}>
+              <li>JavaScript</li>
+              <li>React</li>
+              <li>PHP</li>
+              <li>SQL</li>
+            </ul>;
+ReactDOM.render(liste, document.getElementById("app"));`, run: true }
+    ],
+    resultat: [{ rendu: "Liste à puces carrées, texte vert foncé en 18px, sur fond bleuté." }],
+    explication: [
+      { list: [
+        "[[list-style-type]] → [[listStyleType]], [[font-size]] → [[fontSize]], [[background-color]] → [[backgroundColor]].",
+        "Les accolades extérieures indiquent « expression JavaScript » ; les intérieures délimitent l'objet.",
+        "Avec [[style=\"color:red\"]], React affiche une erreur : la propriété [[style]] attend un objet, pas une chaîne."
+      ] }
+    ]
+  }
+},
+
+/* ---------------------------------------------------------- 4 */
+{
+  n: 4, titre: "Expressions JavaScript dans le JSX", etoiles: 2,
+  notions: ["accolades [[{ }]]", "expressions", "opérateur ternaire", "objet de style calculé"],
+  objectif: "Insérer des valeurs calculées dans du JSX et faire dépendre un style d'une condition.",
+  enonce: [
+    "On dispose des variables suivantes :",
+    { code: "var prenom = \"Nora\";\nvar note = 14.5;\nvar maxi = 20;" },
+    "Afficher une « carte de résultat » dans un [[<div id=\"carte\">]] contenant :",
+    { list: [
+      "le prénom en **majuscules** dans un [[<h3>]] ;",
+      "la ligne [[Note : 14.5/20]] ;",
+      "la ligne [[Pourcentage : 72.5 %]] (calculé, avec 1 décimale) ;",
+      "une ligne [[Résultat : Admis]] (ou [[Ajourné]] si la note est < 10), en vert si admis, en rouge sinon."
+    ] }
+  ],
+  travail: [
+    "Déclarer un objet de style [[styleResultat]] dont la couleur dépend de la note.",
+    "Écrire le JSX de la carte en n'utilisant que des expressions entre accolades pour les valeurs.",
+    "Afficher la carte dans [[#app]].",
+    "Remplacer la note par 8 et vérifier que l'affichage s'adapte.",
+    "Expliquer pourquoi on ne peut pas écrire un [[if]] directement entre accolades."
+  ],
+  indice: "Entre accolades, on peut mettre toute **expression** (qui a une valeur) : appel de méthode, calcul, opérateur [[? :]].",
+  astuce: "Sans accolades, [[note/maxi]] serait affiché comme du texte brut. Et [[toFixed(1)]] retourne une chaîne.",
+  corrige: {
+    analyse: ["Il faut combiner texte statique et valeurs calculées. Le style change selon une condition : on utilise l'opérateur ternaire dans l'objet de style."],
+    raisonnement: [{ list: [
+      "Un seul parent : le [[<div>]].",
+      "[[prenom.toUpperCase()]], [[note]], [[maxi]] entre accolades.",
+      "[[(note / maxi * 100).toFixed(1)]] → 72.5.",
+      "[[note >= 10 ? \"Admis\" : \"Ajourné\"]] pour le texte, même condition pour la couleur."
+    ] }],
+    solution: [
+      { code:
+`var prenom = "Nora";
+var note = 14.5;
+var maxi = 20;
+var styleResultat = { color: note >= 10 ? "green" : "red", fontWeight: "bold" };
+var carte = <div id="carte">
+              <h3>{prenom.toUpperCase()}</h3>
+              <p>Note : {note}/{maxi}</p>
+              <p>Pourcentage : {(note / maxi * 100).toFixed(1)} %</p>
+              <p style={styleResultat}>Résultat : {note >= 10 ? "Admis" : "Ajourné"}</p>
+            </div>;
+ReactDOM.render(carte, document.getElementById("app"));`, run: true }
+    ],
+    resultat: [{ rendu: "<b>NORA</b><br>Note : 14.5/20<br>Pourcentage : 72.5 %<br><b style=\"color:green\">Résultat : Admis</b> (avec note = 8 : <b style=\"color:red\">Résultat : Ajourné</b> et pourcentage 40.0 %)" }],
+    explication: [{ list: [
+      "Chaque accolade contient une **expression JavaScript** évaluée ; son résultat remplace l'accolade.",
+      "Un [[if]] est une **instruction**, pas une expression : il est interdit entre accolades. On le remplace par [[condition ? a : b]].",
+      "**Erreur fréquente** : oublier les accolades autour d'une variable ([[Note : note]] affiche littéralement « note »)."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 5 */
+{
+  n: 5, titre: "Prédire le rendu et expliquer le code", etoiles: 2,
+  notions: ["[[map()]]", "[[key]]", "fonction fléchée", "accolades"],
+  objectif: "Lire un code JSX et expliquer précisément le rôle de chaque instruction, sans l'exécuter.",
+  enonce: [
+    "Observe le code suivant (ne l'exécute pas avant d'avoir répondu) :",
+    { code:
+`var langages = ["PHP", "Java", "JS"];
+var styleItem = { color: "navy", listStyleType: "none" };
+var vue = <ul id="langs" style={styleItem}>
+            {
+              langages.map((l, i) => <li key={i}>{i + 1}. {l}</li>)
+            }
+          </ul>;
+ReactDOM.render(vue, document.getElementById("app"));` }
+  ],
+  travail: [
+    "Décrire exactement ce qui s'affiche (texte, couleur, puces).",
+    "Expliquer le rôle de **chaque** paire d'accolades du code JSX (il y en a 5 à repérer).",
+    "Dire ce que retourne [[langages.map(...)]] et comment React l'affiche.",
+    "Expliquer à quoi sert [[key]] et ce qui se passe dans la console si on l'oublie.",
+    "Réécrire la fonction de rappel avec le mot-clé [[function]] et [[return]]."
+  ],
+  indice: "[[map]] ne modifie pas le tableau d'origine : il en construit un nouveau, élément par élément.",
+  astuce: "Les accolades ne servent pas qu'aux objets : dans du JSX, elles signifient « ici, du JavaScript ».",
+  corrige: {
+    analyse: ["Le code définit un tableau, un objet de style, puis un [[<ul>]] dont les [[<li>]] sont générés par [[map]]."],
+    raisonnement: [{ list: [
+      "[[map]] est appelé avec (élément, index) : [[l]] vaut \"PHP\", \"Java\", \"JS\" et [[i]] vaut 0, 1, 2.",
+      "Pour chaque élément, la fonction fléchée renvoie un [[<li>]] de texte « i+1. l »."
+    ] }],
+    solution: [
+      { note: "**Réponses** — 1) Trois lignes sans puces, en bleu marine : [[1. PHP]], [[2. Java]], [[3. JS]]." },
+      { table: { head: ["Accolades", "Rôle"], rows: [
+        ["[[style={styleItem}]]", "Expression JavaScript : on passe l'objet de style à l'attribut [[style]]"],
+        ["[[{ langages.map(...) }]]", "Bloc JavaScript dans le contenu du [[<ul>]] : sa valeur (un tableau d'éléments) est insérée"],
+        ["[[key={i}]]", "Valeur JavaScript (l'index) donnée à l'attribut [[key]]"],
+        ["[[{i + 1}]]", "Calcul inséré comme texte dans le [[<li>]]"],
+        ["[[{l}]]", "Valeur de l'élément courant insérée comme texte"]
+      ] } },
+      { label: "Version avec function", code:
+`var langages = ["PHP", "Java", "JS"];
+var styleItem = { color: "navy", listStyleType: "none" };
+var vue = <ul id="langs" style={styleItem}>
+            {
+              langages.map(function(l, i) {
+                return <li key={i}>{i + 1}. {l}</li>;
+              })
+            }
+          </ul>;
+ReactDOM.render(vue, document.getElementById("app"));`, run: true }
+    ],
+    resultat: [{ rendu: "<span style=\"color:navy\">1. PHP<br>2. Java<br>3. JS</span> (sans puces)" }],
+    explication: [{ list: [
+      "[[map]] retourne un **tableau d'éléments React** ; React affiche un tableau en affichant chaque élément dans l'ordre.",
+      "[[key]] permet à React d'identifier chaque élément de la liste. Sans elle, la console affiche : <i>Each child in an array or iterator should have a unique \"key\" prop.</i>",
+      "La notation [[=>]] sans accolades ni [[return]] est possible quand le corps contient **une seule** expression.",
+      "**Piège** : avec des accolades dans la fonction fléchée, il faut écrire [[return]] ; sinon la fonction renvoie [[undefined]] et rien ne s'affiche."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 6 */
+{
+  n: 6, titre: "Afficher une liste d'objets avec map et key", etoiles: 2,
+  notions: ["[[map()]] sur objets", "[[key]] stable", "[[reduce()]]", "un seul parent"],
+  objectif: "Générer une liste à partir d'un tableau d'objets et afficher un total calculé.",
+  enonce: [
+    "Voici le volume horaire des modules du semestre :",
+    { code:
+`var modules = [
+  { id: 1, nom: "JavaScript", heures: 60 },
+  { id: 2, nom: "React",      heures: 45 },
+  { id: 3, nom: "PHP",        heures: 50 },
+  { id: 4, nom: "SQL",        heures: 30 }
+];` },
+    "Afficher chaque module sous la forme [[JavaScript — 60 h]], puis, sous la liste, la ligne **Total : 185 h** calculée par le programme."
+  ],
+  travail: [
+    "Calculer le total des heures avec [[reduce()]].",
+    "Générer les [[<li>]] avec [[map()]] en utilisant l'**identifiant** comme [[key]].",
+    "Regrouper la liste et le total dans un seul élément parent.",
+    "Afficher le résultat dans [[#app]].",
+    "Bonus : pourquoi vaut-il mieux utiliser [[id]] plutôt que l'index comme clé ?"
+  ],
+  indice: "Pour [[reduce]], pars d'une valeur initiale [[0]] et ajoute [[m.heures]] à chaque tour.",
+  astuce: "[[key]] se place sur l'élément **retourné par map** (ici le [[<li>]]), pas à l'intérieur.",
+  corrige: {
+    analyse: ["Deux besoins : une liste générée (map) et une valeur agrégée (reduce), le tout renvoyé sous un seul parent."],
+    raisonnement: ["On calcule [[total]] avant le JSX pour garder le JSX lisible. Le parent est un [[<div>]] contenant [[<ul>]] et [[<p>]]."],
+    solution: [
+      { code:
+`var modules = [
+  { id: 1, nom: "JavaScript", heures: 60 },
+  { id: 2, nom: "React",      heures: 45 },
+  { id: 3, nom: "PHP",        heures: 50 },
+  { id: 4, nom: "SQL",        heures: 30 }
+];
+var total = modules.reduce((somme, m) => somme + m.heures, 0);
+var vue = <div>
+            <ul>
+              {modules.map(m => <li key={m.id}>{m.nom} — {m.heures} h</li>)}
+            </ul>
+            <p><strong>Total : {total} h</strong></p>
+          </div>;
+ReactDOM.render(vue, document.getElementById("app"));`, run: true }
+    ],
+    resultat: [{ rendu: "• JavaScript — 60 h<br>• React — 45 h<br>• PHP — 50 h<br>• SQL — 30 h<br><b>Total : 185 h</b>" }],
+    explication: [{ list: [
+      "60 + 45 + 50 + 30 = **185**.",
+      "Avec l'[[id]], React reconnaît chaque élément même si la liste est triée ou filtrée ; avec l'index, la clé d'un élément change dès que sa position change.",
+      "Pour une liste **statique** (comme dans le cours), [[key={index}]] suffit.",
+      "**Erreur fréquente** : retourner deux éléments frères ([[<ul>]] et [[<p>]]) sans parent."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 7 */
+{
+  n: 7, titre: "Mon premier composant fonction", etoiles: 3,
+  notions: ["composant fonction", "majuscule obligatoire", "[[<Composant/>]]", "[[map()]]"],
+  objectif: "Transformer un code JSX en composant réutilisable et respecter la règle de nommage.",
+  enonce: [
+    "On souhaite créer un composant <code>ListeModules</code> qui représente la liste [[<ul>]] des modules suivants : **HTML, CSS, JavaScript, React**.",
+    { code: "var modules = [\"HTML\", \"CSS\", \"JavaScript\", \"React\"];" }
+  ],
+  travail: [
+    "Écrire la fonction [[ListeModules]] qui retourne la liste complète (avec [[<ul>]]).",
+    "Utiliser [[map()]] avec une clé pour générer les [[<li>]].",
+    "Afficher le composant avec [[ReactDOM.render()]] en l'écrivant comme un élément JSX.",
+    "Que se passe-t-il si la fonction s'appelle [[listeModules]] (minuscule) ? Justifier.",
+    "Citer deux types de balises que le JSX accepte en minuscule et en majuscule."
+  ],
+  indice: "Le composant n'a pas encore de paramètre : il utilise directement le tableau global [[modules]].",
+  astuce: "Dans [[return <ul>]], la balise ouvrante doit être sur **la même ligne** que [[return]].",
+  corrige: {
+    analyse: ["Un composant fonction est une fonction qui **retourne du JSX**. Son nom commence par une majuscule pour que React le distingue d'une balise HTML."],
+    raisonnement: ["On met le code JSX de la liste dans le [[return]] de la fonction, puis on utilise [[<ListeModules/>]] comme une balise."],
+    solution: [
+      { code:
+`var modules = ["HTML", "CSS", "JavaScript", "React"];
+var ListeModules = function() {
+  return <ul>
+    {
+      modules.map(function(m, index) {
+        return <li key={index}>{m}</li>;
+      })
+    }
+  </ul>
+}
+ReactDOM.render(<ListeModules/>, document.getElementById("app"));`, run: true }
+    ],
+    resultat: [{ rendu: "• HTML<br>• CSS<br>• JavaScript<br>• React" }],
+    explication: [{ list: [
+      "Une balise en **minuscule** est réservée aux éléments HTML ([[div]], [[span]], [[ul]]…). [[<listeModules/>]] serait interprétée comme une balise HTML inexistante → erreur / avertissement et rien ne s'affiche.",
+      "Une balise en **majuscule** doit être déclarée dans le scope courant : fonction déjà définie, composant importé…",
+      "Les accolades autour de [[modules.map(...)]] sont nécessaires car on est à l'intérieur du JSX ([[<ul>]])."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 8 */
+{
+  n: 8, titre: "Transmettre des props et un style", etoiles: 3,
+  notions: ["[[props]]", "attributs personnalisés", "[[props.style]]", "réutilisation"],
+  objectif: "Rendre un composant réutilisable en lui transmettant ses données par attributs.",
+  enonce: [
+    "Le composant <code>ListeModules</code> de l'exercice 7 utilise un tableau global : il ne peut pas être réutilisé. Modifie-le pour qu'il reçoive deux attributs : <code>modules</code> (le tableau) et <code>style</code> (le style appliqué aux [[<li>]]).",
+    "On veut afficher **deux listes** dans la même page :",
+    { list: [
+      "[[web]] = HTML, CSS, JavaScript, en **rouge** ;",
+      "[[back]] = PHP, SQL, en **bleu**."
+    ] }
+  ],
+  travail: [
+    "Réécrire [[ListeModules]] avec le paramètre [[props]].",
+    "Appliquer [[props.style]] à chaque [[<li>]].",
+    "Écrire l'appel [[ReactDOM.render()]] qui affiche les deux listes.",
+    "Expliquer pourquoi il faut un élément parent dans l'appel à [[render]].",
+    "Expliquer la présence des doubles accolades dans [[style={{color:\"red\"}}]]."
+  ],
+  indice: "Les attributs d'un élément défini par une fonction arrivent dans l'objet [[props]] reçu en paramètre.",
+  astuce: "Le nom des attributs est libre ([[modules]], [[style]]…) : c'est toi qui les inventes.",
+  corrige: {
+    analyse: ["On remplace la dépendance à une variable globale par des **paramètres** (props), ce qui rend le composant générique."],
+    raisonnement: ["Dans le composant : [[props.modules]] et [[props.style]]. À l'appel : [[modules={web}]] et [[style={{color:\"red\"}}]]. Les deux composants sont placés dans un [[<div>]]."],
+    solution: [
+      { code:
+`var ListeModules = function(props) {
+  return <ul>
+    {
+      props.modules.map(function(m, index) {
+        return <li key={index} style={props.style}>{m}</li>;
+      })
+    }
+  </ul>
+}
+var web = ["HTML", "CSS", "JavaScript"];
+var back = ["PHP", "SQL"];
+ReactDOM.render(
+  <div>
+    <ListeModules modules={web} style={{color:"red"}} />
+    <ListeModules modules={back} style={{color:"blue"}} />
+  </div>,
+  document.getElementById("app"));`, run: true }
+    ],
+    resultat: [{ rendu: "<span style=\"color:red\">• HTML<br>• CSS<br>• JavaScript</span><br><span style=\"color:blue\">• PHP<br>• SQL</span>" }],
+    explication: [{ list: [
+      "[[render]] accepte **un seul** élément : deux composants frères doivent être enveloppés dans un parent.",
+      "Dans [[style={{color:\"red\"}}]] : première paire = expression JavaScript, seconde = objet de style.",
+      "[[props]] est **en lecture seule** : un composant ne modifie jamais ses props.",
+      "**Erreur fréquente** : écrire [[style=\"color:red\"]] (chaîne) ou oublier [[props.]] devant [[modules]]."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 9 */
+{
+  n: 9, titre: "Déstructuration et composant qui retourne uniquement des li", etoiles: 3,
+  notions: ["déstructuration de [[props]]", "retour d'un tableau de [[<li>]]", "ordre [[<ul>]] / composant"],
+  objectif: "Écrire un composant plus compact avec la déstructuration et comprendre ce qu'il doit retourner.",
+  enonce: [
+    "On veut un composant <code>ListeModules</code> qui retourne **uniquement les éléments [[<li>]]** (sans le [[<ul>]]). C'est l'appelant qui fournit le [[<ul>]].",
+    "Le composant reçoit deux attributs : <code>modules</code> (tableau de chaînes) et <code>color</code> (nom de couleur, ex. [[\"green\"]]).",
+    "Utiliser la **déstructuration** de l'objet [[props]] dans la signature de la fonction."
+  ],
+  travail: [
+    "Écrire le composant avec la signature [[function({modules, color})]].",
+    "Retourner directement le résultat de [[modules.map(...)]] : chaque [[<li>]] a la couleur [[color]].",
+    "Écrire l'appel [[ReactDOM.render()]] en plaçant le composant **dans** un [[<ul>]].",
+    "Expliquer pourquoi on ne peut plus entourer [[modules.map(...)]] d'accolades dans le [[return]].",
+    "Dans l'arborescence React, [[<ul>]] est-il parent ou enfant de [[<ListeModules>]] ?"
+  ],
+  indice: "Le [[return]] ne contient plus de JSX « parent » : il contient une expression JavaScript ordinaire.",
+  astuce: "Si tu mets des accolades après [[return]], JavaScript les lit comme un **objet littéral**, pas comme une expression JSX → erreur.",
+  corrige: {
+    analyse: ["Le composant retourne un tableau d'éléments [[<li>]] ; le conteneur [[<ul>]] est donc fourni par l'appelant."],
+    raisonnement: ["Déstructurer [[{modules, color}]] évite d'écrire [[props.]] partout. Le [[return]] est simplement [[modules.map(...)]]."],
+    solution: [
+      { code:
+`var modules = ["HTML", "CSS", "JavaScript", "React"];
+var ListeModules = function({modules, color}) {
+  return modules.map(function(m, index) {
+    return <li key={index} style={{color:color}}>{m}</li>;
+  });
+}
+ReactDOM.render(<ul><ListeModules modules={modules} color="green" /></ul>,
+                document.getElementById("app"));`, run: true }
+    ],
+    resultat: [{ rendu: "<span style=\"color:green\">• HTML<br>• CSS<br>• JavaScript<br>• React</span>" }],
+    explication: [{ list: [
+      "Les accolades servent à écrire du JavaScript **à l'intérieur** du JSX. Ici on est directement en JavaScript : elles sont inutiles et provoquent une erreur.",
+      "[[<ul>]] est le **parent** de [[<ListeModules>]] : l'ordre est inversé par rapport à l'exercice 7.",
+      "La déstructuration ne change pas le fonctionnement : [[{modules, color}]] est équivalent à [[props.modules]], [[props.color]].",
+      "**Erreur fréquente** : oublier que le nom de la variable déstructurée doit être **identique** au nom de l'attribut."
+    ] }]
+  }
+}
+);
+
+/* ============================================================
+   DONNÉES — EXERCICES 10 à 18
+   ============================================================ */
+EXERCISES.push(
+/* ---------------------------------------------------------- 10 */
+{
+  n: 10, titre: "Composition : Annuaire de formateurs", etoiles: 3,
+  notions: ["composition de composants", "déstructuration", "[[key]] dans la boucle", "props"],
+  objectif: "Découper une interface en plusieurs composants qui s'utilisent les uns les autres.",
+  enonce: [
+    "Un centre de formation veut afficher l'annuaire de ses formateurs. Les noms sont stockés dans un tableau :",
+    { code: "var noms = [\"Mme Alaoui\", \"M. Benali\", \"Mme Cherkaoui\", \"M. Daoudi\"];" },
+    "Il faut créer **deux composants** :",
+    { list: [
+      "<code>Formateur</code> : représente **un** formateur (un [[<li>]]) ; il reçoit [[nom]] et [[couleur]] ;",
+      "<code>Annuaire</code> : représente la liste [[<ul>]] ; il reçoit [[noms]] et [[couleur]] et utilise <code>Formateur</code> pour chaque nom."
+    ] }
+  ],
+  travail: [
+    "Écrire le composant [[Formateur]] (déstructuration des props).",
+    "Écrire le composant [[Annuaire]] qui parcourt [[noms]] avec [[map()]].",
+    "Placer l'attribut [[key]] au bon endroit.",
+    "Afficher l'annuaire en violet ([[purple]]).",
+    "Expliquer pourquoi [[key]] n'apparaît pas dans les paramètres de [[Formateur]]."
+  ],
+  indice: "[[Annuaire]] appelle [[Formateur]] **dans** la fonction du [[map]], en lui passant [[nom]] et [[couleur]] comme attributs.",
+  astuce: "[[key]] sert uniquement à React pour identifier les éléments d'une liste. Elle n'est pas transmise au composant : [[props.key]] vaut [[undefined]].",
+  corrige: {
+    analyse: ["On suit la philosophie de React : un composant principal ([[Annuaire]]) construit à partir de plusieurs petits composants ([[Formateur]])."],
+    raisonnement: ["Du plus petit au plus grand : on écrit d'abord [[Formateur]], puis [[Annuaire]] qui l'utilise, puis l'appel à [[render]]."],
+    solution: [
+      { code:
+`var noms = ["Mme Alaoui", "M. Benali", "Mme Cherkaoui", "M. Daoudi"];
+var Formateur = function({nom, couleur}) {
+  return <li style={{color:couleur}}>{nom}</li>;
+}
+var Annuaire = function({noms, couleur}) {
+  return <ul>
+    {
+      noms.map(function(nom, index) {
+        return <Formateur key={index} nom={nom} couleur={couleur} />
+      })
+    }
+  </ul>
+}
+ReactDOM.render(<Annuaire noms={noms} couleur="purple" />, document.getElementById("app"));`, run: true }
+    ],
+    resultat: [{ rendu: "<span style=\"color:purple\">• Mme Alaoui<br>• M. Benali<br>• Mme Cherkaoui<br>• M. Daoudi</span>" }],
+    explication: [{ list: [
+      "[[key]] est écrite dans l'appel [[<Formateur key=... />]] (donc dans la boucle), pas dans la fonction [[Formateur]].",
+      "Chaque composant a une seule responsabilité : c'est ce qui permet la **réutilisation** (on pourrait utiliser [[Formateur]] ailleurs).",
+      "**Erreur fréquente** : écrire [[<formateur ... />]] en minuscule, ou oublier de passer [[couleur]] au composant enfant (il ne l'« hérite » pas automatiquement)."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 11 */
+{
+  n: 11, titre: "Composants à base de classes", etoiles: 4,
+  notions: ["[[class … extends React.Component]]", "[[constructor]] / [[super(props)]]", "[[render()]]", "[[this.props]]", "fonction fléchée et [[this]]"],
+  objectif: "Écrire un composant classe et comprendre pourquoi la fonction fléchée est utile dans [[map()]].",
+  enonce: [
+    "Réécris l'annuaire de l'exercice 10 avec des **classes** : <code>Formateur</code> et <code>Annuaire</code> doivent dériver de <code>React.Component</code>.",
+    "Puis, dans une seconde version de [[Annuaire]], remplace la fonction fléchée du [[map]] par une fonction classique [[function(nom, index) { ... }]] qui utilise [[this.props.couleur]]."
+  ],
+  travail: [
+    "Écrire les deux classes avec leur [[constructor(props)]] et leur méthode [[render()]].",
+    "Utiliser [[this.props]] pour lire [[nom]], [[couleur]], [[noms]].",
+    "Afficher l'annuaire avec [[ReactDOM.render()]].",
+    "Version 2 : prévoir l'erreur provoquée par la fonction classique dans [[map]].",
+    "Proposer **deux** corrections de la version 2."
+  ],
+  indice: "Dans une fonction classique appelée comme simple callback, la valeur de [[this]] n'est pas celle de la méthode [[render]].",
+  astuce: "[[this.props]] est toujours accessible dans [[render()]], mais pas forcément dans une fonction imbriquée écrite avec le mot-clé [[function]].",
+  corrige: {
+    analyse: ["Même résultat que l'exercice 10, mais avec des classes : les props s'obtiennent par [[this.props]] et le JSX est retourné par [[render()]]."],
+    raisonnement: [{ list: [
+      "[[constructor(props) { super(props); }]] transmet les props à la classe mère.",
+      "La fonction fléchée [[=>]] **conserve** le [[this]] de [[render()]] ; une fonction [[function]] classique le perd."
+    ] }],
+    solution: [
+      { label: "Version 1 (fonction fléchée)", run: true, code:
+`var noms = ["Mme Alaoui", "M. Benali", "Mme Cherkaoui", "M. Daoudi"];
+class Formateur extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <li style={{color:this.props.color}}>{this.props.nom}</li>
+  }
+}
+class Annuaire extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <ul>
+      {
+        this.props.noms.map((nom, index) => {
+          return <Formateur key={index} nom={nom} color={this.props.color} />
+        })
+      }
+    </ul>
+  }
+}
+ReactDOM.render(<Annuaire noms={noms} color="purple" />, document.getElementById("app"));` },
+      { label: "Version 2 — correction A : mémoriser this.props avant le map", run: true, code:
+`var noms = ["Mme Alaoui", "M. Benali", "Mme Cherkaoui", "M. Daoudi"];
+class Formateur extends React.Component {
+  render() {
+    return <li style={{color:this.props.color}}>{this.props.nom}</li>
+  }
+}
+class Annuaire extends React.Component {
+  render() {
+    var couleur = this.props.color;
+    return <ul>
+      {
+        this.props.noms.map(function(nom, index) {
+          return <Formateur key={index} nom={nom} color={couleur} />
+        })
+      }
+    </ul>
+  }
+}
+ReactDOM.render(<Annuaire noms={noms} color="purple" />, document.getElementById("app"));` }
+    ],
+    resultat: [{ rendu: "Même affichage qu'à l'exercice 10 : quatre noms en violet.<br>Version 2 **non corrigée** : erreur « Cannot read properties of undefined (reading 'props') »." }],
+    explication: [{ list: [
+      "Dans la version 2 non corrigée, [[this.props.color]] est lu dans une fonction [[function]] classique : [[this]] y vaut [[undefined]] → **TypeError**.",
+      "**Correction B** : revenir à la fonction fléchée [[(nom, index) => { ... }]] (version 1).",
+      "Le [[constructor]] qui ne fait que [[super(props)]] peut être omis, mais le cours l'écrit : garde-le dans tes réponses.",
+      "**Erreur fréquente** : oublier [[super(props)]] (erreur au chargement) ou écrire [[props.nom]] au lieu de [[this.props.nom]]."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 12 */
+{
+  n: 12, titre: "Fonction ou classe ? Choisir et convertir", etoiles: 4,
+  notions: ["fonction vs classe", "propriété [[state]]", "conversion fonction ↔ classe"],
+  objectif: "Justifier le choix entre composant fonction et composant classe, et savoir passer de l'un à l'autre.",
+  enonce: [
+    "Pour chacun des trois composants décrits ci-dessous, choisis **fonction** ou **classe** et justifie en une phrase :",
+    { list: [
+      "**A — Badge** : affiche un texte dans une pastille colorée ; texte et couleur arrivent par attributs.",
+      "**B — Compteur** : mémorise le nombre de clics de l'utilisateur et l'affiche (il possède un **état** à gérer).",
+      "**C — ListeProduits** : affiche une liste reçue par attribut, sans autre traitement."
+    ] },
+    "Puis convertis les deux composants suivants :",
+    { code:
+`class Badge extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <span style={{background:this.props.couleur, color:"white", padding:"2px 10px"}}>{this.props.texte}</span>
+  }
+}
+
+function Titre(props) {
+  return <h3>{props.texte}</h3>
+}` }
+  ],
+  travail: [
+    "Remplir le tableau de décision (A, B, C) avec la justification.",
+    "Réécrire [[Badge]] sous forme de **fonction** avec déstructuration.",
+    "Réécrire [[Titre]] sous forme de **classe**.",
+    "Afficher un [[Titre]] et deux [[Badge]] dans un même [[<div>]]."
+  ],
+  indice: "La règle du cours : si le composant possède un état (propriété [[state]]), la classe est **obligatoire** ; sinon une fonction suffit.",
+  astuce: "Quand on convertit une classe en fonction, [[this.props.x]] devient [[props.x]] (ou directement [[x]] avec la déstructuration) et [[render()]] disparaît : on garde son contenu dans le [[return]].",
+  corrige: {
+    analyse: ["Il faut distinguer les composants **sans état** (fonction suffisante) des composants **avec état ou méthodes** (classe)."],
+    raisonnement: ["Question clé : « Ce composant doit-il mémoriser une valeur qui change, ou avoir des méthodes utilitaires ? »"],
+    solution: [
+      { table: { head: ["Composant", "Choix", "Justification"], rows: [
+        ["A — Badge", "Fonction", "Il ne fait qu'afficher ses props : aucun état, aucune méthode."],
+        ["B — Compteur", "**Classe**", "Il a un **état** (nombre de clics) : la classe est obligatoire."],
+        ["C — ListeProduits", "Fonction", "Simple affichage d'une liste reçue en props."]
+      ] } },
+      { run: true, code:
+`function Badge({couleur, texte}) {
+  return <span style={{background:couleur, color:"white", padding:"2px 10px"}}>{texte}</span>
+}
+
+class Titre extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <h3>{this.props.texte}</h3>
+  }
+}
+
+ReactDOM.render(
+  <div>
+    <Titre texte="Statuts des modules" />
+    <Badge texte="Terminé" couleur="green" /> <Badge texte="À revoir" couleur="orange" />
+  </div>,
+  document.getElementById("app"));` }
+    ],
+    resultat: [{ rendu: "Un titre « Statuts des modules » puis deux pastilles : <span style=\"background:green;color:#fff;padding:2px 10px\">Terminé</span> <span style=\"background:orange;color:#fff;padding:2px 10px\">À revoir</span>" }],
+    explication: [{ list: [
+      "Une **fonction** est plus courte et plus simple : privilégie-la quand tu n'as ni état ni méthode.",
+      "Le choix de la classe pour [[Compteur]] n'est pas une question de goût : **sans classe, pas de [[state]]** dans le cadre de ce cours (le state est étudié au chapitre suivant).",
+      "Dans la conversion vers la classe, n'oublie pas [[extends React.Component]], [[constructor]], [[super(props)]] et [[render()]].",
+      "**Erreur fréquente** : garder [[this.props]] dans une fonction (→ [[this]] undefined)."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 13 */
+{
+  n: 13, titre: "Règles d'écriture du JSX : trouver les 4 erreurs", etoiles: 4,
+  notions: ["un seul parent", "[[React.Fragment]]", "parenthèses après [[return]]", "commentaires JSX", "majuscule"],
+  objectif: "Appliquer les règles d'écriture du JSX vues en cours et corriger du code fautif.",
+  enonce: [
+    "Les trois extraits suivants contiennent **quatre erreurs au total**. Trouve-les et corrige-les.",
+    { label: "Extrait 1", code:
+`function Entete() {
+  return <h1>OFPPT</h1>
+         <h2>Développement Digital</h2>
+}` },
+    { label: "Extrait 2", code:
+`function Menu() {
+  return
+    <ul>
+      <li>Accueil</li>
+      // <li>Anciens cours</li>
+      <li>Cours</li>
+    </ul>
+}` },
+    { label: "Extrait 3", code:
+`function carte() {
+  return <p>Je suis une carte</p>
+}
+ReactDOM.render(<carte />, document.getElementById("app"));` }
+  ],
+  travail: [
+    "Pour chaque extrait, nommer la règle violée et l'effet constaté.",
+    "Corriger l'extrait 1 **sans ajouter** de balise supplémentaire dans le DOM.",
+    "Corriger l'extrait 2 (deux erreurs) : le commentaire doit rester **invisible** à l'affichage.",
+    "Corriger l'extrait 3.",
+    "Assembler les trois composants corrigés dans une même page."
+  ],
+  indice: "Extrait 2 : une instruction [[return]] suivie d'un retour à la ligne n'est pas « liée » au JSX qui suit. Quant aux commentaires, [[//]] est du JavaScript, pas du JSX.",
+  astuce: "Pour renvoyer plusieurs éléments frères sans [[<div>]] superflu, React propose un composant spécial qui n'apparaît pas dans le DOM.",
+  corrige: {
+    analyse: [
+      { table: { head: ["Extrait", "Erreur", "Règle violée"], rows: [
+        ["1", "Deux éléments frères retournés", "Un **seul** élément parent peut être retourné"],
+        ["2", "[[return]] suivi d'un retour à la ligne", "Le premier élément JSX doit commencer sur la **même ligne** que [[return]] (ou être entouré de parenthèses)"],
+        ["2", "[[// <li>…</li>]]", "Commentaire JSX : [[{/* … */}]] obligatoire"],
+        ["3", "[[carte]] / [[<carte />]]", "Un composant doit commencer par une **majuscule**"]
+      ] } }
+    ],
+    raisonnement: ["Corrections : [[React.Fragment]] comme parent invisible ; parenthèses après [[return]] ; commentaire entre accolades ; renommer en [[Carte]]."],
+    solution: [
+      { run: true, code:
+`function Entete() {
+  return <React.Fragment>
+    <h1>OFPPT</h1>
+    <h2>Développement Digital</h2>
+  </React.Fragment>
+}
+
+function Menu() {
+  return (
+    <ul>
+      <li>Accueil</li>
+      {/* <li>Anciens cours</li> */}
+      <li>Cours</li>
+    </ul>
+  )
+}
+
+function Carte() {
+  return <p>Je suis une carte</p>
+}
+
+ReactDOM.render(
+  <div>
+    <Entete />
+    <Menu />
+    <Carte />
+  </div>,
+  document.getElementById("app"));` }
+    ],
+    resultat: [{ rendu: "<b style=\"font-size:1.4em\">OFPPT</b><br><b>Développement Digital</b><br>• Accueil<br>• Cours<br>Je suis une carte" }],
+    explication: [{ list: [
+      "[[React.Fragment]] joue le rôle de parent **sans ajouter de nœud** dans le DOM (contrairement à un [[<div>]]).",
+      "Sans parenthèses, JavaScript termine le [[return]] à la fin de la ligne : la fonction retourne [[undefined]] et React signale une erreur.",
+      "Les commentaires [[//]] ne fonctionnent pas dans le JSX : ils s'afficheraient comme du texte. On utilise [[{/* ... */}]].",
+      "Le composant [[Entete]] ne peut pas être lui-même sous un [[<div>]] sans en ajouter un : c'est tout l'intérêt du Fragment."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 14 */
+{
+  n: 14, titre: "Rendu conditionnel : liste de tâches", etoiles: 4,
+  notions: ["opérateur ternaire", "[[null]]", "[[filter()]]", "[[map()]] + condition", "props booléennes"],
+  objectif: "Afficher ou masquer des éléments selon une condition passée en attribut.",
+  enonce: [
+    "Une application affiche la liste de révision du contrôle :",
+    { code:
+`var taches = [
+  { id: 1, titre: "Installer Babel",          fait: true  },
+  { id: 2, titre: "Écrire le JSX",            fait: true  },
+  { id: 3, titre: "Créer ListeTaches",        fait: false },
+  { id: 4, titre: "Tester les props",         fait: false },
+  { id: 5, titre: "Réviser pour le contrôle", fait: false }
+];` },
+    "Écrire un composant <code>ListeTaches</code> qui reçoit les attributs <code>taches</code> et <code>cacherTerminees</code> (booléen) :",
+    { list: [
+      "il affiche d'abord « N tâche(s) restante(s) » (N calculé) ;",
+      "chaque tâche est un [[<li>]] précédé de [[✔ ]] (en vert) si elle est faite, [[☐ ]] (en noir) sinon ;",
+      "si [[cacherTerminees]] vaut [[true]], les tâches faites **ne sont pas affichées**."
+    ] }
+  ],
+  travail: [
+    "Calculer le nombre de tâches restantes avec [[filter()]].",
+    "Dans le [[map]], retourner [[null]] pour une tâche à masquer, sinon le [[<li>]].",
+    "Retourner un seul parent contenant le texte et la liste.",
+    "Afficher deux fois le composant : une fois avec [[cacherTerminees={true}]], une fois avec [[false]].",
+    "Écrire le résultat attendu pour chacun des deux affichages."
+  ],
+  indice: "[[null]] est un résultat valide dans un [[map]] : React n'affiche rien pour cet élément.",
+  astuce: "Le compteur « restantes » doit rester **identique** dans les deux affichages : il ne dépend pas de [[cacherTerminees]].",
+  corrige: {
+    analyse: ["Deux traitements indépendants : un calcul (nombre restant) et un affichage conditionnel (masquer les tâches terminées)."],
+    raisonnement: ["Dans le [[map]] : [[t.fait && cacherTerminees ? null : <li>…</li>]]. Le style de chaque ligne dépend de [[t.fait]]."],
+    solution: [
+      { run: true, code:
+`var taches = [
+  { id: 1, titre: "Installer Babel",          fait: true  },
+  { id: 2, titre: "Écrire le JSX",            fait: true  },
+  { id: 3, titre: "Créer ListeTaches",        fait: false },
+  { id: 4, titre: "Tester les props",         fait: false },
+  { id: 5, titre: "Réviser pour le contrôle", fait: false }
+];
+
+var ListeTaches = function({taches, cacherTerminees}) {
+  var restantes = taches.filter(t => !t.fait).length;
+  return (
+    <div>
+      <p>{restantes} tâche(s) restante(s)</p>
+      <ul>
+        {
+          taches.map(t =>
+            t.fait && cacherTerminees
+              ? null
+              : <li key={t.id} style={{color: t.fait ? "green" : "black"}}>
+                  {t.fait ? "✔ " : "☐ "}{t.titre}
+                </li>
+          )
+        }
+      </ul>
+    </div>
+  )
+}
+
+ReactDOM.render(
+  <div>
+    <h4>Tâches terminées masquées</h4>
+    <ListeTaches taches={taches} cacherTerminees={true} />
+    <h4>Toutes les tâches</h4>
+    <ListeTaches taches={taches} cacherTerminees={false} />
+  </div>,
+  document.getElementById("app"));` }
+    ],
+    resultat: [{ rendu: "<b>Tâches terminées masquées</b> : 3 tâche(s) restante(s) → ☐ Créer ListeTaches, ☐ Tester les props, ☐ Réviser pour le contrôle.<br><b>Toutes les tâches</b> : 3 tâche(s) restante(s) → <span style=\"color:green\">✔ Installer Babel, ✔ Écrire le JSX</span>, puis les trois autres." }],
+    explication: [{ list: [
+      "[[condition ? null : <li>…</li>]] est l'expression conditionnelle du cours : tout est entouré d'accolades car c'est du JavaScript évalué.",
+      "Le [[key]] reste sur l'élément retourné ([[<li>]]).",
+      "[[filter]] crée un nouveau tableau ; [[.length]] donne le nombre de tâches non faites : 3.",
+      "**Erreur fréquente** : mettre un [[if]] dans le JSX, ou oublier [[return]] quand la fonction fléchée a des accolades."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 15 */
+{
+  n: 15, titre: "Débogage : un code, huit erreurs", etoiles: 4,
+  notions: ["synthèse des règles JSX", "majuscule", "[[className]]", "[[style]]", "[[key]]", "Fragment", "commentaires"],
+  objectif: "Lire un code JSX défectueux, repérer toutes les erreurs et les corriger sans aide.",
+  enonce: [
+    "Le code ci-dessous devait afficher un catalogue de trois produits. Il contient **huit erreurs** (syntaxe, règles JSX ou oubli d'affichage).",
+    { code:
+`var produits = [
+  { id: 1, nom: "Clavier", prix: 150 },
+  { id: 2, nom: "Souris",  prix: 80 },
+  { id: 3, nom: "Écran",   prix: 1200 }
+];
+
+function produit({ nom, prix }) {
+  return <li class="item" style="color: navy">
+    {nom} : prix DH
+  </li>
+}
+
+function Catalogue(props) {
+  return
+    <h2>Catalogue</h2>
+    <ul>
+      {props.produits.map(p => <produit nom={p.nom} prix={p.prix} />)}
+      // fin de la liste
+    </ul>
+}
+
+ReactDOM.render(<Catalogue produits={produits} />, document.getElementById("app"));` }
+  ],
+  travail: [
+    "Lister les huit erreurs (numéro de ligne + nature).",
+    "Écrire le code corrigé complet.",
+    "Indiquer l'affichage final attendu.",
+    "Pour chaque erreur, citer le point du cours qui permet de la repérer."
+  ],
+  indice: "Lis le code **composant par composant** : nom, attributs, valeurs affichées, parent, commentaires.",
+  astuce: "Certaines erreurs ne produisent aucun message : le prix n'est tout simplement jamais affiché. Relis le résultat attendu, pas seulement la syntaxe.",
+  corrige: {
+    analyse: ["Le code mélange erreurs de nommage, d'attributs, de structure et de rendu."],
+    raisonnement: ["On vérifie dans l'ordre : définition de [[produit]], puis [[Catalogue]], puis l'appel."],
+    solution: [
+      { table: { head: ["#", "Erreur", "Correction"], rows: [
+        ["1", "Composant [[produit]] en minuscule (définition et balise)", "[[Produit]] / [[<Produit />]]"],
+        ["2", "[[class=\"item\"]]", "[[className=\"item\"]]"],
+        ["3", "[[style=\"color: navy\"]] (chaîne)", "[[style={{color:\"navy\"}}]]"],
+        ["4", "[[prix DH]] : la valeur n'est pas insérée", "[[{prix} DH]]"],
+        ["5", "[[return]] suivi d'un retour à la ligne", "Parenthèses après [[return]]"],
+        ["6", "Deux éléments frères ([[h2]], [[ul]])", "Un parent : [[React.Fragment]]"],
+        ["7", "Pas de [[key]] dans le [[map]]", "[[key={p.id}]]"],
+        ["8", "Commentaire [[//]]", "[[{/* fin de la liste */}]]"]
+      ] } },
+      { run: true, code:
+`var produits = [
+  { id: 1, nom: "Clavier", prix: 150 },
+  { id: 2, nom: "Souris",  prix: 80 },
+  { id: 3, nom: "Écran",   prix: 1200 }
+];
+
+function Produit({ nom, prix }) {
+  return <li className="item" style={{color: "navy"}}>
+    {nom} : {prix} DH
+  </li>
+}
+
+function Catalogue(props) {
+  return (
+    <React.Fragment>
+      <h2>Catalogue</h2>
+      <ul>
+        {props.produits.map(p => <Produit key={p.id} nom={p.nom} prix={p.prix} />)}
+        {/* fin de la liste */}
+      </ul>
+    </React.Fragment>
+  )
+}
+
+ReactDOM.render(<Catalogue produits={produits} />, document.getElementById("app"));` }
+    ],
+    resultat: [{ rendu: "<b style=\"font-size:1.3em\">Catalogue</b><br><span style=\"color:navy\">• Clavier : 150 DH<br>• Souris : 80 DH<br>• Écran : 1200 DH</span>" }],
+    explication: [{ list: [
+      "Méthode : cherche d'abord les **erreurs de nommage** (majuscule), puis les **attributs** ([[className]], [[style]]), puis la **structure** (parent, [[return]]), enfin les **détails** ([[key]], commentaires, valeurs).",
+      "L'erreur 4 est silencieuse : le code s'exécute mais affiche littéralement « prix DH ». Les accolades sont indispensables pour afficher une variable.",
+      "Le composant [[Produit]] ne reçoit pas [[key]] dans ses paramètres : [[key]] est utilisée dans la boucle seulement."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 16 */
+{
+  n: 16, titre: "Boutique Info : produits, promotions et ruptures", etoiles: 5,
+  notions: ["composition à 4 composants", "props", "rendu conditionnel", "[[style]] calculé", "[[reduce]] / [[filter]]", "Fragment"],
+  objectif: "Construire une mini-application complète en combinant composants, props, conditions et styles.",
+  enonce: [
+    "Une boutique d'informatique veut afficher son catalogue.",
+    { code:
+`var produits = [
+  { id: 1, nom: "Clavier", prix: 150,  stock: 12, promo: false },
+  { id: 2, nom: "Souris",  prix: 80,   stock: 0,  promo: false },
+  { id: 3, nom: "Écran",   prix: 1200, stock: 5,  promo: true  },
+  { id: 4, nom: "Casque",  prix: 300,  stock: 3,  promo: true  },
+  { id: 5, nom: "Webcam",  prix: 250,  stock: 0,  promo: false }
+];` },
+    "Écrire **quatre composants** :",
+    { list: [
+      "<code>Produit</code> ([[nom]], [[prix]], [[stock]], [[promo]]) : un [[<li>]]. Si [[promo]] : l'ancien prix **barré** puis le nouveau prix (remise de **20 %**) en vert. Si [[stock]] vaut 0 : la ligne est grise et se termine par « — Rupture de stock » en rouge.",
+      "<code>Catalogue</code> ([[produits]], [[masquerRupture]]) : le [[<ul>]] des produits ; si [[masquerRupture]] est vrai, les produits en rupture ne sont pas affichés.",
+      "<code>Stats</code> ([[produits]]) : « Produits en rupture : N » et « Prix moyen : X DH » (2 décimales), dans un bloc au fond bleu clair.",
+      "<code>App</code> ([[produits]], [[masquerRupture]]) : un titre [[<h1>Boutique Info</h1>]], [[Stats]] puis [[Catalogue]], **sans** [[<div>]] superflu."
+    ] }
+  ],
+  travail: [
+    "Écrire [[Produit]] avec la logique du prix et de la rupture.",
+    "Écrire [[Catalogue]] (condition + [[key]]) et [[Stats]] ([[filter]], [[reduce]], [[toFixed]]).",
+    "Écrire [[App]] avec un Fragment et afficher l'ensemble avec [[masquerRupture={true}]].",
+    "Calculer à la main les valeurs attendues de [[Stats]].",
+    "Indiquer les produits affichés avec [[masquerRupture={false}]]."
+  ],
+  indice: "Calcule d'abord dans des variables ([[prixFinal]], [[enRupture]]) avant d'écrire le JSX : il restera lisible.",
+  astuce: "Pour le prix barré, utilise un style [[textDecoration: \"line-through\"]]. Garde les expressions sur **une même ligne** autour du texte « : » pour conserver les espaces.",
+  corrige: {
+    analyse: ["Il faut décomposer l'application, décider quelles données descendent dans chaque composant, puis traiter trois conditions : promo, rupture, masquage."],
+    raisonnement: [{ list: [
+      "[[App]] → [[Stats]] + [[Catalogue]] → [[Produit]] (hiérarchie de composition).",
+      "Prix moyen = (150 + 80 + 1200 + 300 + 250) / 5 = 1980 / 5 = **396.00**.",
+      "Ruptures : Souris et Webcam = **2**.",
+      "Promos : Écran 1200 → 960 ; Casque 300 → 240."
+    ] }],
+    solution: [
+      { run: true, code:
+`var produits = [
+  { id: 1, nom: "Clavier", prix: 150,  stock: 12, promo: false },
+  { id: 2, nom: "Souris",  prix: 80,   stock: 0,  promo: false },
+  { id: 3, nom: "Écran",   prix: 1200, stock: 5,  promo: true  },
+  { id: 4, nom: "Casque",  prix: 300,  stock: 3,  promo: true  },
+  { id: 5, nom: "Webcam",  prix: 250,  stock: 0,  promo: false }
+];
+
+var Produit = function({ nom, prix, stock, promo }) {
+  var prixFinal = promo ? prix * 0.8 : prix;
+  var enRupture = stock === 0;
+  var affichagePrix = promo
+    ? <span><span style={{ textDecoration: "line-through" }}>{prix} DH</span> <strong style={{ color: "green" }}>{prixFinal} DH</strong></span>
+    : <span>{prix} DH</span>;
+  return (
+    <li style={{ color: enRupture ? "gray" : "black" }}>
+      <strong>{nom}</strong> : {affichagePrix}
+      {enRupture ? <em style={{ color: "red" }}> — Rupture de stock</em> : null}
+    </li>
+  )
+}
+
+var Catalogue = function({ produits, masquerRupture }) {
+  return (
+    <ul>
+      {produits.map(p =>
+        (masquerRupture && p.stock === 0)
+          ? null
+          : <Produit key={p.id} nom={p.nom} prix={p.prix} stock={p.stock} promo={p.promo} />
+      )}
+    </ul>
+  )
+}
+
+var Stats = function({ produits }) {
+  var ruptures = produits.filter(p => p.stock === 0).length;
+  var total = produits.reduce((somme, p) => somme + p.prix, 0);
+  var moyenne = (total / produits.length).toFixed(2);
+  return (
+    <div style={{ background: "#e8eefb", padding: "8px" }}>
+      <p>Produits en rupture : {ruptures}</p>
+      <p>Prix moyen : {moyenne} DH</p>
+    </div>
+  )
+}
+
+var App = function({ produits, masquerRupture }) {
+  return (
+    <React.Fragment>
+      <h1>Boutique Info</h1>
+      <Stats produits={produits} />
+      <Catalogue produits={produits} masquerRupture={masquerRupture} />
+    </React.Fragment>
+  )
+}
+
+ReactDOM.render(<App produits={produits} masquerRupture={true} />, document.getElementById("app"));` }
+    ],
+    resultat: [{ rendu: "<b style=\"font-size:1.4em\">Boutique Info</b><br><span style=\"background:#e8eefb;display:block;padding:4px 8px\">Produits en rupture : 2<br>Prix moyen : 396.00 DH</span>• <b>Clavier</b> : 150 DH<br>• <b>Écran</b> : <s>1200 DH</s> <b style=\"color:green\">960 DH</b><br>• <b>Casque</b> : <s>300 DH</s> <b style=\"color:green\">240 DH</b><br>Avec <code>masquerRupture={false}</code> : Souris et Webcam apparaissent en gris avec « — Rupture de stock » en rouge." }],
+    explication: [{ list: [
+      "Chaque composant a un rôle unique ; les données descendent par **props** de [[App]] vers [[Produit]].",
+      "[[Stats]] reçoit **tous** les produits : les statistiques ne dépendent pas du masquage.",
+      "[[React.Fragment]] évite d'ajouter un [[<div>]] autour de [[h1]], [[Stats]] et [[Catalogue]].",
+      "**Erreurs fréquentes** : oublier de transmettre une prop à l'enfant, tester [[stock = 0]] (affectation) au lieu de [[stock === 0]], oublier le [[key]] dans le [[map]]."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 17 */
+{
+  n: 17, titre: "Suivi des stagiaires avec des classes et des méthodes", etoiles: 5,
+  notions: ["classes", "méthodes de classe ([[this.mention()]])", "[[this.props]]", "rendu conditionnel", "[[reduce]] / [[filter]]"],
+  objectif: "Utiliser une classe là où des méthodes sont utiles, et combiner calculs et affichage conditionnel.",
+  enonce: [
+    "Un formateur veut afficher les moyennes de ses stagiaires.",
+    { code:
+`var stagiaires = [
+  { id: 1, nom: "Amine",   moyenne: 15.5  },
+  { id: 2, nom: "Salma",   moyenne: 9     },
+  { id: 3, nom: "Yassine", moyenne: 12.25 },
+  { id: 4, nom: "Khadija", moyenne: 17    },
+  { id: 5, nom: "Omar",    moyenne: 10    }
+];` },
+    "Créer deux **classes** :",
+    { list: [
+      "<code>Stagiaire</code> ([[nom]], [[moyenne]]) : un [[<li>]] « Nom : moyenne/20 — mention », vert si la moyenne est ≥ 10, rouge sinon. La **mention** est calculée par une **méthode** [[mention()]] : ≥ 16 « Très bien », ≥ 14 « Bien », ≥ 12 « Assez bien », ≥ 10 « Passable », sinon « Ajourné » ;",
+      "<code>ListeStagiaires</code> ([[stagiaires]], [[seuil]]) : affiche, au-dessus de la liste, « Moyenne de la classe : X/20 — Admis : N » (calculée sur **tous** les stagiaires, 2 décimales), puis uniquement les stagiaires dont la moyenne est ≥ [[seuil]]. La moyenne de classe est calculée par une méthode [[moyenneClasse()]]."
+    ] }
+  ],
+  travail: [
+    "Écrire la classe [[Stagiaire]] avec sa méthode [[mention()]].",
+    "Écrire la classe [[ListeStagiaires]] avec sa méthode [[moyenneClasse()]].",
+    "Afficher avec [[seuil={10}]] puis [[seuil={0}]].",
+    "Calculer à la main la moyenne de la classe et le nombre d'admis.",
+    "Justifier le choix de classes plutôt que de fonctions."
+  ],
+  indice: "Dans [[render()]], une méthode de la classe s'appelle avec [[this.nomDeLaMethode()]].",
+  astuce: "Dans le [[map]] de [[ListeStagiaires]], utilise une fonction **fléchée** pour garder l'accès à [[this.props.seuil]].",
+  corrige: {
+    analyse: ["Des méthodes ([[mention]], [[moyenneClasse]]) organisent les calculs : le cours préconise alors une classe."],
+    raisonnement: [{ list: [
+      "Somme des moyennes : 15.5 + 9 + 12.25 + 17 + 10 = 63.75 ; divisée par 5 = **12.75**.",
+      "Admis (≥ 10) : Amine, Yassine, Khadija, Omar = **4**.",
+      "Avec [[seuil={10}]], Salma (9) est masquée."
+    ] }],
+    solution: [
+      { run: true, code:
+`var stagiaires = [
+  { id: 1, nom: "Amine",   moyenne: 15.5  },
+  { id: 2, nom: "Salma",   moyenne: 9     },
+  { id: 3, nom: "Yassine", moyenne: 12.25 },
+  { id: 4, nom: "Khadija", moyenne: 17    },
+  { id: 5, nom: "Omar",    moyenne: 10    }
+];
+
+class Stagiaire extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  mention() {
+    var m = this.props.moyenne;
+    if (m >= 16) return "Très bien";
+    if (m >= 14) return "Bien";
+    if (m >= 12) return "Assez bien";
+    if (m >= 10) return "Passable";
+    return "Ajourné";
+  }
+  render() {
+    var admis = this.props.moyenne >= 10;
+    return <li style={{ color: admis ? "green" : "red" }}>
+      {this.props.nom} : {this.props.moyenne}/20 — {this.mention()}
+    </li>
+  }
+}
+
+class ListeStagiaires extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  moyenneClasse() {
+    var total = this.props.stagiaires.reduce((somme, s) => somme + s.moyenne, 0);
+    return (total / this.props.stagiaires.length).toFixed(2);
+  }
+  render() {
+    var admis = this.props.stagiaires.filter(s => s.moyenne >= 10).length;
+    return (
+      <div>
+        <p>Moyenne de la classe : {this.moyenneClasse()}/20 — Admis : {admis}</p>
+        <ul>
+          {this.props.stagiaires.map(s =>
+            s.moyenne < this.props.seuil
+              ? null
+              : <Stagiaire key={s.id} nom={s.nom} moyenne={s.moyenne} />
+          )}
+        </ul>
+      </div>
+    )
+  }
+}
+
+ReactDOM.render(
+  <div>
+    <h4>Seuil 10 (admis seulement)</h4>
+    <ListeStagiaires stagiaires={stagiaires} seuil={10} />
+    <h4>Seuil 0 (tous)</h4>
+    <ListeStagiaires stagiaires={stagiaires} seuil={0} />
+  </div>,
+  document.getElementById("app"));` }
+    ],
+    resultat: [{ rendu: "<b>Seuil 10</b> : Moyenne de la classe : 12.75/20 — Admis : 4<br><span style=\"color:green\">Amine : 15.5/20 — Bien<br>Yassine : 12.25/20 — Assez bien<br>Khadija : 17/20 — Très bien<br>Omar : 10/20 — Passable</span><br><b>Seuil 0</b> : même ligne de moyenne, plus <span style=\"color:red\">Salma : 9/20 — Ajourné</span> (2<sup>e</sup> position)." }],
+    explication: [{ list: [
+      "Les composants possèdent des **méthodes** : c'est le critère du cours pour choisir une classe.",
+      "Les méthodes sont appelées avec [[this.]] : [[this.mention()]], [[this.moyenneClasse()]].",
+      "La fonction fléchée dans [[map]] conserve [[this]] : [[this.props.seuil]] est accessible.",
+      "**Erreurs fréquentes** : oublier [[this.]] devant la méthode, oublier [[return]] dans [[mention()]] pour le cas final, comparer avec [[=]] au lieu de [[>=]]."
+    ] }]
+  }
+},
+
+/* ---------------------------------------------------------- 18 */
+{
+  n: 18, titre: "Mini-sujet de synthèse : Planning de la journée", etoiles: 5,
+  notions: ["page complète", "composant fonction + composant classe", "Fragment", "commentaire JSX", "condition", "props"],
+  objectif: "Résoudre en autonomie un sujet complet proche d'un contrôle, de la page HTML jusqu'au rendu final.",
+  enonce: [
+    "On veut afficher le planning d'un jour de formation.",
+    { code:
+`var seances = [
+  { id: 1, matiere: "JavaScript",        salle: "B12",    heure: "08:30", enLigne: false },
+  { id: 2, matiere: "React",             salle: "Labo 3", heure: "10:45", enLigne: false },
+  { id: 3, matiere: "Anglais technique", salle: "",       heure: "14:00", enLigne: true  },
+  { id: 4, matiere: "Communication",     salle: "",       heure: "16:00", enLigne: true  }
+];` },
+    "Cahier des charges :",
+    { list: [
+      "Une **page HTML complète** (React 16, ReactDOM, Babel, conteneur [[#app]]).",
+      "Composant **fonction** <code>Seance</code> ([[matiere]], [[salle]], [[heure]], [[enLigne]]) : un [[<li>]] « **heure** — matière : … » ; si la séance est en ligne, afficher une pastille bleue « En ligne » (texte blanc sur fond bleu), sinon « Salle X ».",
+      "Composant **classe** <code>Planning</code> ([[seances]], [[jour]], [[seulementEnLigne]]) qui retourne, **sans [[<div>]]**, un titre [[<h2>Planning du …</h2>]], la liste des séances et une ligne « Séances en ligne : X / Y ». Si [[seulementEnLigne]] est vrai, seules les séances en ligne sont listées.",
+      "Un **commentaire JSX** doit précéder la liste.",
+      "Afficher le planning du « lundi » avec [[seulementEnLigne={false}]]."
+    ] }
+  ],
+  travail: [
+    "Écrire la page HTML et le script Babel complets.",
+    "Écrire [[Seance]] (fonction) et [[Planning]] (classe).",
+    "Gérer la condition d'affichage des séances en ligne avec une expression conditionnelle.",
+    "Indiquer le résultat attendu avec [[seulementEnLigne={true}]].",
+    "Expliquer pourquoi Babel dans le navigateur n'est pas utilisé en production."
+  ],
+  indice: "Fais un brouillon des composants : qui reçoit quoi ? [[Planning]] passe à [[Seance]] les quatre valeurs dont elle a besoin.",
+  astuce: "Pour ne pas ajouter de [[<div>]], utilise [[React.Fragment]] comme parent de [[h2]], liste et paragraphe.",
+  corrige: {
+    analyse: ["Sujet de synthèse : structure de page, deux types de composants, composition, condition, Fragment, commentaire."],
+    raisonnement: [{ list: [
+      "Page : trois CDN, [[#app]], script Babel.",
+      "[[Seance]] : fonction (aucun état ni méthode). [[Planning]] : classe (selon la consigne).",
+      "Liste affichée = [[seulementEnLigne ? seances.filter(s => s.enLigne) : seances]].",
+      "Séances en ligne : 2 sur 4."
+    ] }],
+    solution: [
+      { label: "index.html", lang: "html", run: "page", code: PAGE("Planning",
+`var seances = [
+  { id: 1, matiere: "JavaScript",        salle: "B12",    heure: "08:30", enLigne: false },
+  { id: 2, matiere: "React",             salle: "Labo 3", heure: "10:45", enLigne: false },
+  { id: 3, matiere: "Anglais technique", salle: "",       heure: "14:00", enLigne: true  },
+  { id: 4, matiere: "Communication",     salle: "",       heure: "16:00", enLigne: true  }
+];
+
+function Seance({ matiere, salle, heure, enLigne }) {
+  return (
+    <li>
+      <strong>{heure}</strong> — {matiere} : {enLigne ? <span style={{ color: "white", background: "royalblue", padding: "1px 8px" }}>En ligne</span> : "Salle " + salle}
+    </li>
+  )
+}
+
+class Planning extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    var liste = this.props.seulementEnLigne
+      ? this.props.seances.filter(s => s.enLigne)
+      : this.props.seances;
+    var nbEnLigne = this.props.seances.filter(s => s.enLigne).length;
+    return (
+      <React.Fragment>
+        <h2>Planning du {this.props.jour}</h2>
+        {/* liste des séances */}
+        <ul>
+          {liste.map(s => <Seance key={s.id} matiere={s.matiere} salle={s.salle} heure={s.heure} enLigne={s.enLigne} />)}
+        </ul>
+        <p>Séances en ligne : {nbEnLigne} / {this.props.seances.length}</p>
+      </React.Fragment>
+    )
+  }
+}
+
+ReactDOM.render(
+  <Planning seances={seances} jour="lundi" seulementEnLigne={false} />,
+  document.getElementById("app"));`) }
+    ],
+    resultat: [{ rendu: "<b style=\"font-size:1.3em\">Planning du lundi</b><br>• <b>08:30</b> — JavaScript : Salle B12<br>• <b>10:45</b> — React : Salle Labo 3<br>• <b>14:00</b> — Anglais technique : <span style=\"color:#fff;background:royalblue;padding:1px 8px\">En ligne</span><br>• <b>16:00</b> — Communication : <span style=\"color:#fff;background:royalblue;padding:1px 8px\">En ligne</span><br>Séances en ligne : 2 / 4<br>Avec <code>seulementEnLigne={true}</code> : seules les deux séances en ligne sont listées (le compteur reste 2 / 4)." }],
+    explication: [{ list: [
+      "Babel traduit le JSX **dans le navigateur** : cette étape ralentit l'exécution. En production, on utilise un outil comme Webpack pour produire un paquet compact.",
+      "Le Fragment n'ajoute aucun nœud DOM : le [[<h2>]], le [[<ul>]] et le [[<p>]] sont directement dans [[#app]].",
+      "Le commentaire [[{/* ... */}]] est invisible à l'affichage.",
+      "**Erreurs fréquentes** : [[\"Salle \" + salle]] oublié dans la branche « sinon », [[key]] manquante, composant en minuscule, script Babel placé avant le [[div]]."
+    ] }]
+  }
+}
+);
+
+/* ============================================================
+   MINI-CONTRÔLE BLANC + SOURCES
+   ============================================================ */
+const FORMATIONS = `var formations = [
+  { id: 1, titre: "Développement Digital",      duree: 24, places: 5  },
+  { id: 2, titre: "Infrastructure Digitale",    duree: 24, places: 0  },
+  { id: 3, titre: "Gestion des Entreprises",    duree: 24, places: 12 },
+  { id: 4, titre: "Électricité de Maintenance", duree: 12, places: 0  }
+];`;
+
+const CONTROLE = {
+  titre: "Mini-contrôle blanc — Catalogue des formations (Le langage JSX)",
+  duree: "1 h 30",
+  minutes: 90,
+  contexte: [
+    "Un centre de formation souhaite publier en ligne son **catalogue de formations**. Tu es chargée de réaliser la page avec **React 16** et **JSX** (Babel dans le navigateur). Les données sont fournies dans le tableau suivant :",
+    { code: FORMATIONS },
+    "L'affichage final attendu (avec le masquage des formations complètes activé) est :",
+    { rendu: "<b style=\"font-size:1.3em\">Catalogue des formations</b><br>• Développement Digital (24 mois) : 5 place(s) disponible(s)<br>• Gestion des Entreprises (24 mois) : 12 place(s) disponible(s)" }
+  ],
+  consignes: [
+    "Document : aucun. Un éditeur de texte est autorisé, **pas** d'assistant IA ni de copie de corrigé.",
+    "Respecte les **noms** imposés : [[Formation]], [[ListeFormations]], [[formations]], [[masquerCompletes]].",
+    "Les composants commencent par une **majuscule** ; chaque liste porte une [[key]] ; aucun [[<div>]] superflu quand un Fragment est demandé.",
+    "Chaque question est notée selon le barème indiqué ; le code doit être **syntaxiquement correct**.",
+    "Lance le chronomètre ci-dessus avant de commencer et arrête-toi à la fin du temps."
+  ],
+  questions: [
+    { id: "Q1", pts: 2, titre: "Questions de cours (JSX et rendu)", texte: [
+      "a) Quel est le rôle de Babel et de l'attribut [[type=\"text/babel\"]] ? (1 pt)",
+      "b) Quel est le rôle de [[ReactDOM.render()]] ? Donner ses deux arguments. (1 pt)"
+    ] },
+    { id: "Q2", pts: 2, titre: "Règles d'écriture du JSX", texte: [
+      "Donner la syntaxe JSX correcte pour : (0,5 pt chacune)",
+      { list: [
+        "a) appliquer la classe CSS [[complet]] à un élément ;",
+        "b) mettre un texte en rouge avec l'attribut [[style]] ;",
+        "c) mettre en commentaire la ligne [[<li>Test</li>]] ;",
+        "d) nommer un composant qui affiche une formation."
+      ] }
+    ] },
+    { id: "Q3", pts: 3, titre: "Structure de la page", texte: [
+      "Écrire la structure de la page [[index.html]] : chargement de React 16, ReactDOM 16 et Babel (CDN unpkg), conteneur d'affichage, et la balise [[<script>]] qui accueillera le code JSX. Ne pas recopier le tableau [[formations]]."
+    ] },
+    { id: "Q4", pts: 3, titre: "Le composant Formation", texte: [
+      "Écrire le composant **fonction** [[Formation]] qui reçoit (par déstructuration) les attributs [[titre]], [[duree]] et [[places]] et retourne un [[<li>]] de la forme : [[Développement Digital (24 mois)]]. (On ajoutera les places à la question 6.)"
+    ] },
+    { id: "Q5", pts: 3, titre: "Le composant ListeFormations", texte: [
+      "Écrire le composant **fonction** [[ListeFormations]] qui reçoit l'attribut [[formations]] (le tableau) et retourne un [[<ul>]] contenant un composant [[Formation]] par élément, en utilisant [[map()]] et une [[key]] correcte. Écrire l'appel [[ReactDOM.render()]]."
+    ] },
+    { id: "Q6", pts: 3, titre: "Affichage des places", texte: [
+      "Modifier [[Formation]] pour qu'elle affiche à la suite du titre :",
+      { list: [
+        "« : N place(s) disponible(s) » si [[places]] est supérieur à 0 ;",
+        "le mot **Complet** en rouge (avec l'attribut [[style]]) si [[places]] vaut 0."
+      ] },
+      "Utiliser une expression conditionnelle dans le JSX."
+    ] },
+    { id: "Q7", pts: 2, titre: "Masquer les formations complètes", texte: [
+      "Ajouter à [[ListeFormations]] l'attribut booléen [[masquerCompletes]]. S'il vaut [[true]], les formations sans place ne sont **pas affichées**. Écrire les modifications nécessaires."
+    ] },
+    { id: "Q8", pts: 2, titre: "Version classe avec Fragment", texte: [
+      "Réécrire [[ListeFormations]] sous forme de **classe** dérivée de [[React.Component]] qui retourne, **sans [[<div>]]**, un titre [[<h2>Catalogue des formations</h2>]] suivi de la liste. Placer un **commentaire JSX** avant la liste. Écrire l'appel final avec [[masquerCompletes={true}]]."
+    ] }
+  ],
+  correctionIntro: [
+    "Le corrigé de chaque question est ci-dessous, avec le **barème détaillé** et les erreurs fréquentes. Le programme complet assemblé se trouve en bas ; utilise ensuite le tableau d'auto-évaluation."
+  ],
+  correction: {
+    Q1: {
+      solution: [
+        "a) **Babel** est un interpréteur/traducteur : il transforme le code JSX en JavaScript compris par le navigateur. L'attribut [[type=\"text/babel\"]] indique à Babel **quelle partie** du code (la balise [[<script>]]) doit être traduite.",
+        "b) [[ReactDOM.render(élément, conteneur)]] **insère un élément React dans la page HTML**. 1<sup>er</sup> argument : l'élément React à afficher (ex. [[<ListeFormations ... />]]) ; 2<sup>e</sup> argument : le nœud DOM de destination (ex. [[document.getElementById(\"app\")]])."
+      ],
+      bareme: ["a) Rôle de Babel (traduction JSX → JavaScript) : 0,5 pt ; rôle de l'attribut : 0,5 pt", "b) Rôle : 0,5 pt ; les deux arguments : 0,5 pt"],
+      erreurs: ["Dire que Babel « exécute » le JSX ou qu'il remplace React.", "Oublier que le 2<sup>e</sup> argument est un élément du DOM, pas une chaîne."]
+    },
+    Q2: {
+      solution: [
+        { list: [
+          "a) [[className=\"complet\"]]",
+          "b) [[style={{color:\"red\"}}]]",
+          "c) [[{/* <li>Test</li> */}]]",
+          "d) Un nom qui commence par une **majuscule**, par ex. [[Formation]] (utilisé comme [[<Formation />]])."
+        ] }
+      ],
+      bareme: ["0,5 pt par réponse exacte", "Pour b) : 0,25 pt si une seule paire d'accolades ou si [[color: red]] sans guillemets"],
+      erreurs: ["[[class]] au lieu de [[className]].", "[[style=\"color:red\"]] avec une chaîne.", "Commentaire [[//]] ou [[<!-- -->]]."]
+    },
+    Q3: {
+      solution: [
+        { lang: "html", code:
+`<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin><\/script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin><\/script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"><\/script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="text/babel">
+      // code JSX ici
+    <\/script>
+  </body>
+</html>` }
+      ],
+      bareme: ["Trois scripts CDN corrects (React, ReactDOM, Babel) : 1,5 pt (0,5 chacun)", "Conteneur [[<div id=\"app\">]] : 0,5 pt", "[[<script type=\"text/babel\">]] placé **après** le conteneur : 1 pt"],
+      erreurs: ["Oublier [[type=\"text/babel\"]].", "Placer le script avant le [[div]] (conteneur introuvable).", "Oublier Babel ou ReactDOM."]
+    },
+    Q4: {
+      solution: [
+        { code:
+`function Formation({ titre, duree, places }) {
+  return <li>{titre} ({duree} mois)</li>
+}` }
+      ],
+      bareme: ["Nom en majuscule et déstructuration correcte : 1 pt", "[[<li>]] bien formé : 1 pt", "Valeurs insérées avec accolades, texte « ( » « mois) » correct : 1 pt"],
+      erreurs: ["[[function formation]] en minuscule.", "Oublier les accolades autour de [[titre]] / [[duree]].", "Utiliser [[props]] sans le déclarer en paramètre."]
+    },
+    Q5: {
+      solution: [
+        { code:
+`function ListeFormations({ formations }) {
+  return <ul>
+    {
+      formations.map(f => <Formation key={f.id} titre={f.titre} duree={f.duree} places={f.places} />)
+    }
+  </ul>
+}
+ReactDOM.render(<ListeFormations formations={formations} />, document.getElementById("app"));` }
+      ],
+      bareme: ["Composant et [[return <ul>]] corrects, accolades autour de [[map]] : 1 pt", "[[map]] avec [[key={f.id}]] sur l'élément retourné : 1 pt", "Props transmises à [[Formation]] + appel [[ReactDOM.render()]] correct : 1 pt"],
+      erreurs: ["[[key]] oubliée ou placée à l'intérieur du [[li]].", "Oublier de transmettre [[places]].", "Appel [[<ListeFormations />]] sans l'attribut [[formations]]."]
+    },
+    Q6: {
+      solution: [
+        { code:
+`function Formation({ titre, duree, places }) {
+  return <li>{titre} ({duree} mois) : {places > 0
+    ? places + " place(s) disponible(s)"
+    : <span style={{ color: "red" }}>Complet</span>}
+  </li>
+}` }
+      ],
+      bareme: ["Expression conditionnelle [[? :]] entourée d'accolades : 1 pt", "Branche « places > 0 » correcte : 1 pt", "Branche « Complet » en rouge avec [[style={{...}}]] : 1 pt"],
+      erreurs: ["Utiliser un [[if]] dans le JSX.", "[[style=\"color:red\"]].", "Tester [[places = 0]] au lieu de [[places > 0]] ou [[=== 0]]."]
+    },
+    Q7: {
+      solution: [
+        { code:
+`function ListeFormations({ formations, masquerCompletes }) {
+  return <ul>
+    {
+      formations.map(f =>
+        (masquerCompletes && f.places === 0)
+          ? null
+          : <Formation key={f.id} titre={f.titre} duree={f.duree} places={f.places} />
+      )
+    }
+  </ul>
+}
+// appel : <ListeFormations formations={formations} masquerCompletes={true} />` }
+      ],
+      bareme: ["Nouvel attribut déstructuré : 0,5 pt", "Condition correcte (complet **et** masquage actif) : 1 pt", "Retour de [[null]] sinon l'élément avec [[key]] : 0,5 pt"],
+      erreurs: ["Retourner [[\"\"]] ou oublier le cas « sinon ».", "Masquer **toutes** les formations quand [[masquerCompletes]] est vrai (oubli de la condition sur [[places]])."]
+    },
+    Q8: {
+      solution: [
+        { code:
+`class ListeFormations extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <React.Fragment>
+        <h2>Catalogue des formations</h2>
+        {/* liste des formations */}
+        <ul>
+          {
+            this.props.formations.map(f =>
+              (this.props.masquerCompletes && f.places === 0)
+                ? null
+                : <Formation key={f.id} titre={f.titre} duree={f.duree} places={f.places} />
+            )
+          }
+        </ul>
+      </React.Fragment>
+    )
+  }
+}
+ReactDOM.render(<ListeFormations formations={formations} masquerCompletes={true} />, document.getElementById("app"));` }
+      ],
+      bareme: ["Classe dérivée de [[React.Component]], [[constructor]] / [[super(props)]], [[render()]] : 0,5 pt", "[[this.props]] correctement utilisé : 0,5 pt", "[[React.Fragment]] (pas de [[div]]) + commentaire JSX valide : 0,5 pt", "Appel final correct : 0,5 pt"],
+      erreurs: ["Écrire [[props.formations]] au lieu de [[this.props.formations]].", "Utiliser [[function]] classique dans [[map]] et perdre [[this]].", "Commentaire [[//]] dans le JSX."]
+    }
+  },
+  programmeComplet: [
+    { label: "Programme final (Q3 à Q8 assemblées)", lang: "html", run: "page", code: PAGE("Catalogue des formations",
+FORMATIONS + `
+
+function Formation({ titre, duree, places }) {
+  return <li>{titre} ({duree} mois) : {places > 0
+    ? places + " place(s) disponible(s)"
+    : <span style={{ color: "red" }}>Complet</span>}
+  </li>
+}
+
+class ListeFormations extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <React.Fragment>
+        <h2>Catalogue des formations</h2>
+        {/* liste des formations */}
+        <ul>
+          {
+            this.props.formations.map(f =>
+              (this.props.masquerCompletes && f.places === 0)
+                ? null
+                : <Formation key={f.id} titre={f.titre} duree={f.duree} places={f.places} />
+            )
+          }
+        </ul>
+      </React.Fragment>
+    )
+  }
+}
+
+ReactDOM.render(<ListeFormations formations={formations} masquerCompletes={true} />, document.getElementById("app"));`) }
+  ]
+};
+
+const SOURCES = {
+  intro: "Le **PDF du cours** reste la référence principale pour les notions et le niveau. Les exercices sont originaux ; les ressources web suivantes ont servi à vérifier les bonnes pratiques (listes, clés, règles JSX) et à calibrer la difficulté :",
+  liste: [
+    { titre: "OFPPT – DRIF · C12 Développer en Front-end · S4 Le langage JSX (cours PDF, 16 pages)", url: "#", desc: "Cours fourni par l'étudiante : référence principale (notions, syntaxe, exemples)." },
+    { titre: "Coddy — Listes et keys en React (map, prop key, index)", url: "https://coddy.tech/docs/fr/react/lists-and-keys", desc: "Rôle de [[key]], pièges de l'index, avertissement « unique key prop »." },
+    { titre: "JavaScript Tutorial — React JSX Key Prop", url: "https://javascripttutorial.net/react-tutorial/react-jsx-key", desc: "Rendu d'une liste avec map et choix d'une clé stable." },
+    { titre: "Hyring — React JSX (règles et exemples)", url: "https://hyring.com/learn/react/jsx", desc: "Règles du JSX : racine unique, fragments, commentaires, balises fermées." },
+    { titre: "Hexlet — JSX : collections et Fragment", url: "https://hexlet.io/courses/js-react/lessons/jsx-collections/theory_unit", desc: "Collections d'éléments, clés et usage de React.Fragment dans des composants classes." },
+    { titre: "Leyaa — Map function usage in React (exercices)", url: "https://leyaa.ai/codefly/learn/react/part-2/react-map-function-usage/challenge", desc: "Exemples de questions pratiques sur [[map]] dans le JSX." }
+  ],
+  fin: "**Limite honnête :** mes recherches n'ont trouvé **aucun ancien contrôle OFPPT / EFM** publié sur le JSX. Le format du mini-contrôle (durée, barème sur 20, mélange cours + code) est donc une **estimation** ; compare-le avec les consignes de ton formateur."
+};
+
+/* ============================================================
+   MOTEUR DE LA PAGE (rendu des exercices, statuts, exécution)
+   ============================================================ */
+(function () {
+  'use strict';
+  var LS = 'banque-jsx-n5-v1';
+  var st = { status: {}, scores: {} };
+  try { var raw = localStorage.getItem(LS); if (raw) { var p = JSON.parse(raw); st.status = p.status || {}; st.scores = p.scores || {}; } } catch (e) {}
+  function save() { try { localStorage.setItem(LS, JSON.stringify(st)); } catch (e) {} }
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  // [[code]] -> <code> échappé ; **gras** -> <strong> ; le reste est du HTML d'auteur
+  function fmt(s) {
+    return String(s)
+      .replace(/\[\[([\s\S]+?)\]\]/g, function (m, c) { return '<code>' + esc(c) + '</code>'; })
+      .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>');
+  }
+  function h(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      var v = attrs[k];
+      if (k === 'class') e.className = v;
+      else if (k === 'html') e.innerHTML = v;
+      else if (k === 'text') e.textContent = v;
+      else if (k.indexOf('on') === 0) e.addEventListener(k.slice(2), v);
+      else e.setAttribute(k, v);
+    }
+    (kids || []).forEach(function (c) {
+      if (c == null) return;
+      e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    });
+    return e;
+  }
+  function stars(n) { return '★'.repeat(n) + '☆'.repeat(5 - n); }
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  /* ---------- Exécution d'un extrait dans un iframe ---------- */
+  function buildDoc(b) {
+    if (b.run === 'page') return b.code;
+    var S = 'scr' + 'ipt';
+    return '<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{font-family:system-ui,sans-serif;padding:10px;color:#222}' + (b.css || '') + '</style>' +
+      '<' + S + ' src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></' + S + '>' +
+      '<' + S + ' src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></' + S + '>' +
+      '<' + S + ' src="https://unpkg.com/@babel/standalone/babel.min.js"></' + S + '>' +
+      '<' + S + '>window.onerror=function(m){document.body.insertAdjacentHTML("beforeend","<pre style=\\"color:#b00;white-space:pre-wrap\\">Erreur : "+String(m).replace(/</g,"&lt;")+"</pre>")}</' + S + '>' +
+      '</head><body><div id="app"></div><' + S + ' type="text/babel">' + b.code + '</' + S + '></body></html>';
+  }
+  function codeBlock(b) {
+    var code = b.code.replace(/^\n/, '').replace(/\s+$/, '');
+    var b2 = { code: code, run: b.run, css: b.css };
+    var wrap = h('div', { class: 'code' });
+    var bar = h('div', { class: 'bar' }, [h('span', { text: b.label || b.lang || 'JSX' }), h('span', { class: 'sp' })]);
+    bar.appendChild(h('button', { text: 'Copier', onclick: function (ev) {
+      var btn = ev.target;
+      function ok() { btn.textContent = 'Copié ✓'; setTimeout(function () { btn.textContent = 'Copier'; }, 1200); }
+      try { navigator.clipboard.writeText(code).then(ok, ok); } catch (e) { ok(); }
+    } }));
+    var frame = null;
+    if (b.run) {
+      bar.appendChild(h('button', { class: 'run', text: '▶ Exécuter', onclick: function (ev) {
+        var btn = ev.target;
+        if (frame) { frame.remove(); hint.remove(); frame = null; btn.textContent = '▶ Exécuter'; return; }
+        frame = h('iframe', { sandbox: 'allow-scripts', title: 'Résultat' });
+        frame.srcdoc = buildDoc(b2);
+        wrap.appendChild(frame);
+        wrap.appendChild(hint);
+        btn.textContent = '■ Fermer';
+      } }));
+    }
+    var hint = h('div', { class: 'hint', text: 'Aperçu en direct (connexion Internet requise pour charger React et Babel).' });
+    wrap.appendChild(bar);
+    wrap.appendChild(h('pre', null, [h('code', { text: code })]));
+    return wrap;
+  }
+  function blocks(arr) {
+    var out = document.createElement('div');
+    (arr || []).forEach(function (b) {
+      if (typeof b === 'string') out.appendChild(h('p', { html: fmt(b) }));
+      else if (b.code != null) out.appendChild(codeBlock(b));
+      else if (b.list) {
+        var l = h(b.ordered ? 'ol' : 'ul');
+        b.list.forEach(function (i) { l.appendChild(h('li', { html: fmt(i) })); });
+        out.appendChild(l);
+      } else if (b.note) out.appendChild(h('div', { class: 'callout ' + (b.kind || ''), html: fmt(b.note) }));
+      else if (b.rendu) out.appendChild(h('div', { class: 'rendu', html: fmt(b.rendu) }));
+      else if (b.table) {
+        var t = h('table'); var tr = h('tr');
+        b.table.head.forEach(function (c) { tr.appendChild(h('th', { html: fmt(c) })); });
+        t.appendChild(tr);
+        b.table.rows.forEach(function (r) { var x = h('tr'); r.forEach(function (c) { x.appendChild(h('td', { html: fmt(c) })); }); t.appendChild(x); });
+        out.appendChild(t);
+      }
+    });
+    return out;
+  }
+  function lbl(t) { return h('div', { class: 'lbl', text: t }); }
+
+  /* ---------- Statuts ---------- */
+  var filter = 'all';
+  var N = EXERCISES.length;
+  function getStatus(n) { return st.status[n] || 'todo'; }
+  function setStatus(n, v) { st.status[n] = v; save(); refreshStatus(); }
+  function refreshStatus() {
+    var done = 0, review = 0;
+    EXERCISES.forEach(function (ex) {
+      var s = getStatus(ex.n);
+      if (s === 'done') done++; if (s === 'review') review++;
+      var card = document.getElementById('ex' + ex.n);
+      if (card) {
+        card.className = 'card ex ' + (s === 'todo' ? '' : s);
+        card.style.display = (filter === 'all' || filter === s) ? '' : 'none';
+      }
+      var dot = document.getElementById('dot' + ex.n);
+      if (dot) dot.className = 'dot ' + (s === 'todo' ? '' : s);
+      var radios = document.querySelectorAll('input[name="st' + ex.n + '"]');
+      Array.prototype.forEach.call(radios, function (r) {
+        r.checked = (r.value === s);
+        r.parentNode.className = r.checked ? 'on ' + r.value : '';
+      });
+    });
+    document.getElementById('pbar').style.width = (done / N * 100) + '%';
+    document.getElementById('ptxt').textContent = done + ' / ' + N + ' terminés · ' + review + ' à revoir';
+  }
+  function statusControl(n) {
+    var box = h('div', { class: 'statut' });
+    [['todo', '☐ À faire'], ['done', '☐ Terminé'], ['review', '☐ À revoir']].forEach(function (o) {
+      var inp = h('input', { type: 'radio', name: 'st' + n, value: o[0] });
+      inp.addEventListener('change', function () { setStatus(n, o[0]); });
+      box.appendChild(h('label', null, [inp, o[1].slice(2)]));
+    });
+    return box;
+  }
+
+  /* ---------- Rendu des énoncés ---------- */
+  var list = document.getElementById('enonces-list');
+  var side = document.getElementById('side-ex');
+  EXERCISES.forEach(function (ex) {
+    var card = h('article', { class: 'card ex', id: 'ex' + ex.n });
+    card.appendChild(h('div', { class: 'ex-head' }, [
+      h('h3', { text: 'EXERCICE ' + ex.n + ' — ' + ex.titre }),
+      h('span', { class: 'stars', title: 'Difficulté ' + ex.etoiles + '/5', text: stars(ex.etoiles) })
+    ]));
+    var meta = h('div', { class: 'meta' });
+    meta.appendChild(h('b', { text: 'Niveau' })); meta.appendChild(h('span', { text: 'Niveau 5 — Préparation au contrôle' }));
+    meta.appendChild(h('b', { text: 'Difficulté' })); meta.appendChild(h('span', { text: ex.etoiles + ' / 5 (progression au sein du niveau 5)' }));
+    var chips = h('span'); ex.notions.forEach(function (c) { chips.appendChild(h('span', { class: 'chip', html: fmt(c) })); });
+    meta.appendChild(h('b', { text: 'Notions' })); meta.appendChild(chips);
+    meta.appendChild(h('b', { text: 'Objectif' })); meta.appendChild(h('span', { html: fmt(ex.objectif) }));
+    card.appendChild(meta);
+    card.appendChild(lbl('Énoncé')); card.appendChild(blocks(ex.enonce));
+    card.appendChild(lbl('Travail demandé'));
+    var ol = h('ol', { class: 'travail' }); ex.travail.forEach(function (t) { ol.appendChild(h('li', { html: fmt(t) })); });
+    card.appendChild(ol);
+    card.appendChild(lbl('Statut')); card.appendChild(statusControl(ex.n));
+    card.appendChild(h('details', { class: 'tip' }, [h('summary', { text: '💡 Indice' }), h('div', { html: fmt(ex.indice) })]));
+    if (ex.astuce) card.appendChild(h('details', { class: 'tip astuce' }, [h('summary', { text: '⚠ Astuce' }), h('div', { html: fmt(ex.astuce) })]));
+    card.appendChild(h('p', null, [h('a', { href: '#cor' + ex.n, text: 'Aller au corrigé (après avoir essayé !) →' })]));
+    list.appendChild(card);
+    side.appendChild(h('a', { href: '#ex' + ex.n }, [h('span', { id: 'dot' + ex.n, class: 'dot' }), pad(ex.n) + ' · ' + ex.titre]));
+  });
+
+  var fbox = document.getElementById('filters');
+  [['all', 'Tous'], ['todo', 'À faire'], ['done', 'Terminés'], ['review', 'À revoir']].forEach(function (o) {
+    var b = h('button', { text: o[1], class: o[0] === 'all' ? 'on' : '', onclick: function () {
+      filter = o[0];
+      Array.prototype.forEach.call(fbox.children, function (x) { x.className = ''; });
+      b.className = 'on'; refreshStatus();
+    } });
+    fbox.appendChild(b);
+  });
+
+  /* ---------- Rendu des corrigés ---------- */
+  var cl = document.getElementById('corriges-list');
+  EXERCISES.forEach(function (ex) {
+    var c = ex.corrige;
+    var d = h('details', { class: 'c', id: 'cor' + ex.n });
+    d.appendChild(h('summary', { text: 'Corrigé — Exercice ' + ex.n + ' : ' + ex.titre + '  ' + stars(ex.etoiles) }));
+    var body = h('div', { class: 'body' });
+    body.appendChild(lbl('Analyse')); body.appendChild(blocks(c.analyse));
+    body.appendChild(lbl('Raisonnement')); body.appendChild(blocks(c.raisonnement));
+    body.appendChild(lbl('Solution complète')); body.appendChild(blocks(c.solution));
+    body.appendChild(lbl('Résultat attendu')); body.appendChild(blocks(c.resultat));
+    body.appendChild(lbl('Explication pédagogique')); body.appendChild(blocks(c.explication));
+    var act = h('div', { class: 'actions' }, [h('span', { text: 'Après comparaison :' })]);
+    act.appendChild(h('button', { class: 'btn', text: '✔ Marquer Terminé', onclick: function () { setStatus(ex.n, 'done'); } }));
+    act.appendChild(h('button', { class: 'btn', text: '↺ Marquer À revoir', onclick: function () { setStatus(ex.n, 'review'); } }));
+    act.appendChild(h('a', { href: '#ex' + ex.n, text: '↑ Revenir à l\'énoncé' }));
+    body.appendChild(act);
+    d.appendChild(body);
+    cl.appendChild(d);
+  });
+  document.getElementById('open-all').onclick = function () { Array.prototype.forEach.call(cl.children, function (d) { d.open = true; }); };
+  document.getElementById('close-all').onclick = function () { Array.prototype.forEach.call(cl.children, function (d) { d.open = false; }); };
+  // ouvrir automatiquement un corrigé ciblé par un lien
+  window.addEventListener('hashchange', function () {
+    var t = document.getElementById(location.hash.slice(1));
+    if (t && t.tagName === 'DETAILS') t.open = true;
+  });
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest && ev.target.closest('a[href^="#cor"]');
+    if (a) { var t = document.getElementById(a.getAttribute('href').slice(1)); if (t) t.open = true; }
+  });
+
+  /* ---------- Mini-contrôle ---------- */
+  var cb = document.getElementById('controle-box');
+  var C = CONTROLE;
+  var head = h('div', { class: 'card' });
+  head.appendChild(h('h3', { style: 'margin-top:0;color:#2f5597', text: C.titre }));
+  head.appendChild(h('div', { class: 'meta' }, [
+    h('b', { text: 'Niveau' }), h('span', { text: 'Niveau 5 — Contrôle blanc' }),
+    h('b', { text: 'Durée indicative' }), h('span', { text: C.duree }),
+    h('b', { text: 'Barème' }), h('span', { text: 'Total sur 20 points' }),
+    h('b', { text: 'Documents' }), h('span', { text: 'Aucun (cours fermé) — éditeur de texte autorisé' })
+  ]));
+  var tm = h('div', { class: 'sticky-box' });
+  var tdisp = h('span', { class: 'timer', text: '90:00' });
+  var secs = C.minutes * 60, iv = null;
+  function draw() { var m = Math.floor(secs / 60), s = secs % 60; tdisp.textContent = pad(m) + ':' + pad(s); }
+  function stop() { if (iv) { clearInterval(iv); iv = null; } }
+  tm.appendChild(tdisp);
+  tm.appendChild(h('button', { class: 'btn primary', text: '▶ Démarrer / Pause', onclick: function () {
+    if (iv) { stop(); return; }
+    iv = setInterval(function () { secs--; draw(); if (secs <= 0) { stop(); tdisp.textContent = '00:00 — Temps écoulé !'; } }, 1000);
+  } }));
+  tm.appendChild(h('button', { class: 'btn', text: '↺ Réinitialiser', onclick: function () { stop(); secs = C.minutes * 60; draw(); } }));
+  head.appendChild(tm);
+  cb.appendChild(head);
+
+  var ctx = h('div', { class: 'card' });
+  ctx.appendChild(lbl('Contexte')); ctx.appendChild(blocks(C.contexte));
+  ctx.appendChild(lbl('Consignes')); ctx.appendChild(h('ul', { html: C.consignes.map(function (x) { return '<li>' + fmt(x) + '</li>'; }).join('') }));
+  cb.appendChild(ctx);
+
+  var qs = h('div', { class: 'card' });
+  C.questions.forEach(function (q) {
+    qs.appendChild(h('div', { class: 'lbl', text: q.id + ' — ' + q.titre + '  (' + q.pts + ' pt' + (q.pts > 1 ? 's' : '') + ')' }));
+    qs.appendChild(blocks(q.texte));
+  });
+  qs.appendChild(h('p', { html: '<b>Total : 20 points</b>' }));
+  cb.appendChild(qs);
+
+  /* ---------- Correction du contrôle ---------- */
+  var corrBox = document.getElementById('corr-box');
+  document.getElementById('show-corr').onclick = function () {
+    if (!corrBox.hidden) return;
+    if (!confirm('As-tu terminé le mini-contrôle ? La correction complète va s\'afficher.')) return;
+    corrBox.hidden = false; this.disabled = true;
+  };
+  var cc = h('div');
+  cc.appendChild(blocks(C.correctionIntro));
+  C.questions.forEach(function (q) {
+    var r = C.correction[q.id];
+    var d = h('details', { class: 'c' });
+    d.appendChild(h('summary', { text: q.id + ' — ' + q.titre + ' (' + q.pts + ' pts)' }));
+    var body = h('div', { class: 'body' });
+    body.appendChild(lbl('Correction')); body.appendChild(blocks(r.solution));
+    body.appendChild(lbl('Barème détaillé')); body.appendChild(blocks([{ list: r.bareme }]));
+    body.appendChild(lbl('Erreurs fréquentes')); body.appendChild(blocks([{ list: r.erreurs }]));
+    d.appendChild(body); cc.appendChild(d);
+  });
+  cc.appendChild(h('div', { class: 'lbl', text: 'Programme complet corrigé (Q3 à Q8 assemblées)' }));
+  cc.appendChild(blocks(C.programmeComplet));
+
+  var calc = h('div', { class: 'card score' });
+  calc.appendChild(h('h3', { style: 'margin-top:0;color:#2f5597', text: 'Mon auto-évaluation' }));
+  var tot = h('span', { class: 'big', text: '0 / 20' }), msg = h('span');
+  function recompute() {
+    var sum = 0;
+    C.questions.forEach(function (q) { var v = parseFloat(st.scores[q.id]); if (!isNaN(v)) sum += Math.min(Math.max(v, 0), q.pts); });
+    tot.textContent = sum + ' / 20';
+    msg.textContent = sum >= 16 ? ' — Très bien : tu es prête.' : sum >= 14 ? ' — Bien : revois les erreurs fréquentes.' : sum >= 10 ? ' — Passable : retravaille les exercices marqués « À revoir ».' : ' — À consolider : refais les exercices 7 à 15 puis recommence le contrôle.';
+  }
+  var tbl = h('table'); tbl.appendChild(h('tr', null, [h('th', { text: 'Question' }), h('th', { text: 'Points obtenus' }), h('th', { text: 'Maximum' })]));
+  C.questions.forEach(function (q) {
+    var inp = h('input', { type: 'number', min: '0', max: String(q.pts), step: '0.5' });
+    if (st.scores[q.id] != null) inp.value = st.scores[q.id];
+    inp.addEventListener('input', function () { st.scores[q.id] = inp.value; save(); recompute(); });
+    tbl.appendChild(h('tr', null, [h('td', { text: q.id + ' — ' + q.titre }), h('td', null, [inp]), h('td', { text: String(q.pts) })]));
+  });
+  calc.appendChild(tbl); calc.appendChild(h('p', null, [tot, msg]));
+  cc.appendChild(calc);
+  corrBox.appendChild(cc);
+  recompute();
+
+  /* ---------- Sources ---------- */
+  var sb = document.getElementById('sources-box');
+  sb.appendChild(h('p', { html: fmt(SOURCES.intro) }));
+  var ul = h('ul');
+  SOURCES.liste.forEach(function (s) {
+    var first = s.url === '#' ? h('strong', { text: s.titre }) : h('a', { href: s.url, target: '_blank', rel: 'noopener', text: s.titre });
+    ul.appendChild(h('li', null, [first, h('span', { html: ' — ' + fmt(s.desc) })]));
+  });
+  sb.appendChild(ul);
+  sb.appendChild(h('p', { html: fmt(SOURCES.fin) }));
+
+  document.getElementById('reset').onclick = function () {
+    if (!confirm('Effacer tous tes statuts et scores enregistrés ?')) return;
+    st = { status: {}, scores: {} }; save(); location.reload();
+  };
+
+  refreshStatus();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      class Produit {
+        constructor(nom, prix, quantite = 1) {
+          this.nom = nom;
+          this.prix = prix;
+          this.quantite = quantite;
+        }
+        total() {
+          return this.prix * this.quantite;
+        }
+        info() {
+          console.log(`${this.nom} *${this.quantite} = ${this.total()} DH`);
+        }
+      }
+
+      let p1 = new Produit("Cahier", 12, 5);
+      let p2 = new Produit("Stylo", 3);
+      p1.info();
+      p2.info();
+    </script>
+  </body>
+</html>

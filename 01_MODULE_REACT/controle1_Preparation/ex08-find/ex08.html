@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const employes = [
+        { nom: "Rami", age: 33, salaire: 6000, actif: true },
+        { nom: "Fatihi", age: 24, salaire: 4200, actif: false },
+        { nom: "Chakib", age: 45, salaire: 9500, actif: true },
+        { nom: "Mounir", age: 37, salaire: 5200, actif: true },
+      ];
+
+      // Votre code ici
+      let compteur = 0;
+      for (let item of employes) {
+        if (item.actif) {
+          compteur++;
+        }
+      }
+      console.log(compteur);
+      let emp = employes.filter(function (a) {
+        return a.actif && a.salaire >= 5000;
+      });
+
+      console.log(emp);
+
+      let premier = employes.find((a) => a.salaire > 8000);
+      console.log(premier);
+
+      let superm = employes.find((a) => a.salaire > 20000);
+      console.log(superm ? superm.nom : "Aucun");
+    </script>
+  </body>
+</html>
